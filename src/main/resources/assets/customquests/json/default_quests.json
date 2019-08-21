@@ -1,0 +1,126 @@
+{
+  "quests":[
+    {
+      "id":0,
+      "icon":"minecraft:glass",
+      "title":"Quest 1",
+      "text":"Μήλω",
+      "dependencies":[1],
+      "requirements":[
+        {
+          "type":"ITEM_DELIVER",
+          "sub_requirements": [
+            {
+              "item":"minecraft:apple",
+              "amount":1,
+              "nbt":"{}"
+            },
+            {
+              "item":"minecraft:stick",
+              "amount":1,
+              "nbt":"{}"
+            }
+           ]
+        },
+        {
+          "type":"ITEM_DELIVER",
+          "sub_requirements": [
+            {
+              "item":"minecraft:diamond",
+              "amount":2,
+              "nbt":"{}"
+            },
+            {
+              "item":"minecraft:gold",
+              "amount":3,
+              "nbt":"{}"
+            }
+           ]
+        }
+      ],
+      "rewards":[
+        {
+          "type":"ITEMS",
+          "content":{
+            "item":"minecraft:apple",
+            "amount":1,
+            "nbt":"{}"
+          }
+        }
+      ],
+      "position":[0, 0]
+    },
+    {
+      "id":1,
+      "icon":"minecraft:melon",
+      "title":"Quest 2",
+      "text":"Beta",
+      "dependencies":[],
+      "requirements":[
+        {
+          "type":"ITEM_DETECT",
+          "sub_requirements": [
+            {
+              "item":"minecraft:apple",
+              "amount":1,
+              "nbt":"{}"
+            },
+            {
+              "item":"minecraft:stick",
+              "amount":1,
+              "nbt":"{}"
+            }
+          ]
+        }
+      ],
+      "rewards":[
+        {
+          "type":"ITEMS",
+          "content":{
+            "item":"minecraft:stick",
+            "amount":1,
+            "nbt":"{}"
+          }
+        }
+      ],
+      "position":[100, 100]
+    },
+    {
+      "id":2,
+      "icon":"minecraft:apple",
+      "title":"Quest 3",
+      "text":"Gamma",
+      "dependencies":[0],
+      "requirements":[
+        {
+          "type":"TRAVEL_TO",
+          "sub_requirements": [
+            {
+              "dim": 0,
+              "x": 0,
+              "y": 0,
+              "z": 0,
+              "radius":20
+            },
+            {
+              "dim": 1,
+              "x": 10,
+              "y": 10,
+              "z": 10,
+              "radius":10
+            }
+          ]
+        }
+      ],
+      "rewards":[
+        {
+          "type":"COMMAND",
+          "content":{
+            "command":"/give @a minecraft:diamond 64"
+          }
+        }
+      ],
+      "position":[100, 0]
+    }
+  ]
+}

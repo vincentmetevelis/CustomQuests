@@ -1,0 +1,6 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "customquests:item/item_questing_device"
+  }
+}

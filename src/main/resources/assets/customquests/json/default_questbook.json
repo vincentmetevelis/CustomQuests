@@ -1,0 +1,24 @@
+{
+  "title":"Your Questing Screen",
+  "text":"Test123",
+  "questlines":[
+    {
+      "id":0,
+      "title":"The Beginning",
+      "text":"Throwback 101",
+      "quests":[0, 1, 2]
+    },
+    {
+      "id":1,
+      "title":"After the beginning",
+      "text":"Pun intended",
+      "quests":[]
+    },
+    {
+      "id":2,
+      "title":"The madness begins",
+      "text":"Lol",
+      "quests":[]
+    }
+  ]
+}
