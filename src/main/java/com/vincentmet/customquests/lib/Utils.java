@@ -5,6 +5,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.sun.javafx.geom.Vec2f;
 import com.vincentmet.customquests.screens.ScreenQuestingDevice;
 import com.vincentmet.customquests.quests.Quest;
 import com.vincentmet.customquests.quests.QuestLine;
@@ -26,6 +27,8 @@ import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.ProtocolException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -142,13 +145,15 @@ public class Utils {
         itemRender.renderItemIntoGUI(item, x + 8, y + 7);
     }
     
-    public static <T extends ScreenQuestingDevice> void onHexaButtonClicked(int x, int y, double mouseX, double mouseY,  T gui, Quest quest){
+    public static <T extends ScreenQuestingDevice> void onHexaButtonClicked(int x, int y, double mouseX, double mouseY,  T gui, Quest quest, String uuid){
         x += Ref.GUI_QUESTING_MARGIN_LEFT;
         y += Ref.GUI_QUESTING_MARGIN_TOP;
         int width = 32;
         int height = 32;
-        if((x + width) > mouseX && mouseX > x && (y + height) > mouseY && mouseY > y){
-            ScreenQuestingDevice.activeQuest = quest.getId();
+        if(!Quest.hasQuestUncompletedDependenciesForPlayer(uuid, quest.getId())){
+            if((x + width) > mouseX && mouseX > x && (y + height) > mouseY && mouseY > y){
+                ScreenQuestingDevice.activeQuest = quest.getId();
+            }
         }
     }
     
@@ -179,6 +184,22 @@ public class Utils {
         GL11.glTranslatef(-x, -y, 0);
         gui.getMinecraft().getTextureManager().bindTexture(lineColor.getResourceLocation());
         gui.blit(x, y, 0, 0, length, Ref.GUI_QUESTING_LINE_THICKNESS);
+        GL11.glPopMatrix();
+    }
+
+    public static <T extends ScreenQuestingDevice> void drawLine(Vec2f point1, Vec2f point2, T gui, LineColor lineColor){
+        GL11.glPushMatrix();
+        int dx = (int)(point1.x - point2.x);
+        int dy = (int)(point1.y - point2.y);
+        int length = (int)Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
+
+        double angle = Math.toDegrees(Math.atan2(dy,dx))+180;
+
+        GL11.glTranslatef(point1.x, point1.y, 0);
+        GL11.glRotated(angle, 0, 0, 1);
+        GL11.glTranslatef(-point1.x, -point1.y, 0);
+        gui.getMinecraft().getTextureManager().bindTexture(lineColor.getResourceLocation());
+        gui.blit((int)point1.x, (int)point1.y, 0, 0, length, Ref.GUI_QUESTING_LINE_THICKNESS);
         GL11.glPopMatrix();
     }
     
@@ -260,5 +281,33 @@ public class Utils {
             e.printStackTrace();
         }
         return new CompoundNBT();
+    }
+
+    public static <T extends ScreenQuestingDevice> void drawMultilineText(T gui, int x, int startingHeight, int maxWidth, FontRenderer fontRenderer, String text, int color){
+        List<String> lines = new ArrayList<>();
+        List<String> spaceSplittedText = Arrays.asList(text.split(" "));
+
+        String lastLine = "";
+        boolean isFirstWord = true;
+        for(String word : spaceSplittedText){
+            if(fontRenderer.getStringWidth(lastLine + " " + word) <= maxWidth){
+                if(isFirstWord){
+                    lastLine += word;
+                    isFirstWord = false;
+                }else{
+                    lastLine += (" " + word);
+                }
+            }else{
+                lines.add(lastLine);
+                lastLine = word;
+            }
+        }
+        lines.add(lastLine);
+
+        int currentHeight = startingHeight;
+        for(String line : lines){
+            gui.drawString(fontRenderer, line, x, currentHeight, color);
+            currentHeight += fontRenderer.FONT_HEIGHT;
+        }
     }
 }

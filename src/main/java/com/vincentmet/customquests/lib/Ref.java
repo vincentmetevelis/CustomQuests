@@ -22,7 +22,8 @@ public class Ref {
     public static final ResourceLocation IMAGE_COLOR_RED = new ResourceLocation(MODID, "textures/gui/red.png");
     public static final ResourceLocation IMAGE_COLOR_GREEN = new ResourceLocation(MODID, "textures/gui/green.png");
     public static final ResourceLocation IMAGE_COLOR_YELLOW = new ResourceLocation(MODID, "textures/gui/yellow.png");
-    
+    public static final ResourceLocation IMAGE_COLOR_WHITE = new ResourceLocation(MODID, "textures/gui/white.png");
+
     public static final int GUI_QUESTING_LINE_THICKNESS = 1;
     public static final int GUI_QUESTING_MARGIN_LEFT = 200;
     public static final int GUI_QUESTING_MARGIN_TOP = 20;

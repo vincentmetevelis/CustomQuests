@@ -1,12 +1,10 @@
 package com.vincentmet.customquests.screens;
 
+import com.sun.javafx.geom.Vec2f;
 import com.vincentmet.customquests.lib.LineColor;
 import com.vincentmet.customquests.lib.Ref;
 import com.vincentmet.customquests.lib.Utils;
-import com.vincentmet.customquests.quests.IQuestRequirement;
-import com.vincentmet.customquests.quests.Quest;
-import com.vincentmet.customquests.quests.QuestLine;
-import com.vincentmet.customquests.quests.QuestRequirement;
+import com.vincentmet.customquests.quests.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.screen.Screen;
@@ -20,6 +18,7 @@ public class ScreenQuestingDevice extends Screen {
 
     public static int activeQuestline = 0;
     public static int activeQuest = -1;
+    public static int activeSubRequirement = 0;
 
     public ScreenQuestingDevice(ITextComponent titleIn) {
         super(titleIn);
@@ -27,10 +26,7 @@ public class ScreenQuestingDevice extends Screen {
 
     @Override
     public void render(int mouseX, int mouseY, float partialTicks) {
-        FontRenderer fontRenderer = Minecraft.getInstance().fontRenderer;
         this.renderBackground();
-
-        Utils.addCenteredLabel(5, Ref.ALL_QUESTBOOK.getTitle(), 0xFFFFFF, this, font);
 
         int currentQuestlinesGuiHeight = 0;
         for(QuestLine questline : Ref.ALL_QUESTBOOK.getQuestlines()){
@@ -39,45 +35,62 @@ public class ScreenQuestingDevice extends Screen {
         }
 
         if(activeQuest >= 0){
-            int spacingID = 1;
+            int spacingIdRequirements = 0;
+            int spacingIdRewards = 0;
             Utils.addLabel(
-                    Ref.GUI_QUESTING_MARGIN_LEFT + ((this.width-Ref.GUI_QUESTING_MARGIN_LEFT)/2)-(fontRenderer.getStringWidth(Quest.getQuestFromId(activeQuest).getTitle())/2),
-                    Ref.GUI_QUESTING_MARGIN_TOP,
+                    Ref.GUI_QUESTING_MARGIN_LEFT + (int)((this.width-Ref.GUI_QUESTING_MARGIN_LEFT)*0.5)-(font.getStringWidth(Quest.getQuestFromId(activeQuest).getTitle())/2),
+                    5,
                     Quest.getQuestFromId(activeQuest).getTitle(),
                     0xFF00FF,
                     this,
-                    fontRenderer
+                    font
             );
-            Utils.addLabel(
-                    Ref.GUI_QUESTING_MARGIN_LEFT + ((this.width - Ref.GUI_QUESTING_MARGIN_LEFT)/2)-(fontRenderer.getStringWidth(Quest.getQuestFromId(activeQuest).getDescription())/2),
-                    Ref.GUI_QUESTING_MARGIN_TOP + 25,
+            //left side of the line
+            Utils.drawMultilineText(
+                    this, Ref.GUI_QUESTING_MARGIN_LEFT,
+                    Ref.GUI_QUESTING_MARGIN_TOP,
+                    (this.width - Ref.GUI_QUESTING_MARGIN_LEFT)/2,
+                    font,
                     Quest.getQuestFromId(activeQuest).getDescription(),
-                    0xFF00FF,
-                    this,
-                    fontRenderer
+                    0xFFFF00
             );
+            //right side of the line
             for(QuestRequirement requirement : Quest.getQuestFromId(activeQuest).getRequirements()){
                 Utils.addLabel(
-                        Ref.GUI_QUESTING_MARGIN_LEFT + ((this.width - Ref.GUI_QUESTING_MARGIN_LEFT)/2)-(fontRenderer.getStringWidth(requirement.getType().toString())/2),
-                        Ref.GUI_QUESTING_MARGIN_TOP + 25 + 25 * spacingID,
+                        Ref.GUI_QUESTING_MARGIN_LEFT + (int)((this.width - Ref.GUI_QUESTING_MARGIN_LEFT)*0.52),
+                        Ref.GUI_QUESTING_MARGIN_TOP + 25 + 15 * spacingIdRequirements,
                         requirement.getType().toString(),
                         0xFF00FF,
                         this,
-                        fontRenderer
+                        font
                 );
-                spacingID++;
+                spacingIdRequirements++;
                 for(IQuestRequirement subRequirement : requirement.getRequirement()){
                     Utils.addLabel(
-                            Ref.GUI_QUESTING_MARGIN_LEFT + ((this.width - Ref.GUI_QUESTING_MARGIN_LEFT)/2)-(fontRenderer.getStringWidth(requirement.getType().toString())/2),
-                            Ref.GUI_QUESTING_MARGIN_TOP + 25 + 100 * spacingID,
+                            Ref.GUI_QUESTING_MARGIN_LEFT + (int)((this.width - Ref.GUI_QUESTING_MARGIN_LEFT)*0.52),
+                            Ref.GUI_QUESTING_MARGIN_TOP + 25 + 15 * spacingIdRequirements,
                             subRequirement.toString(),
                             0xFF00FF,
                             this,
-                            fontRenderer
+                            font
                     );
+                    spacingIdRequirements++;
                 }
             }
+
+            for(QuestReward reward : Quest.getQuestFromId(activeQuest).getRewards()){
+                Utils.addLabel(
+                        Ref.GUI_QUESTING_MARGIN_LEFT + (int)((this.width - Ref.GUI_QUESTING_MARGIN_LEFT)*0.52),
+                        Ref.GUI_QUESTING_MARGIN_TOP + 25 + spacingIdRequirements + 50 + 15 * spacingIdRequirements,
+                        reward.getType().toString() + " " + reward.getReward().toString(),
+                        0xFF00FF,
+                        this,
+                        font
+                );
+            }
+            Utils.drawLine(new Vec2f(Ref.GUI_QUESTING_MARGIN_LEFT + ((this.width - Ref.GUI_QUESTING_MARGIN_LEFT)/2), Ref.GUI_QUESTING_MARGIN_TOP), new Vec2f(Ref.GUI_QUESTING_MARGIN_LEFT + ((this.width - Ref.GUI_QUESTING_MARGIN_LEFT)/2), this.height - Ref.GUI_QUESTING_MARGIN_TOP), this, LineColor.WHITE);
         }else{
+            Utils.addCenteredLabel(5, Ref.ALL_QUESTBOOK.getTitle(), 0xFFFFFF,this, font);
             for(int questId : Ref.ALL_QUESTBOOK.getQuestlines().get(activeQuestline).getQuests()){
                 Quest quest = Quest.getQuestFromId(questId);
                 LineColor lineColor = LineColor.BLACK;
@@ -108,7 +121,7 @@ public class ScreenQuestingDevice extends Screen {
         
         for(int questId : Ref.ALL_QUESTBOOK.getQuestlines().get(activeQuestline).getQuests()){
             Quest quest = Quest.getQuestFromId(questId);
-            Utils.onHexaButtonClicked(quest.getPosition().getX(), quest.getPosition().getY(), mouseX, mouseY, this, quest);
+            Utils.onHexaButtonClicked(quest.getPosition().getX(), quest.getPosition().getY(), mouseX, mouseY, this, quest, Utils.getUUID("vincentmet"));
         }
 
         return super.mouseClicked(mouseX, mouseY, mouseButton);

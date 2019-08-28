@@ -29,6 +29,11 @@ public class QuestRequirement {
         public String toString() {
             return "Kill Entity";
         }
+
+        @Override
+        public String getLabelText() {
+            return null;
+        }
     }
 
     public static class ItemDetect implements IQuestRequirement{
@@ -40,6 +45,11 @@ public class QuestRequirement {
         @Override
         public String toString() {
             return "Detect Item";
+        }
+
+        @Override
+        public String getLabelText() {
+            return null;
         }
     }
 
@@ -53,6 +63,11 @@ public class QuestRequirement {
         public String toString() {
             return "Craft Item";
         }
+
+        @Override
+        public String getLabelText() {
+            return null;
+        }
     }
 
     public static class ItemSubmit implements IQuestRequirement{
@@ -64,6 +79,11 @@ public class QuestRequirement {
         @Override
         public String toString() {
             return "Submit Item";
+        }
+
+        @Override
+        public String getLabelText() {
+            return null;
         }
     }
 
@@ -78,6 +98,11 @@ public class QuestRequirement {
         @Override
         public String toString() {
             return "Travel To";
+        }
+
+        @Override
+        public String getLabelText() {
+            return null;
         }
     }
 

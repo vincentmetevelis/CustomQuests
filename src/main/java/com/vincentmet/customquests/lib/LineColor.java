@@ -6,7 +6,8 @@ public enum LineColor {
     BLACK(0, Ref.IMAGE_COLOR_BLACK),
     RED(1, Ref.IMAGE_COLOR_RED),
     YELLOW(2, Ref.IMAGE_COLOR_YELLOW),
-    GREEN(3, Ref.IMAGE_COLOR_GREEN);
+    GREEN(3, Ref.IMAGE_COLOR_GREEN),
+    WHITE(4, Ref.IMAGE_COLOR_WHITE);
 
     private int id;
     private ResourceLocation resourceLocation;
