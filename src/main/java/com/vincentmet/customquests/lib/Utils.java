@@ -6,6 +6,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.sun.javafx.geom.Vec2f;
+import com.vincentmet.customquests.quests.QuestReward;
 import com.vincentmet.customquests.screens.ScreenQuestingDevice;
 import com.vincentmet.customquests.quests.Quest;
 import com.vincentmet.customquests.quests.QuestLine;
@@ -14,9 +15,11 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.renderer.ItemRenderer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.JsonToNBT;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.datafix.fixes.StringToUUID;
 import net.minecraft.util.text.TextFormatting;
 import org.apache.commons.lang3.StringUtils;
@@ -309,5 +312,16 @@ public class Utils {
             gui.drawString(fontRenderer, line, x, currentHeight, color);
             currentHeight += fontRenderer.FONT_HEIGHT;
         }
+    }
+
+    public static <T extends ScreenQuestingDevice> void drawItemBox(T gui, int x, int y, ItemStack item){
+        gui.getMinecraft().getTextureManager().bindTexture(Ref.IMAGE_ITEMBOX_BACKGROUND);
+        gui.blit(x, y, 0, 0, 18, 18);
+        Minecraft.getInstance().getItemRenderer().renderItemIntoGUI(item, x+1, y+1);
+    }
+
+    public static <T extends ScreenQuestingDevice> void drawItemBoxAndReward(T gui, int x, int y, ItemStack item, String text){
+        Utils.drawItemBox(gui, x, y, item);
+        Utils.addLabel(x + 20, y + (18/2 - 8/2), text, 0x00FF00, gui, Minecraft.getInstance().fontRenderer);
     }
 }

@@ -9,6 +9,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.Util;
 import net.minecraft.util.text.ITextComponent;
@@ -79,15 +80,16 @@ public class ScreenQuestingDevice extends Screen {
             }
 
             for(QuestReward reward : Quest.getQuestFromId(activeQuest).getRewards()){
-                Utils.addLabel(
-                        Ref.GUI_QUESTING_MARGIN_LEFT + (int)((this.width - Ref.GUI_QUESTING_MARGIN_LEFT)*0.52),
-                        Ref.GUI_QUESTING_MARGIN_TOP + 25 + spacingIdRequirements + 50 + 15 * spacingIdRequirements,
-                        reward.getType().toString() + " " + reward.getReward().toString(),
-                        0xFF00FF,
+                Utils.drawItemBoxAndReward(
                         this,
-                        font
+                        Ref.GUI_QUESTING_MARGIN_LEFT + (int)((this.width - Ref.GUI_QUESTING_MARGIN_LEFT)*0.52),
+                        Ref.GUI_QUESTING_MARGIN_TOP + ((this.height-Ref.GUI_QUESTING_MARGIN_TOP)/2) + this.height/100*3 + 22 * spacingIdRewards,
+                        new ItemStack(Items.ITEM_FRAME),
+                        reward.getReward().toString()
                 );
+                spacingIdRewards++;
             }
+            Utils.drawLine(new Vec2f(Ref.GUI_QUESTING_MARGIN_LEFT + ((this.width - Ref.GUI_QUESTING_MARGIN_LEFT)/2), Ref.GUI_QUESTING_MARGIN_TOP + ((this.height-Ref.GUI_QUESTING_MARGIN_TOP)/2)), new Vec2f(this.width - this.width/100*2, Ref.GUI_QUESTING_MARGIN_TOP + ((this.height-Ref.GUI_QUESTING_MARGIN_TOP)/2)), this, LineColor.WHITE);
             Utils.drawLine(new Vec2f(Ref.GUI_QUESTING_MARGIN_LEFT + ((this.width - Ref.GUI_QUESTING_MARGIN_LEFT)/2), Ref.GUI_QUESTING_MARGIN_TOP), new Vec2f(Ref.GUI_QUESTING_MARGIN_LEFT + ((this.width - Ref.GUI_QUESTING_MARGIN_LEFT)/2), this.height - Ref.GUI_QUESTING_MARGIN_TOP), this, LineColor.WHITE);
         }else{
             Utils.addCenteredLabel(5, Ref.ALL_QUESTBOOK.getTitle(), 0xFFFFFF,this, font);
