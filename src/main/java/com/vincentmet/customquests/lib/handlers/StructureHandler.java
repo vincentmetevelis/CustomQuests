@@ -1,12 +1,11 @@
 package com.vincentmet.customquests.lib.handlers;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.vincentmet.customquests.lib.Ref;
 import com.vincentmet.customquests.lib.converters.ConverterHelper;
 import com.vincentmet.customquests.quests.*;
-import javafx.util.Pair;
-import net.minecraft.entity.EntityType;
 import net.minecraft.item.ItemStack;
 
 import java.util.ArrayList;
@@ -105,7 +104,7 @@ public class StructureHandler {
                     case ITEMS:
                         questRewardList.add(new QuestReward(
                                 QuestRewardType.ITEMS,
-                                new QuestReward.Items(new ItemStack(
+                                new QuestReward.ReceiveItems(new ItemStack(
                                         ConverterHelper.Quests.Rewards.Items.getItem(jsonQuestReward),
                                         ConverterHelper.Quests.Rewards.Items.getAmount(jsonQuestReward),
                                         ConverterHelper.Quests.Rewards.Items.getNbt(jsonQuestReward)
@@ -147,15 +146,34 @@ public class StructureHandler {
     }
 
     public static void initQuestingProgress(){
-        JsonObject json = JsonHandler.getQuestingProgressJson();
+        JsonObject jsonProgress = JsonHandler.getQuestingProgressJson();
         List<QuestUserProgress> questUserProgressList = new ArrayList<>();
 
-        for(JsonElement userprogress : json.get("players").getAsJsonArray()){
-            List<Integer> completedQuests = new ArrayList<>();
-            for(JsonElement completedQuest : userprogress.getAsJsonObject().get("finished_quests").getAsJsonArray()){
-                completedQuests.add(completedQuest.getAsInt());
+        for(JsonElement jsonUserProgressElement : ConverterHelper.QuestProgress.getPlayers(jsonProgress)){
+            JsonObject jsonUserProgress = jsonUserProgressElement.getAsJsonObject();
+
+            List<QuestStatus> questStatusList = new ArrayList<>();
+            for(JsonElement jsonQuestStatusElement : ConverterHelper.QuestProgress.Players.getQuestStatus(jsonUserProgress)){
+                JsonObject jsonQuestStatus = jsonQuestStatusElement.getAsJsonObject();
+
+                List<QuestRequirementStatus> questStatusRequirementList = new ArrayList<>();
+                for(JsonElement jsonQuestRequirementStatusElement : ConverterHelper.QuestProgress.Players.QuestStatus.getRequirementCompletion(jsonQuestStatus)){
+                    questStatusRequirementList.add(new QuestRequirementStatus(
+                            ConverterHelper.QuestProgress.Players.QuestStatus.RequirementCompletion.getSubRequirementCompletionStatusList(jsonQuestRequirementStatusElement.getAsJsonArray())
+                    ));
+                }
+
+                questStatusList.add(new QuestStatus(
+                        ConverterHelper.QuestProgress.Players.QuestStatus.getId(jsonQuestStatus),
+                        ConverterHelper.QuestProgress.Players.QuestStatus.getIsClaimed(jsonQuestStatus),
+                        questStatusRequirementList
+                ));
             }
-            questUserProgressList.add(new QuestUserProgress(userprogress.getAsJsonObject().get("uuid").getAsString(), completedQuests));
+            questUserProgressList.add(new QuestUserProgress(
+                    ConverterHelper.QuestProgress.Players.getUUID(jsonUserProgress),
+                    ConverterHelper.QuestProgress.Players.getFinishedQuests(jsonUserProgress),
+                    questStatusList
+            ));
         }
 
         Ref.ALL_QUESTING_PROGRESS = questUserProgressList;

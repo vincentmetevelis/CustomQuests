@@ -281,7 +281,7 @@ public class ConverterHelper {
 			}
 
 			public static class TeleportTo{
-
+				//todo
 			}
 		}
 
@@ -297,64 +297,79 @@ public class ConverterHelper {
 		}
 	}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	public static class Quests1{
-		public static int getQuestIdFromQuestJsonElement(JsonElement quest){
-			return quest.getAsJsonObject().get("id").getAsInt();
+	public static class QuestProgress{ //todo write to json file functions
+		public static JsonArray getPlayers(JsonObject json){
+			if(json.has("players") && json.get("players").isJsonArray()){
+				return json.get("players").getAsJsonArray();
+			}else{
+				return new JsonArray();
+			}
 		}
 
-		public static String getQuestTitleFromQuestJsonElement(JsonElement quest){
-			return quest.getAsJsonObject().get("title").getAsString();
-		}
+		public static class Players{
+			public static String getUUID(JsonObject json){
+				if(json.has("uuid") && json.get("uuid").isJsonPrimitive()){
+					return json.get("uuid").getAsString();
+				}else{
+					return Ref.ERR_MSG_STR_INVALID_JSON;
+				}
+			}
 
-		public static String getQuestDescriptionFromQuestJsonElement(JsonElement quest){
-			return quest.getAsJsonObject().get("text").getAsString();
-		}
+			public static List<Integer> getFinishedQuests(JsonObject json){
+				if(json.has("finished_quests") && json.get("finished_quests").isJsonArray()){
+					List<Integer> finishedQuestList = new ArrayList<>();
+					for(JsonElement questDependencyId : json.get("finished_quests").getAsJsonArray()){
+						finishedQuestList.add(questDependencyId.getAsInt());
+					}
+					return finishedQuestList;
+				}else{
+					return new ArrayList<>();
+				}
+			}
 
-		public static Item getQuestIconFromQuestJsonElement(JsonElement quest){
-			return ForgeRegistries.ITEMS.getValue(new ResourceLocation(quest.getAsJsonObject().get("icon").getAsString()));
-		}
+			public static JsonArray getQuestStatus(JsonObject json){
+				if(json.has("quest_status") && json.get("quest_status").isJsonArray()){
+					return json.get("quest_status").getAsJsonArray();
+				}else{
+					return new JsonArray();
+				}
+			}
 
-		public static QuestRequirementType getQuestTypeFromString(String questType){
-			/*switch(questType){
-				case "ITEM_DETECT": return QuestRequirementType.ITEM_DETECT;
-				case "ITEM_DELIVER": return QuestRequirementType.ITEM_DELIVER;
-				case "CRAFTING_DETECT": return QuestRequirementType.CRAFTING_DETECT;
-				case "KILL_MOB": return QuestRequirementType.KILL_MOB;
-				case "TRAVEL_TO": return QuestRequirementType.TRAVEL_TO;
-				default: return QuestRequirementType.ITEM_DETECT;
-			}*/
+			public static class QuestStatus{
+				public static int getId(JsonObject json){
+					if(json.has("id") && json.get("id").isJsonPrimitive()){
+						return json.get("id").getAsInt();
+					}else{
+						return Ref.ERR_MSG_INT_INVALID_JSON;
+					}
+				}
 
-			return QuestRequirementType.ITEM_DETECT;
-		}
+				public static boolean getIsClaimed(JsonObject json){
+					if(json.has("claimed") && json.get("claimed").isJsonPrimitive()){
+						return json.get("claimed").getAsBoolean();
+					}else{
+						return Ref.ERR_MSG_BOOL_INVALID_JSON;
+					}
+				}
 
-		public static QuestRewardType getQuestRewardTypeFromString(String rewardType){
-			/*switch(rewardType){
-				case "ITEMS": return QuestRewardType.ITEMS;
-				case "COMMAND": return QuestRewardType.COMMAND;
-				case "SPAWN_ENTITY": return QuestRewardType.SPAWN_ENTITY;
-				default: return QuestRewardType.ITEMS;
-			}*/
-			return QuestRewardType.ITEMS;
-		}
+				public static JsonArray getRequirementCompletion(JsonObject json){
+					if(json.has("requirement_completion") && json.get("requirement_completion").isJsonArray()){
+						return json.get("requirement_completion").getAsJsonArray();
+					}else{
+						return new JsonArray();
+					}
+				}
 
-		public static QuestPosition getQuestPositionFromJsonArray(JsonArray xyArray){
-			int x = xyArray.get(0).getAsInt();
-			int y = xyArray.get(1).getAsInt();
-			return new QuestPosition(x, y);
+				public static class RequirementCompletion{
+					public static List<Integer> getSubRequirementCompletionStatusList(JsonArray json) {
+						List<Integer> subRequirementDependencyList = new ArrayList<>();
+						for (JsonElement questSubDependencyId : json.getAsJsonArray()) {
+							subRequirementDependencyList.add(questSubDependencyId.getAsInt());
+						}
+						return subRequirementDependencyList;
+					}
+				}
+			}
 		}
 	}
 }

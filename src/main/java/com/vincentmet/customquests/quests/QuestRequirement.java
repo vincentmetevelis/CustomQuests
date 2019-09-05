@@ -1,11 +1,12 @@
 package com.vincentmet.customquests.quests;
 
-import javafx.util.Pair;
 import net.minecraft.entity.EntityType;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.util.math.BlockPos;
-import net.minecraftforge.common.ForgeConfigSpec;
+import net.minecraftforge.registries.ForgeRegistries;
 
+import java.awt.*;
 import java.util.List;
 
 public class QuestRequirement {
@@ -32,7 +33,12 @@ public class QuestRequirement {
 
         @Override
         public String getLabelText() {
-            return null;
+            return entity.getName().getString();
+        }
+
+        @Override
+        public ItemStack getItemStack() {
+            return new ItemStack(Items.DIAMOND_SWORD);
         }
     }
 
@@ -49,7 +55,12 @@ public class QuestRequirement {
 
         @Override
         public String getLabelText() {
-            return null;
+            return itemStack.toString();
+        }
+
+        @Override
+        public ItemStack getItemStack() {
+            return itemStack;
         }
     }
 
@@ -66,7 +77,12 @@ public class QuestRequirement {
 
         @Override
         public String getLabelText() {
-            return null;
+            return itemStack.toString();
+        }
+
+        @Override
+        public ItemStack getItemStack() {
+            return itemStack;
         }
     }
 
@@ -83,15 +99,20 @@ public class QuestRequirement {
 
         @Override
         public String getLabelText() {
-            return null;
+            return itemStack.toString();
+        }
+
+        @Override
+        public ItemStack getItemStack() {
+            return itemStack;
         }
     }
 
     public static class TravelTo implements IQuestRequirement{
-        private int dimId;
+        private String dim;
         private BlockPos blockPos;
-        public TravelTo(int dimId, BlockPos blockPos){
-            this.dimId = dimId;
+        public TravelTo(String dim, BlockPos blockPos){
+            this.dim = dim;
             this.blockPos = blockPos;
         }
 
@@ -102,7 +123,12 @@ public class QuestRequirement {
 
         @Override
         public String getLabelText() {
-            return null;
+            return dim + " - " + blockPos.toString();
+        }
+
+        @Override
+        public ItemStack getItemStack() {
+            return new ItemStack(Items.COMPASS);
         }
     }
 

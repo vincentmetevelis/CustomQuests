@@ -64,6 +64,10 @@ public class JsonHandler {
         }
     }
 
+    public static void writeJson(){ //todo
+
+    }
+
     public static JsonObject getQuestbookJson(){
         return jsonContainerQuestbook;
     }
@@ -75,6 +79,4 @@ public class JsonHandler {
     public static JsonObject getQuestingProgressJson(){
         return jsonContainerQuestingProgress;
     }
-
-    //TODO writeJson()
 }

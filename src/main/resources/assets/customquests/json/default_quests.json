@@ -96,14 +96,14 @@
           "type":"TRAVEL_TO",
           "sub_requirements": [
             {
-              "dim": 0,
+              "dim": "minecraft:overworld",
               "x": 0,
               "y": 0,
               "z": 0,
               "radius":20
             },
             {
-              "dim": 1,
+              "dim": "minecraft:overworld",
               "x": 10,
               "y": 10,
               "z": 10,

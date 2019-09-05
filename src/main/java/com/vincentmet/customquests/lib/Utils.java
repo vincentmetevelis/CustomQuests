@@ -320,7 +320,7 @@ public class Utils {
         Minecraft.getInstance().getItemRenderer().renderItemIntoGUI(item, x+1, y+1);
     }
 
-    public static <T extends ScreenQuestingDevice> void drawItemBoxAndReward(T gui, int x, int y, ItemStack item, String text){
+    public static <T extends ScreenQuestingDevice> void drawItemBoxAndLabel(T gui, int x, int y, ItemStack item, String text){
         Utils.drawItemBox(gui, x, y, item);
         Utils.addLabel(x + 20, y + (18/2 - 8/2), text, 0x00FF00, gui, Minecraft.getInstance().fontRenderer);
     }

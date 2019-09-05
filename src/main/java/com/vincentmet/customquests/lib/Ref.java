@@ -33,6 +33,7 @@ public class Ref {
 
     public static final String ERR_MSG_STR_INVALID_JSON = "INVALID JSON";
     public static final int ERR_MSG_INT_INVALID_JSON = -1337;
+    public static final boolean ERR_MSG_BOOL_INVALID_JSON = false;
     public static String questBookLocation = "";
     public static String questsLocation = "";
     public static String questingProgressLocation = "";

@@ -6,14 +6,9 @@ import com.vincentmet.customquests.lib.Ref;
 import com.vincentmet.customquests.lib.Utils;
 import com.vincentmet.customquests.quests.*;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.Util;
 import net.minecraft.util.text.ITextComponent;
-import org.lwjgl.opengl.GL11;
 
 public class ScreenQuestingDevice extends Screen {
 
@@ -56,35 +51,51 @@ public class ScreenQuestingDevice extends Screen {
                     0xFFFF00
             );
             //right side of the line
+            Utils.addLabel(
+                    Ref.GUI_QUESTING_MARGIN_LEFT + (int)((this.width - Ref.GUI_QUESTING_MARGIN_LEFT)*0.52),
+                    Ref.GUI_QUESTING_MARGIN_TOP + 10,
+                    "Requirements:",
+                    0xFF000F,
+                    this,
+                    Minecraft.getInstance().fontRenderer
+            );
+            spacingIdRequirements++;
             for(QuestRequirement requirement : Quest.getQuestFromId(activeQuest).getRequirements()){
                 Utils.addLabel(
                         Ref.GUI_QUESTING_MARGIN_LEFT + (int)((this.width - Ref.GUI_QUESTING_MARGIN_LEFT)*0.52),
-                        Ref.GUI_QUESTING_MARGIN_TOP + 25 + 15 * spacingIdRequirements,
-                        requirement.getType().toString(),
+                        Ref.GUI_QUESTING_MARGIN_TOP + 10 + 22 * spacingIdRequirements,
+                        requirement.getType().toString() + ":",
                         0xFF00FF,
                         this,
                         font
                 );
                 spacingIdRequirements++;
                 for(IQuestRequirement subRequirement : requirement.getRequirement()){
-                    Utils.addLabel(
-                            Ref.GUI_QUESTING_MARGIN_LEFT + (int)((this.width - Ref.GUI_QUESTING_MARGIN_LEFT)*0.52),
-                            Ref.GUI_QUESTING_MARGIN_TOP + 25 + 15 * spacingIdRequirements,
-                            subRequirement.toString(),
-                            0xFF00FF,
+                    Utils.drawItemBoxAndLabel(
                             this,
-                            font
+                            Ref.GUI_QUESTING_MARGIN_LEFT + (int)((this.width - Ref.GUI_QUESTING_MARGIN_LEFT)*0.52) + 10,
+                            Ref.GUI_QUESTING_MARGIN_TOP + 5 + 22 * spacingIdRequirements,
+                            subRequirement.getItemStack(),
+                            subRequirement.getLabelText()
                     );
                     spacingIdRequirements++;
                 }
             }
 
+            Utils.addLabel(
+                    Ref.GUI_QUESTING_MARGIN_LEFT + (int)((this.width - Ref.GUI_QUESTING_MARGIN_LEFT)*0.52),
+                    Ref.GUI_QUESTING_MARGIN_TOP + ((this.height-Ref.GUI_QUESTING_MARGIN_TOP)/2) + 5,
+                    "Rewards:",
+                    0xFF000F,
+                    this,
+                    Minecraft.getInstance().fontRenderer
+            );
             for(QuestReward reward : Quest.getQuestFromId(activeQuest).getRewards()){
-                Utils.drawItemBoxAndReward(
+                Utils.drawItemBoxAndLabel(
                         this,
                         Ref.GUI_QUESTING_MARGIN_LEFT + (int)((this.width - Ref.GUI_QUESTING_MARGIN_LEFT)*0.52),
-                        Ref.GUI_QUESTING_MARGIN_TOP + ((this.height-Ref.GUI_QUESTING_MARGIN_TOP)/2) + this.height/100*3 + 22 * spacingIdRewards,
-                        new ItemStack(Items.ITEM_FRAME),
+                        Ref.GUI_QUESTING_MARGIN_TOP + ((this.height-Ref.GUI_QUESTING_MARGIN_TOP)/2) + 18 + 22 * spacingIdRewards,
+                        reward.getReward().getItemStack(),
                         reward.getReward().toString()
                 );
                 spacingIdRewards++;

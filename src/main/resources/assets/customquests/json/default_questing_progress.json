@@ -3,11 +3,11 @@
     {
       "uuid":"392e085c34d04f808a98f803794b547b",
       "finished_quests":[0, 1],
-      "completion_status":[
+      "quest_status":[
         {
           "id": 0,
           "claimed": false,
-          "status":[
+          "requirement_completion":[
             [1, 1],
             [2, 3]
           ]
