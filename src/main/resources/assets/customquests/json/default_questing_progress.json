@@ -2,7 +2,7 @@
   "players":[
     {
       "uuid":"392e085c34d04f808a98f803794b547b",
-      "finished_quests":[0, 1],
+      "finished_quests":[],
       "quest_status":[
         {
           "id": 0,

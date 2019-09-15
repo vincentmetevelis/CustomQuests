@@ -49,22 +49,44 @@ public class Quest {
         return false;
     }
 
-    public static boolean hasUnclaimedRewardsForPlayer(String playerUuid, int questId){
-        if(isQuestCompletedForPlayer(playerUuid, questId)){
-            if(true) {//todo
-                return false;
+    public static boolean hasUnclaimedRewardsForPlayer(String uuid, int questId){
+        if(isQuestCompletedForPlayer(uuid, questId)){
+            for(QuestUserProgress userprogress : Ref.ALL_QUESTING_PROGRESS){
+                if(userprogress.getUuid().equals(uuid)){
+                    for(QuestStatus queststatus : userprogress.getQuestStatuses()){
+                        if(queststatus.getQuestId() == questId){
+                            return queststatus.isClaimed();//todo unittest this func
+                        }
+                    }
+                }
             }
         }
         return false;
     }
 
     public static boolean hasQuestUncompletedDependenciesForPlayer(String uuid, int questId){
-        if(Quest.getQuestFromId(questId).getDependencies().isEmpty()){
-            return false;
-        }/*else if(){
+        boolean areAllDependenciesCompleted = true;
+        for(int dependencyId : Quest.getQuestFromId(questId).getDependencies()){ // get dependencies for current quest
+            if(!isQuestCompletedForPlayer(uuid, dependencyId)){
+                areAllDependenciesCompleted = false;
+            }
+        }
+        return !areAllDependenciesCompleted;
+    }
 
-        }*/
-        return true;
+    public static boolean areQuestsInSameQuestline(int quest1, int quest2){
+        return Quest.getQuestFromId(quest1).getQuestline() == Quest.getQuestFromId(quest2).getQuestline();
+    }
+
+    public int getQuestline(){
+        for(QuestLine questline : Ref.ALL_QUESTBOOK.getQuestlines()){
+            for(int questId : questline.getQuests()){
+                if(Quest.getQuestFromId(questId).getId() == this.getId()){
+                    return questline.getId();
+                }
+            }
+        }
+        return Ref.ERR_MSG_INT_INVALID_JSON;
     }
 
     public void setId(int id){

@@ -3,8 +3,12 @@ package com.vincentmet.customquests.lib;
 import com.vincentmet.customquests.quests.Quest;
 import com.vincentmet.customquests.quests.QuestMenu;
 import com.vincentmet.customquests.quests.QuestUserProgress;
+import com.vincentmet.customquests.screens.elements.IQuestingGuiElement;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.util.ResourceLocation;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Ref {
@@ -16,6 +20,7 @@ public class Ref {
     public static final ResourceLocation IMAGE_BUTTON_HEXAGON_UNPRESSED = new ResourceLocation(MODID, "textures/gui/button_hexagon_unpressed.png");
     public static final ResourceLocation IMAGE_BUTTON_HEXAGON_PRESSED = new ResourceLocation(MODID, "textures/gui/button_hexagon_pressed.png");
     public static final ResourceLocation IMAGE_BUTTON_HEXAGON_DISABLED = new ResourceLocation(MODID, "textures/gui/button_hexagon_disabled.png");
+    public static final ResourceLocation IMAGE_BUTTON_HEXAGON_COMPLETED = new ResourceLocation(MODID, "textures/gui/button_hexagon_completed.png");
     public static final ResourceLocation IMAGE_BUTTON_QUESTLINE_UNPRESSED = new ResourceLocation(MODID, "textures/gui/button_rect_unpressed.png");
     public static final ResourceLocation IMAGE_BUTTON_QUESTLINE_PRESSED = new ResourceLocation(MODID, "textures/gui/button_rect_pressed.png");
     public static final ResourceLocation IMAGE_COLOR_BLACK = new ResourceLocation(MODID, "textures/gui/black.png");
@@ -43,4 +48,7 @@ public class Ref {
     public static QuestMenu ALL_QUESTBOOK;
     public static List<Quest> ALL_QUESTS;
     public static List<QuestUserProgress> ALL_QUESTING_PROGRESS;
+    public static List<IQuestingGuiElement> ALL_GUI_ELEMENTS = new ArrayList<>();
+
+    public static final FontRenderer FONT_RENDERER = Minecraft.getInstance().fontRenderer;
 }

@@ -8,12 +8,14 @@ import com.vincentmet.customquests.Objects;
 import com.vincentmet.customquests.lib.Ref;
 import com.vincentmet.customquests.lib.Utils;
 import com.vincentmet.customquests.quests.*;
+import javafx.util.Pair;
 import net.minecraft.client.util.JSONException;
 import net.minecraft.entity.EntityType;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import java.nio.charset.MalformedInputException;
@@ -86,14 +88,6 @@ public class ConverterHelper {
 	}
 
 	public static class Quests{
-		public static Quest getQuestById(int id){
-			for(int i=0; i<Ref.ALL_QUESTS.size(); i++){
-				if(Ref.ALL_QUESTS.get(i).getId() == id){
-					return Ref.ALL_QUESTS.get(i);
-				}
-			}
-			return null;
-		}
 
 		public static int getId(JsonObject json){
 			if(json.has("id") && json.get("id").isJsonPrimitive()){
@@ -159,7 +153,7 @@ public class ConverterHelper {
 
 		public static class Requirements{
 			public static QuestRequirementType getType(JsonObject json){
-				if(json.has("type") && json.get("type").isJsonArray()){
+				if(json.has("type") && json.get("type").isJsonPrimitive()){
 					switch(json.get("type").getAsString()){
 						case "ITEM_DETECT": return QuestRequirementType.ITEM_DETECT;
 						case "ITEM_DELIVER": return QuestRequirementType.ITEM_DELIVER;
@@ -182,7 +176,7 @@ public class ConverterHelper {
 			}
 
 			public static class ItemsDetect{
-				public static Item getSubRequirementItem(JsonObject json){
+				public static Item getItem(JsonObject json){
 					if(json.has("item") && json.get("item").isJsonPrimitive()){
 						return ForgeRegistries.ITEMS.getValue(new ResourceLocation(json.get("item").getAsString()));
 					}else{
@@ -190,7 +184,7 @@ public class ConverterHelper {
 					}
 				}
 
-				public static int getSubRequirementAmount(JsonObject json){
+				public static int getAmount(JsonObject json){
 					if(json.has("amount") && json.get("amount").isJsonPrimitive()){
 						return json.get("amount").getAsInt();
 					}else{
@@ -198,7 +192,7 @@ public class ConverterHelper {
 					}
 				}
 
-				public static CompoundNBT getSubRequirementNbt(JsonObject json){
+				public static CompoundNBT getNbt(JsonObject json){
 					if(json.has("nbt") && json.get("nbt").isJsonPrimitive()){
 						return Utils.getNbtFromJson(json.get("nbt").getAsString());
 					}else{
@@ -208,21 +202,121 @@ public class ConverterHelper {
 			}
 
 			public static class ItemsRetrieve{
+				public static Item getItem(JsonObject json){
+					if(json.has("item") && json.get("item").isJsonPrimitive()){
+						return ForgeRegistries.ITEMS.getValue(new ResourceLocation(json.get("item").getAsString()));
+					}else{
+						return Items.AIR;
+					}
+				}
 
+				public static int getAmount(JsonObject json){
+					if(json.has("amount") && json.get("amount").isJsonPrimitive()){
+						return json.get("amount").getAsInt();
+					}else{
+						return Ref.ERR_MSG_INT_INVALID_JSON;
+					}
+				}
+
+				public static CompoundNBT getNbt(JsonObject json){
+					if(json.has("nbt") && json.get("nbt").isJsonPrimitive()){
+						return Utils.getNbtFromJson(json.get("nbt").getAsString());
+					}else{
+						return new CompoundNBT();
+					}
+				}
+			}
+
+			public static class ItemsCraft{
+				public static Item getItem(JsonObject json){
+					if(json.has("item") && json.get("item").isJsonPrimitive()){
+						return ForgeRegistries.ITEMS.getValue(new ResourceLocation(json.get("item").getAsString()));
+					}else{
+						return Items.AIR;
+					}
+				}
+
+				public static int getAmount(JsonObject json){
+					if(json.has("amount") && json.get("amount").isJsonPrimitive()){
+						return json.get("amount").getAsInt();
+					}else{
+						return Ref.ERR_MSG_INT_INVALID_JSON;
+					}
+				}
+
+				public static CompoundNBT getNbt(JsonObject json){
+					if(json.has("nbt") && json.get("nbt").isJsonPrimitive()){
+						return Utils.getNbtFromJson(json.get("nbt").getAsString());
+					}else{
+						return new CompoundNBT();
+					}
+				}
 			}
 
 			public static class KillMob{
+				public static EntityType getEntity(JsonObject json){
+					if(json.has("entity") && json.get("entity").isJsonPrimitive()){
+						return ForgeRegistries.ENTITIES.getValue(new ResourceLocation(json.get("entity").getAsString()));
+					}else{
+						return null;
+					}
+				}
 
+				public static int getAmount(JsonObject json){
+					if(json.has("amount") && json.get("amount").isJsonPrimitive()){
+						return json.get("amount").getAsInt();
+					}else{
+						return Ref.ERR_MSG_INT_INVALID_JSON;
+					}
+				}
 			}
 
 			public static class TravelTo{
+				public static String getDimension(JsonObject json){
+					if(json.has("dim") && json.get("dim").isJsonPrimitive()){
+						return json.get("dim").getAsString();
+					}else{
+						return "minecraft:overworld";
+					}
+				}
 
+				public static int getX(JsonObject json){
+					if(json.has("x") && json.get("x").isJsonPrimitive()){
+						return json.get("x").getAsInt();
+					}else{
+						return Ref.ERR_MSG_INT_INVALID_JSON;
+					}
+				}
+
+				public static int getY(JsonObject json){
+					if(json.has("y") && json.get("y").isJsonPrimitive()){
+						return json.get("y").getAsInt();
+					}else{
+						return Ref.ERR_MSG_INT_INVALID_JSON;
+					}
+				}
+
+				public static int getZ(JsonObject json){
+					if(json.has("z") && json.get("z").isJsonPrimitive()){
+						return json.get("z").getAsInt();
+					}else{
+						return Ref.ERR_MSG_INT_INVALID_JSON;
+					}
+				}
+
+				public static int getRadius(JsonObject json){
+					if(json.has("radius") && json.get("radius").isJsonPrimitive()){
+						return json.get("radius").getAsInt();
+					}else{
+						return Ref.ERR_MSG_INT_INVALID_JSON;
+					}
+				}
 			}
 		}
 
 		public static class Rewards{
 			public static QuestRewardType getType(JsonObject json){
-				if(json.has("type") && json.get("type").isJsonArray()){
+				if(json.has("type") && json.get("type").isJsonPrimitive()){
 					switch(json.get("type").getAsString()){
 						case "ITEMS": return QuestRewardType.ITEMS;
 						case "COMMAND": return QuestRewardType.COMMAND;
@@ -281,7 +375,13 @@ public class ConverterHelper {
 			}
 
 			public static class TeleportTo{
-				//todo
+				public static Pair<String, BlockPos> getLocation(JsonObject json){
+					if(json.has("content") && json.get("content").getAsJsonObject().has("entity") && json.get("content").getAsJsonObject().get("entity").isJsonPrimitive()){
+						return new Pair<>(json.get("dim").getAsString(), new BlockPos(json.get("x").getAsInt(), json.get("y").getAsInt(), json.get("z").getAsInt()));
+					}else{
+						return new Pair<>("minecraft:overworld", new BlockPos(0, 100, 0));
+					}
+				}
 			}
 		}
 

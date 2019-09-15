@@ -111,9 +111,11 @@ public class QuestRequirement {
     public static class TravelTo implements IQuestRequirement{
         private String dim;
         private BlockPos blockPos;
-        public TravelTo(String dim, BlockPos blockPos){
+        private int radius;
+        public TravelTo(String dim, BlockPos blockPos, int radius){
             this.dim = dim;
             this.blockPos = blockPos;
+            this.radius = radius;
         }
 
         @Override

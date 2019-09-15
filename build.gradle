@@ -13,7 +13,7 @@ apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 
-version = '1.14.4-0.1'
+version = '1.14.4-0.1-DEV1'
 group = 'com.vincentmet.customquests' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'customquests'
 

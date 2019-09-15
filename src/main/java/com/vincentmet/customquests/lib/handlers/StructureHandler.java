@@ -7,6 +7,8 @@ import com.vincentmet.customquests.lib.Ref;
 import com.vincentmet.customquests.lib.converters.ConverterHelper;
 import com.vincentmet.customquests.quests.*;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,50 +51,94 @@ public class StructureHandler {
 
                 switch(ConverterHelper.Quests.Requirements.getType(jsonQuestRequirement)){
                     case ITEM_DETECT:
-                        List<IQuestRequirement> subQuestRequirements = new ArrayList<>();
+                        List<IQuestRequirement> subQuestRequirementsItemDetect = new ArrayList<>();
                         for(JsonElement jsonQuestSubRequirementElement : ConverterHelper.Quests.Requirements.getSubRequirements(jsonQuestRequirement)){
                             JsonObject jsonQuestSubRequirement = jsonQuestSubRequirementElement.getAsJsonObject();
 
-                            subQuestRequirements.add(new QuestRequirement.ItemDetect(
+                            subQuestRequirementsItemDetect.add(new QuestRequirement.ItemDetect(
                                     new ItemStack(
-                                            ConverterHelper.Quests.Requirements.ItemsDetect.getSubRequirementItem(jsonQuestSubRequirement),
-                                            ConverterHelper.Quests.Requirements.ItemsDetect.getSubRequirementAmount(jsonQuestSubRequirement),
-                                            ConverterHelper.Quests.Requirements.ItemsDetect.getSubRequirementNbt(jsonQuestSubRequirement)
+                                            ConverterHelper.Quests.Requirements.ItemsDetect.getItem(jsonQuestSubRequirement),
+                                            ConverterHelper.Quests.Requirements.ItemsDetect.getAmount(jsonQuestSubRequirement),
+                                            ConverterHelper.Quests.Requirements.ItemsDetect.getNbt(jsonQuestSubRequirement)
                                     )
                             ));
                         }
                         questRequirementList.add(new QuestRequirement(
                                 QuestRequirementType.ITEM_DETECT,
-                                subQuestRequirements
+                                subQuestRequirementsItemDetect
                         ));
                         break;
                     case TRAVEL_TO:
-
-                        break;
-                    case CRAFTING_DETECT:
-
-                        break;
-                    case ITEM_DELIVER:
-
-                        break;
-                    case KILL_MOB:
-                        /*List<IQuestRequirement> subQuestRequirements = new ArrayList<>();
+                        List<IQuestRequirement> subQuestRequirementsTravelTo = new ArrayList<>();
                         for(JsonElement jsonQuestSubRequirementElement : ConverterHelper.Quests.Requirements.getSubRequirements(jsonQuestRequirement)){
                             JsonObject jsonQuestSubRequirement = jsonQuestSubRequirementElement.getAsJsonObject();
 
-                            subQuestRequirements.add(new QuestRequirement.ItemDetect(
+                            subQuestRequirementsTravelTo.add(new QuestRequirement.TravelTo(
+                                    ConverterHelper.Quests.Requirements.TravelTo.getDimension(jsonQuestSubRequirement),
+                                    new BlockPos(
+                                            ConverterHelper.Quests.Requirements.TravelTo.getX(jsonQuestSubRequirement),
+                                            ConverterHelper.Quests.Requirements.TravelTo.getY(jsonQuestSubRequirement),
+                                            ConverterHelper.Quests.Requirements.TravelTo.getZ(jsonQuestSubRequirement)
+                                    ),
+                                    ConverterHelper.Quests.Requirements.TravelTo.getRadius(jsonQuestSubRequirement)
+                            ));
+                        }
+                        questRequirementList.add(new QuestRequirement(
+                                QuestRequirementType.TRAVEL_TO,
+                                subQuestRequirementsTravelTo
+                        ));
+                        break;
+                    case CRAFTING_DETECT:
+                        List<IQuestRequirement> subQuestRequirementsCraftingDetect = new ArrayList<>();
+                        for(JsonElement jsonQuestSubRequirementElement : ConverterHelper.Quests.Requirements.getSubRequirements(jsonQuestRequirement)){
+                            JsonObject jsonQuestSubRequirement = jsonQuestSubRequirementElement.getAsJsonObject();
+
+                            subQuestRequirementsCraftingDetect.add(new QuestRequirement.ItemCraft(
                                     new ItemStack(
-                                            ConverterHelper.Quests.Requirements.ItemsDetect.getSubRequirementItem(jsonQuestSubRequirement),
-                                            ConverterHelper.Quests.Requirements.ItemsDetect.getSubRequirementAmount(jsonQuestSubRequirement),
-                                            ConverterHelper.Quests.Requirements.ItemsDetect.getSubRequirementNbt(jsonQuestSubRequirement)
+                                            ConverterHelper.Quests.Requirements.ItemsCraft.getItem(jsonQuestSubRequirement),
+                                            ConverterHelper.Quests.Requirements.ItemsCraft.getAmount(jsonQuestSubRequirement),
+                                            ConverterHelper.Quests.Requirements.ItemsCraft.getNbt(jsonQuestSubRequirement)
                                     )
+                            ));
+                        }
+                        questRequirementList.add(new QuestRequirement(
+                                QuestRequirementType.CRAFTING_DETECT,
+                                subQuestRequirementsCraftingDetect
+                        ));
+                        break;
+                    case ITEM_DELIVER:
+                        List<IQuestRequirement> subQuestRequirementsItemDeliver = new ArrayList<>();
+                        for(JsonElement jsonQuestSubRequirementElement : ConverterHelper.Quests.Requirements.getSubRequirements(jsonQuestRequirement)){
+                            JsonObject jsonQuestSubRequirement = jsonQuestSubRequirementElement.getAsJsonObject();
+
+                            subQuestRequirementsItemDeliver.add(new QuestRequirement.ItemSubmit(
+                                    new ItemStack(
+                                            ConverterHelper.Quests.Requirements.ItemsRetrieve.getItem(jsonQuestSubRequirement),
+                                            ConverterHelper.Quests.Requirements.ItemsRetrieve.getAmount(jsonQuestSubRequirement),
+                                            ConverterHelper.Quests.Requirements.ItemsRetrieve.getNbt(jsonQuestSubRequirement)
+                                    )
+                            ));
+                        }
+                        questRequirementList.add(new QuestRequirement(
+                                QuestRequirementType.ITEM_DELIVER,
+                                subQuestRequirementsItemDeliver
+                        ));
+                        break;
+                    case KILL_MOB:
+                        List<IQuestRequirement> subQuestRequirementsKillMob = new ArrayList<>();
+                        for(JsonElement jsonQuestSubRequirementElement : ConverterHelper.Quests.Requirements.getSubRequirements(jsonQuestRequirement)){
+                            JsonObject jsonQuestSubRequirement = jsonQuestSubRequirementElement.getAsJsonObject();
+
+                            subQuestRequirementsKillMob.add(new QuestRequirement.KillMob(
+                                    ForgeRegistries.ENTITIES.getValue(ConverterHelper.Quests.Requirements.KillMob.getEntity(jsonQuestSubRequirement).getRegistryName()),
+                                    ConverterHelper.Quests.Requirements.KillMob.getAmount(jsonQuestSubRequirement)
                             ));
                         }
 
                         questRequirementList.add(new QuestRequirement(
                                 QuestRequirementType.KILL_MOB,
-                                subQuestRequirements
-                        ));*/
+                                subQuestRequirementsKillMob
+                        ));
                         break;
                 }
             }

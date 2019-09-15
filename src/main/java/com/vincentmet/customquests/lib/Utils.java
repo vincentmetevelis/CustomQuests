@@ -11,6 +11,9 @@ import com.vincentmet.customquests.screens.ScreenQuestingDevice;
 import com.vincentmet.customquests.quests.Quest;
 import com.vincentmet.customquests.quests.QuestLine;
 import com.vincentmet.customquests.quests.QuestPosition;
+import com.vincentmet.customquests.screens.elements.ButtonQuest;
+import com.vincentmet.customquests.screens.elements.ItemBox;
+import com.vincentmet.customquests.screens.elements.Label;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.screen.Screen;
@@ -104,113 +107,6 @@ public class Utils {
         }
         return sb.toString();
     }
-    
-    public static <T extends ScreenQuestingDevice> void addQuestlineButton(int x, int y, double mouseX, double mouseY, String text, T gui, FontRenderer fontRenderer){
-        x += Ref.GUI_QUESTLINES_MARGIN_LEFT;
-        y += Ref.GUI_QUESTLINES_MARGIN_TOP;
-        int width = 150;
-        int height = 20;
-        if((x + width) > mouseX && mouseX > x && (y + height) > mouseY && mouseY > y){
-            gui.getMinecraft().getTextureManager().bindTexture(Ref.IMAGE_BUTTON_QUESTLINE_PRESSED);
-        }else{
-            gui.getMinecraft().getTextureManager().bindTexture(Ref.IMAGE_BUTTON_QUESTLINE_UNPRESSED);
-        }
-        gui.blit(x, y, 0, 0, width, height);
-        Utils.addLabel((x+(width/2)-fontRenderer.getStringWidth(text)/2), (y+(height/2)) - (fontRenderer.FONT_HEIGHT/2), text, 0xFFFFFF, gui, fontRenderer);
-    }
-    
-    public static <T extends ScreenQuestingDevice> void onQuestlineButtonClicked(int x, int y, double mouseX, double mouseY, T gui, QuestLine questLine){
-        x += Ref.GUI_QUESTLINES_MARGIN_LEFT;
-        y += Ref.GUI_QUESTLINES_MARGIN_TOP;
-        int width = 150;
-        int height = 20;
-        if((x + width) > mouseX && mouseX > x && (y + height) > mouseY && mouseY > y){
-            ScreenQuestingDevice.activeQuestline = questLine.getId();
-            ScreenQuestingDevice.activeQuest = -1;
-        }
-    }
-    
-    public static <T extends ScreenQuestingDevice> void addHexaButton(int x, int y, double mouseX, double mouseY, ItemRenderer itemRender, T gui, ItemStack item, int questID, String uuid){
-        x += Ref.GUI_QUESTING_MARGIN_LEFT;
-        y += Ref.GUI_QUESTING_MARGIN_TOP;
-        int width = 32;
-        int height = 32;
-        if(Quest.hasQuestUncompletedDependenciesForPlayer(uuid, questID)){
-            gui.getMinecraft().getTextureManager().bindTexture(Ref.IMAGE_BUTTON_HEXAGON_DISABLED);
-        }else{
-            if((x + width) > mouseX && mouseX > x && (y + height) > mouseY && mouseY > y){
-                gui.getMinecraft().getTextureManager().bindTexture(Ref.IMAGE_BUTTON_HEXAGON_PRESSED);
-            }else{
-                gui.getMinecraft().getTextureManager().bindTexture(Ref.IMAGE_BUTTON_HEXAGON_UNPRESSED);
-            }
-        }
-        gui.blit(x, y, 0, 0, width, height);
-        itemRender.renderItemIntoGUI(item, x + 8, y + 7);
-    }
-    
-    public static <T extends ScreenQuestingDevice> void onHexaButtonClicked(int x, int y, double mouseX, double mouseY,  T gui, Quest quest, String uuid){
-        x += Ref.GUI_QUESTING_MARGIN_LEFT;
-        y += Ref.GUI_QUESTING_MARGIN_TOP;
-        int width = 32;
-        int height = 32;
-        if(!Quest.hasQuestUncompletedDependenciesForPlayer(uuid, quest.getId())){
-            if((x + width) > mouseX && mouseX > x && (y + height) > mouseY && mouseY > y){
-                ScreenQuestingDevice.activeQuest = quest.getId();
-            }
-        }
-    }
-    
-    public static <T extends ScreenQuestingDevice> void addCenteredLabel(int y, String text, int color, T gui, FontRenderer fontRendererObj){
-        gui.drawString(fontRendererObj, text, (gui.width/2) - (fontRendererObj.getStringWidth(text)/2), y, color);
-    }
-    
-    public static <T extends ScreenQuestingDevice> void addLabel(int x, int y, String text, int color, T gui, FontRenderer fontRendererObj){
-        gui.drawString(fontRendererObj, text, x, y, color);
-    }
-    
-    public static <T extends ScreenQuestingDevice> void drawConnectionLine(QuestPosition quest, QuestPosition dependency, T gui, LineColor lineColor){
-        GL11.glPushMatrix();
-        int dx = quest.getX() - dependency.getX();
-        int dy = quest.getY() - dependency.getY();
-        int length = (int)Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
-
-        int iconHeightCentered = (32 / 2) - (int)Math.floor((float)Ref.GUI_QUESTING_LINE_THICKNESS/2);
-        int iconWidthCentered = (32 / 2) - (int)Math.floor((float)Ref.GUI_QUESTING_LINE_THICKNESS/2);
-
-        int x = Ref.GUI_QUESTING_MARGIN_LEFT + iconWidthCentered + quest.getX();
-        int y = Ref.GUI_QUESTING_MARGIN_TOP + iconHeightCentered + quest.getY();
-
-        double angle = Math.toDegrees(Math.atan2(dy,dx))+180;
-
-        GL11.glTranslatef(x, y, 0);
-        GL11.glRotated(angle, 0, 0, 1);
-        GL11.glTranslatef(-x, -y, 0);
-        gui.getMinecraft().getTextureManager().bindTexture(lineColor.getResourceLocation());
-        gui.blit(x, y, 0, 0, length, Ref.GUI_QUESTING_LINE_THICKNESS);
-        GL11.glPopMatrix();
-    }
-
-    public static <T extends ScreenQuestingDevice> void drawLine(Vec2f point1, Vec2f point2, T gui, LineColor lineColor){
-        GL11.glPushMatrix();
-        int dx = (int)(point1.x - point2.x);
-        int dy = (int)(point1.y - point2.y);
-        int length = (int)Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
-
-        double angle = Math.toDegrees(Math.atan2(dy,dx))+180;
-
-        GL11.glTranslatef(point1.x, point1.y, 0);
-        GL11.glRotated(angle, 0, 0, 1);
-        GL11.glTranslatef(-point1.x, -point1.y, 0);
-        gui.getMinecraft().getTextureManager().bindTexture(lineColor.getResourceLocation());
-        gui.blit((int)point1.x, (int)point1.y, 0, 0, length, Ref.GUI_QUESTING_LINE_THICKNESS);
-        GL11.glPopMatrix();
-    }
-    
-    public static <T extends ScreenQuestingDevice> void drawConnectionLine(QuestPosition quest, List<QuestPosition> dependencies, T gui, LineColor lineColor){
-        for(QuestPosition qp : dependencies){
-            drawConnectionLine(quest, qp, gui, lineColor);
-        }
-    }
 
     public static String getUUID(String username){
         if(UsernameUuidCache.isNameAlreadyInCache(username)){
@@ -286,42 +182,7 @@ public class Utils {
         return new CompoundNBT();
     }
 
-    public static <T extends ScreenQuestingDevice> void drawMultilineText(T gui, int x, int startingHeight, int maxWidth, FontRenderer fontRenderer, String text, int color){
-        List<String> lines = new ArrayList<>();
-        List<String> spaceSplittedText = Arrays.asList(text.split(" "));
-
-        String lastLine = "";
-        boolean isFirstWord = true;
-        for(String word : spaceSplittedText){
-            if(fontRenderer.getStringWidth(lastLine + " " + word) <= maxWidth){
-                if(isFirstWord){
-                    lastLine += word;
-                    isFirstWord = false;
-                }else{
-                    lastLine += (" " + word);
-                }
-            }else{
-                lines.add(lastLine);
-                lastLine = word;
-            }
-        }
-        lines.add(lastLine);
-
-        int currentHeight = startingHeight;
-        for(String line : lines){
-            gui.drawString(fontRenderer, line, x, currentHeight, color);
-            currentHeight += fontRenderer.FONT_HEIGHT;
-        }
-    }
-
-    public static <T extends ScreenQuestingDevice> void drawItemBox(T gui, int x, int y, ItemStack item){
-        gui.getMinecraft().getTextureManager().bindTexture(Ref.IMAGE_ITEMBOX_BACKGROUND);
-        gui.blit(x, y, 0, 0, 18, 18);
-        Minecraft.getInstance().getItemRenderer().renderItemIntoGUI(item, x+1, y+1);
-    }
-
-    public static <T extends ScreenQuestingDevice> void drawItemBoxAndLabel(T gui, int x, int y, ItemStack item, String text){
-        Utils.drawItemBox(gui, x, y, item);
-        Utils.addLabel(x + 20, y + (18/2 - 8/2), text, 0x00FF00, gui, Minecraft.getInstance().fontRenderer);
+    public static boolean isMouseInBounds(double mouseX, double mouseY, int x1, int y1, int x2, int y2){
+        return x2 > mouseX && mouseX > x1 && y2 > mouseY && mouseY > y1;
     }
 }
