@@ -23,6 +23,10 @@ public class Ref {
     public static final ResourceLocation IMAGE_BUTTON_HEXAGON_COMPLETED = new ResourceLocation(MODID, "textures/gui/button_hexagon_completed.png");
     public static final ResourceLocation IMAGE_BUTTON_QUESTLINE_UNPRESSED = new ResourceLocation(MODID, "textures/gui/button_rect_unpressed.png");
     public static final ResourceLocation IMAGE_BUTTON_QUESTLINE_PRESSED = new ResourceLocation(MODID, "textures/gui/button_rect_pressed.png");
+    public static final ResourceLocation IMAGE_BUTTON_QUESTLINE_DISABLED = new ResourceLocation(MODID, "textures/gui/button_rect_disabled.png");
+    public static final ResourceLocation IMAGE_BUTTON_CLAIM_REWARD_UNPRESSED = new ResourceLocation(MODID, "textures/gui/button_rect_small_unpressed.png");
+    public static final ResourceLocation IMAGE_BUTTON_CLAIM_REWARD_DISABLED = new ResourceLocation(MODID, "textures/gui/button_rect_small_disabled.png");
+    public static final ResourceLocation IMAGE_BUTTON_CLAIM_REWARD_PRESSED = new ResourceLocation(MODID, "textures/gui/button_rect_small_pressed.png");
     public static final ResourceLocation IMAGE_COLOR_BLACK = new ResourceLocation(MODID, "textures/gui/black.png");
     public static final ResourceLocation IMAGE_COLOR_RED = new ResourceLocation(MODID, "textures/gui/red.png");
     public static final ResourceLocation IMAGE_COLOR_GREEN = new ResourceLocation(MODID, "textures/gui/green.png");
@@ -39,6 +43,7 @@ public class Ref {
     public static final String ERR_MSG_STR_INVALID_JSON = "INVALID JSON";
     public static final int ERR_MSG_INT_INVALID_JSON = -1337;
     public static final boolean ERR_MSG_BOOL_INVALID_JSON = false;
+    public static boolean shouldSaveNextTick = false;
     public static String questBookLocation = "";
     public static String questsLocation = "";
     public static String questingProgressLocation = "";

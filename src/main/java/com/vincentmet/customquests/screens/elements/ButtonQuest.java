@@ -5,6 +5,7 @@ import com.vincentmet.customquests.lib.Utils;
 import com.vincentmet.customquests.quests.Quest;
 import com.vincentmet.customquests.screens.ScreenQuestingDevice;
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 
 public class ButtonQuest implements IQuestingGuiElement {
@@ -23,7 +24,7 @@ public class ButtonQuest implements IQuestingGuiElement {
     }
 
     @Override
-    public <T extends ScreenQuestingDevice> void render(T gui, double mouseX, double mouseY) {
+    public <T extends ScreenQuestingDevice> void render(T gui, PlayerEntity player, double mouseX, double mouseY) {
         if(Quest.isQuestCompletedForPlayer(uuid, quest.getId())){
             gui.getMinecraft().getTextureManager().bindTexture(Ref.IMAGE_BUTTON_HEXAGON_COMPLETED);
         }else if(Quest.hasQuestUncompletedDependenciesForPlayer(uuid, quest.getId())){
@@ -40,7 +41,7 @@ public class ButtonQuest implements IQuestingGuiElement {
     }
 
     @Override
-    public <T extends ScreenQuestingDevice> void onClick(T gui, double mouseX, double mouseY) {
+    public <T extends ScreenQuestingDevice> void onClick(T gui, PlayerEntity player, double mouseX, double mouseY) {
         if(!Quest.hasQuestUncompletedDependenciesForPlayer(uuid, quest.getId())){
             if(Utils.isMouseInBounds(mouseX, mouseY, x, y, x+WIDTH, y+HEIGHT)){
                 ScreenQuestingDevice.activeQuest = quest.getId();

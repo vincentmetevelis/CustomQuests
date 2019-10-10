@@ -29,7 +29,7 @@ public class ItemQuestingDevice extends Item{
     @Override
     public ActionResult<ItemStack> onItemRightClick(World world, PlayerEntity player, Hand hand){
         if (!world.isRemote){
-            Minecraft.getInstance().displayGuiScreen(new ScreenQuestingDevice(new TranslationTextComponent("title")));
+            Minecraft.getInstance().displayGuiScreen(new ScreenQuestingDevice(new TranslationTextComponent("title"), player));
         }
         return super.onItemRightClick(world, player, hand);
     }

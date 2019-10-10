@@ -13,12 +13,12 @@
             {
               "item":"minecraft:apple",
               "amount":1,
-              "nbt":"{}"
+              "nbt":""
             },
             {
               "item":"minecraft:stick",
               "amount":1,
-              "nbt":"{}"
+              "nbt":""
             }
            ]
         },
@@ -28,12 +28,12 @@
             {
               "item":"minecraft:diamond",
               "amount":2,
-              "nbt":"{}"
+              "nbt":""
             },
             {
               "item":"minecraft:gold_ingot",
               "amount":3,
-              "nbt":"{}"
+              "nbt":""
             }
            ]
         }
@@ -44,7 +44,7 @@
           "content":{
             "item":"minecraft:apple",
             "amount":1,
-            "nbt":"{}"
+            "nbt":""
           }
         }
       ],
@@ -63,12 +63,12 @@
             {
               "item":"minecraft:apple",
               "amount":1,
-              "nbt":"{}"
+              "nbt":""
             },
             {
               "item":"minecraft:stick",
               "amount":1,
-              "nbt":"{}"
+              "nbt":""
             }
           ]
         }
@@ -79,7 +79,7 @@
           "content":{
             "item":"minecraft:stick",
             "amount":1,
-            "nbt":"{}"
+            "nbt":""
           }
         }
       ],
@@ -96,17 +96,17 @@
           "type":"TRAVEL_TO",
           "sub_requirements": [
             {
-              "dim": 0,
+              "dim": "minecraft:overworld",
               "x": 0,
               "y": 0,
               "z": 0,
               "radius":20
             },
             {
-              "dim": 1,
-              "x": 10,
-              "y": 10,
-              "z": 10,
+              "dim": "minecraft:nether",
+              "x": 0,
+              "y": 100,
+              "z": 0,
               "radius":10
             }
           ]
@@ -147,7 +147,8 @@
         {
           "type":"SPAWN_ENTITY",
           "content":{
-            "entity":"minecraft:sheep"
+            "entity":"minecraft:sheep",
+            "amount":3
           }
         }
       ],
@@ -166,12 +167,12 @@
             {
               "item":"minecraft:apple",
               "amount":1,
-              "nbt":"{}"
+              "nbt":""
             },
             {
               "item":"minecraft:stick",
               "amount":1,
-              "nbt":"{}"
+              "nbt":""
             }
           ]
         }

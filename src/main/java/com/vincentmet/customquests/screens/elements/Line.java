@@ -7,6 +7,7 @@ import com.vincentmet.customquests.quests.Quest;
 import com.vincentmet.customquests.quests.QuestPosition;
 import com.vincentmet.customquests.screens.ScreenQuestingDevice;
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import org.lwjgl.opengl.GL11;
 
@@ -54,7 +55,7 @@ public class Line implements IQuestingGuiElement {
     }
 
     @Override
-    public <T extends ScreenQuestingDevice> void render(T gui, double mouseX, double mouseY) {
+    public <T extends ScreenQuestingDevice> void render(T gui, PlayerEntity player, double mouseX, double mouseY) {
         GL11.glPushMatrix();
         GL11.glTranslatef(this.x, this.y, 0);
         GL11.glRotated(this.angle, 0, 0, 1);
@@ -65,7 +66,7 @@ public class Line implements IQuestingGuiElement {
     }
 
     @Override
-    public <T extends ScreenQuestingDevice> void onClick(T gui, double mouseX, double mouseY) {
+    public <T extends ScreenQuestingDevice> void onClick(T gui, PlayerEntity player, double mouseX, double mouseY) {
 
     }
 }

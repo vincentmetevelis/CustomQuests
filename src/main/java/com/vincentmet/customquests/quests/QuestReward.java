@@ -1,15 +1,19 @@
 package com.vincentmet.customquests.quests;
 
+import com.google.gson.JsonObject;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.vincentmet.customquests.lib.Ref;
 import net.minecraft.block.Blocks;
 import net.minecraft.command.CommandSource;
-import net.minecraft.command.ICommandSource;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.world.dimension.DimensionType;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraftforge.registries.ForgeRegistries;
 
 public class QuestReward {
     private QuestRewardType type;
@@ -20,6 +24,23 @@ public class QuestReward {
         this.reward = reward;
     }
 
+    public JsonObject getJson(){
+        JsonObject json = new JsonObject();
+        switch(type){
+            case ITEMS:
+                json.addProperty("type", "ITEMS");
+                break;
+            case SPAWN_ENTITY:
+                json.addProperty("type", "SPAWN_ENTITY");
+                break;
+            case COMMAND:
+                json.addProperty("type", "COMMAND");
+                break;
+        }
+        json.add("content", reward.getJson());
+        return json;
+    }
+
     public QuestRewardType getType() {
         return type;
     }
@@ -28,28 +49,50 @@ public class QuestReward {
         return reward;
     }
 
+    public void setType(QuestRewardType type) {
+        this.type = type;
+        Ref.shouldSaveNextTick = true;
+    }
+
+    public void setReward(IQuestReward reward) {
+        this.reward = reward;
+        Ref.shouldSaveNextTick = true;
+    }
+
     public static class ReceiveItems implements IQuestReward{
-        private ItemStack items;
-        public ReceiveItems(ItemStack items){
-            this.items = items;
+        private ItemStack itemStack;
+        public ReceiveItems(ItemStack item){
+            this.itemStack = item;
+        }
+
+        @Override
+        public JsonObject getJson(){
+            JsonObject json = new JsonObject();
+            json.addProperty("item", ForgeRegistries.ITEMS.getKey(itemStack.getItem()).toString());
+            json.addProperty("amount", itemStack.getCount());
+            json.addProperty("nbt", itemStack.getTag()==null?"{}":itemStack.getTag().toString());
+            return json;
         }
 
         @Override
         public void executeReward(PlayerEntity player) {
-            player.inventory.addItemStackToInventory(items);
+            player.inventory.addItemStackToInventory(itemStack.copy());
         }
 
         @Override
         public String toString() {
-            return items.toString();
+            return itemStack.toString();
         }
 
         @Override
         public ItemStack getItemStack() {
-            return items;
+            return itemStack;
         }
 
-
+        public void setItem(ItemStack item) {
+            this.itemStack = item;
+            Ref.shouldSaveNextTick = true;
+        }
     }
 
     public static class Command implements IQuestReward{
@@ -59,10 +102,17 @@ public class QuestReward {
         }
 
         @Override
+        public JsonObject getJson() {
+            JsonObject json = new JsonObject();
+            json.addProperty("command", command);
+            return json;
+        }
+
+        @Override
         public void executeReward(PlayerEntity player) {
-            final CommandDispatcher<CommandSource> dispatcher = new CommandDispatcher<>();
+            final CommandDispatcher<CommandSource> dispatcher = player.getServer().getCommandManager().getDispatcher();
             try {
-                dispatcher.execute(command, new CommandSource(ICommandSource.field_213139_a_, player.getPositionVec(), player.getPitchYaw(), player.world.getServer().getWorld(player.dimension), 3, player.getDisplayName().getString(), player.getDisplayName(), null, player));
+                dispatcher.execute(command, new CommandSource(player, player.getPositionVec(), player.getPitchYaw(), player.world.getServer().getWorld(player.dimension), 3, player.getDisplayName().getString(), player.getDisplayName(), player.getServer(), player));
             } catch (CommandSyntaxException e) {
                 e.printStackTrace();
             }
@@ -77,27 +127,52 @@ public class QuestReward {
         public ItemStack getItemStack() {
             return new ItemStack(Blocks.COMMAND_BLOCK);
         }
+
+        public void setCommand(String command) {
+            this.command = command;
+            Ref.shouldSaveNextTick = true;
+        }
     }
 
     public static class SpawnEntity implements IQuestReward{
         private EntityType entity;
-        public SpawnEntity(EntityType entity){
+        private int amount;
+        public SpawnEntity(EntityType entity, int amount){
             this.entity = entity;
+            this.amount = amount;
+        }
+
+        @Override
+        public JsonObject getJson() {
+            JsonObject json = new JsonObject();
+            json.addProperty("entity", ForgeRegistries.ENTITIES.getKey(entity).toString());
+            json.addProperty("amount", amount);
+            return json;
         }
 
         @Override
         public void executeReward(PlayerEntity player) {
-            player.getEntityWorld().getServer().getWorld(player.dimension).summonEntity(entity.create(player.getEntityWorld()));
+            for(int i=0; i<amount;i++)player.getEntityWorld().getServer().getWorld(player.dimension).summonEntity(entity.create(player.world, new CompoundNBT(), new TranslationTextComponent("test"), player, player.getPosition(), SpawnReason.COMMAND, true, false));
         }
 
         @Override
         public String toString() {
-            return entity.toString();
+            return amount + "x " + entity.getName().getString();
         }
 
         @Override
         public ItemStack getItemStack() {
             return new ItemStack(Items.DIAMOND_SWORD);
+        }
+
+        public void setEntity(EntityType entity) {
+            this.entity = entity;
+            Ref.shouldSaveNextTick = true;
+        }
+
+        public void setAmount(int amount) {
+            this.amount = amount;
+            Ref.shouldSaveNextTick = true;
         }
     }
 }

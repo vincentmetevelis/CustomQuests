@@ -1,13 +1,19 @@
 package com.vincentmet.customquests.lib.handlers;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.vincentmet.customquests.lib.Ref;
 import com.vincentmet.customquests.lib.Utils;
+import com.vincentmet.customquests.quests.Quest;
+import com.vincentmet.customquests.quests.QuestLine;
+import com.vincentmet.customquests.quests.QuestUserProgress;
+import net.minecraft.client.renderer.entity.model.RendererModel;
 
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Random;
 
 public class JsonHandler {
     private static JsonObject jsonContainerQuests;
@@ -64,8 +70,59 @@ public class JsonHandler {
         }
     }
 
-    public static void writeJson(){ //todo
+    public static void writeJson(){
+        try{
+            FileWriter file = new FileWriter(Ref.questsLocation);
 
+            JsonObject json = new JsonObject();
+            JsonArray questArray = new JsonArray();
+            for(Quest quest : Ref.ALL_QUESTS){
+                questArray.add(quest.getJson());
+            }
+            json.add("quests", questArray);
+            file.write(json.toString());
+
+            file.flush();
+            file.close();
+        }catch(IOException e){
+            e.printStackTrace();
+        }
+
+        try{
+            FileWriter file = new FileWriter(Ref.questBookLocation);
+
+            JsonObject json = new JsonObject();
+            json.addProperty("title", Ref.ALL_QUESTBOOK.getTitle());
+            json.addProperty("text", Ref.ALL_QUESTBOOK.getDescription());
+            JsonArray questlineArray = new JsonArray();
+            for(QuestLine questLine : Ref.ALL_QUESTBOOK.getQuestlines()){
+                questlineArray.add(questLine.getJson());
+            }
+            json.add("questlines", questlineArray);
+            file.write(json.toString());
+
+            file.flush();
+            file.close();
+        }catch(IOException e){
+            e.printStackTrace();
+        }
+
+        try{
+            FileWriter file = new FileWriter(Ref.questingProgressLocation);
+
+            JsonObject json = new JsonObject();
+            JsonArray playerArray = new JsonArray();
+            for(QuestUserProgress users: Ref.ALL_QUESTING_PROGRESS){
+                playerArray.add(users.getJson());
+            }
+            json.add("players", playerArray);
+            file.write(json.toString());
+
+            file.flush();
+            file.close();
+        }catch(IOException e){
+            e.printStackTrace();
+        }
     }
 
     public static JsonObject getQuestbookJson(){

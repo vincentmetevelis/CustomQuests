@@ -1,7 +1,14 @@
 package com.vincentmet.customquests.quests;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import com.vincentmet.customquests.lib.Ref;
+import com.vincentmet.customquests.lib.Triple;
+import javafx.util.Pair;
+import jdk.nashorn.internal.ir.LiteralNode;
 import net.minecraft.item.Item;
+import net.minecraft.nbt.JsonToNBT;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +34,31 @@ public class Quest {
         this.position = position;
     }
 
+    public JsonObject getJson(){
+        JsonObject json = new JsonObject();
+        json.addProperty("id", id);
+        json.addProperty("icon", ForgeRegistries.ITEMS.getKey(icon).toString());
+        json.addProperty("title", title);
+        json.addProperty("text", description);
+        JsonArray dependencyArray = new JsonArray();
+        for(int questId : dependencyIds){
+            dependencyArray.add(questId);
+        }
+        json.add("dependencies", dependencyArray);
+        JsonArray requirementArray = new JsonArray();
+        for(QuestRequirement requirement : requirements){
+            requirementArray.add(requirement.getJson());
+        }
+        json.add("requirements", requirementArray);
+        JsonArray rewardArray = new JsonArray();
+        for(QuestReward reward : rewards){
+            rewardArray.add(reward.getJson());
+        }
+        json.add("rewards", rewardArray);
+        json.add("position", position.getJson());
+        return json;
+    }
+
     public static Quest getQuestFromId(int id){
         for(int i=0; i<Ref.ALL_QUESTS.size(); i++){
             if(Ref.ALL_QUESTS.get(i).id == id){
@@ -49,12 +81,92 @@ public class Quest {
         return false;
     }
 
-    public static boolean hasUnclaimedRewardsForPlayer(String uuid, int questId){
-        if(isQuestCompletedForPlayer(uuid, questId)){
-            for(QuestUserProgress userprogress : Ref.ALL_QUESTING_PROGRESS){
-                if(userprogress.getUuid().equals(uuid)){
-                    for(QuestStatus queststatus : userprogress.getQuestStatuses()){
-                        if(queststatus.getQuestId() == questId){
+    public static List<Integer> getUncompletedQuests(String uuid){ // Both active and locked quests
+        List<Integer> list = new ArrayList<>();
+        for(Quest quest : Ref.ALL_QUESTS){
+            if(!Quest.isQuestCompletedForPlayer(uuid, quest.getId())){
+                list.add(quest.getId());
+            }
+        }
+        return list;
+    }
+
+    public static List<Integer> getCompletedQuests(String uuid){
+        List<Integer> list = new ArrayList<>();
+        for(Quest quest : Ref.ALL_QUESTS){
+            if(Quest.isQuestCompletedForPlayer(uuid, quest.getId())){
+                list.add(quest.getId());
+            }
+        }
+        return list;
+    }
+
+    public static List<Integer> getLockedQuests(String uuid){ // no completed nor active quests, only those the player doesn't have access to yes
+        List<Integer> list = new ArrayList<>();
+        for (Quest quest : Ref.ALL_QUESTS) {
+            if(Quest.isQuestLocked(uuid, quest.getId())){
+                list.add(quest.getId());
+            }
+        }
+        return list;
+    }
+
+    public static boolean isQuestLocked(String uuid, int questId){
+        for (QuestUserProgress userProgress : Ref.ALL_QUESTING_PROGRESS) {
+            if(userProgress.getUuid().equals(uuid)){
+                if (Quest.isQuestCompletedForPlayer(uuid, questId) || Quest.hasQuestUncompletedDependenciesForPlayer(uuid, questId)){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public static List<Integer> getActiveQuests(String uuid){
+        List<Integer> list = new ArrayList<>();
+        for (Quest quest : Ref.ALL_QUESTS) {
+            if(Quest.isQuestActive(uuid, quest.getId())){
+                list.add(quest.getId());
+            }
+        }
+        return list;
+    }
+
+    public static boolean isQuestActive(String uuid, int questId){
+        for (QuestUserProgress userProgress : Ref.ALL_QUESTING_PROGRESS) {
+            if(userProgress.getUuid().equals(uuid)){
+                if (!Quest.isQuestCompletedForPlayer(uuid, questId) && !Quest.isQuestLocked(uuid, questId)){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public static List<Triple<Integer, Integer, Integer>> getActiveQuestsWithType(String uuid, QuestRequirementType type){
+        List<Triple<Integer, Integer, Integer>> list = new ArrayList<>();
+        for(int questId : Quest.getActiveQuests(uuid)){
+            int reqCount = 0;
+            for(QuestRequirement questRequirement : Quest.getQuestFromId(questId).getRequirements()){
+                if(questRequirement.getType() == type){
+                    int subReqCount=0;
+                    for(IQuestRequirement iqr : questRequirement.getSubRequirements()){
+                        list.add(new Triple<>(questId, reqCount, subReqCount));
+                        subReqCount++;
+                    }
+                }
+                reqCount++;
+            }
+        }
+        return list;
+    }
+
+    public static boolean hasUnclaimedRewardsForPlayer(String uuid, int questId) {
+        if (isQuestCompletedForPlayer(uuid, questId)) {
+            for (QuestUserProgress userprogress : Ref.ALL_QUESTING_PROGRESS) {
+                if (userprogress.getUuid().equals(uuid)) {
+                    for (QuestStatus queststatus : userprogress.getQuestStatuses()) {
+                        if (queststatus.getQuestId() == questId) {
                             return queststatus.isClaimed();//todo unittest this func
                         }
                     }
@@ -89,36 +201,49 @@ public class Quest {
         return Ref.ERR_MSG_INT_INVALID_JSON;
     }
 
-    public void setId(int id){
-        this.id = id;
-    }
-
     public void setTitle(String title) {
         this.title = title;
+        Ref.shouldSaveNextTick = true;
     }
 
     public void setDescription(String description) {
         this.description = description;
+        Ref.shouldSaveNextTick = true;
     }
 
     public void setRequirement(List<QuestRequirement> requirement) {
         this.requirements = requirement;
+        Ref.shouldSaveNextTick = true;
     }
 
     public void setDependencies(List<Integer> dependencyIds) {
         this.dependencyIds = dependencyIds;
+        Ref.shouldSaveNextTick = true;
     }
 
     public void setIcon(Item icon) {
         this.icon = icon;
+        Ref.shouldSaveNextTick = true;
     }
 
     public void setPosition(QuestPosition position) {
         this.position = position;
+        Ref.shouldSaveNextTick = true;
     }
 
     public void setRewards(List<QuestReward> rewards) {
         this.rewards = rewards;
+        Ref.shouldSaveNextTick = true;
+    }
+
+    public void addReward(QuestReward reward){
+        this.rewards.add(reward);
+        Ref.shouldSaveNextTick = true;
+    }
+
+    public void deleteReward(QuestReward reward){
+        this.rewards.remove(reward);
+        Ref.shouldSaveNextTick = true;
     }
 
     public int getId(){

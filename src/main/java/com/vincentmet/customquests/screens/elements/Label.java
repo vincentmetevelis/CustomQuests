@@ -2,6 +2,7 @@ package com.vincentmet.customquests.screens.elements;
 
 import com.vincentmet.customquests.lib.Ref;
 import com.vincentmet.customquests.screens.ScreenQuestingDevice;
+import net.minecraft.entity.player.PlayerEntity;
 
 public class Label implements IQuestingGuiElement {
     private int x;
@@ -25,12 +26,12 @@ public class Label implements IQuestingGuiElement {
     }
 
     @Override
-    public <T extends ScreenQuestingDevice> void render(T gui, double mouseX, double mouseY) {
+    public <T extends ScreenQuestingDevice> void render(T gui, PlayerEntity player, double mouseX, double mouseY) {
         gui.drawString(Ref.FONT_RENDERER, text, x, y, color);
     }
 
     @Override
-    public <T extends ScreenQuestingDevice> void onClick(T gui, double mouseX, double mouseY) {
+    public <T extends ScreenQuestingDevice> void onClick(T gui, PlayerEntity player, double mouseX, double mouseY) {
 
     }
 }

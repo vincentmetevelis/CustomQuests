@@ -1,5 +1,6 @@
 package com.vincentmet.customquests.quests;
 
+import com.vincentmet.customquests.lib.Ref;
 import net.minecraft.util.text.TranslationTextComponent;
 
 import java.util.List;
@@ -29,13 +30,26 @@ public class QuestMenu {
 
     public void setQuestlines(List<QuestLine> questlines) {
         this.questlines = questlines;
+        Ref.shouldSaveNextTick = true;
+    }
+
+    public void addQuestline(QuestLine questline){
+        this.questlines.add(questline);
+        Ref.shouldSaveNextTick = true;
+    }
+
+    public void deleteQuestline(QuestLine questline){
+        this.questlines.remove(questline);
+        Ref.shouldSaveNextTick = true;
     }
 
     public void setDescription(String description) {
         this.description = description;
+        Ref.shouldSaveNextTick = true;
     }
 
     public void setTitle(String title) {
         this.title = title;
+        Ref.shouldSaveNextTick = true;
     }
 }

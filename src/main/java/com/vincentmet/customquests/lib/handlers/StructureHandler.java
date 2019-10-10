@@ -1,6 +1,5 @@
 package com.vincentmet.customquests.lib.handlers;
 
-import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.vincentmet.customquests.lib.Ref;
@@ -169,7 +168,8 @@ public class StructureHandler {
                         questRewardList.add(new QuestReward(
                                 QuestRewardType.SPAWN_ENTITY,
                                 new QuestReward.SpawnEntity(
-                                        ConverterHelper.Quests.Rewards.SpawnEntity.getEntity(jsonQuestReward)
+                                        ConverterHelper.Quests.Rewards.SpawnEntity.getEntity(jsonQuestReward),
+                                        ConverterHelper.Quests.Rewards.SpawnEntity.getAmount(jsonQuestReward)
                                 )
                         ));
                         break;
@@ -191,7 +191,7 @@ public class StructureHandler {
         Ref.ALL_QUESTS = questsList;
     }
 
-    public static void initQuestingProgress(){
+    public static void initQuestingProgress(){ //todo make sure the a new player is correctly generated if one doesn't exist; same goes for quests per player
         JsonObject jsonProgress = JsonHandler.getQuestingProgressJson();
         List<QuestUserProgress> questUserProgressList = new ArrayList<>();
 
@@ -203,10 +203,14 @@ public class StructureHandler {
                 JsonObject jsonQuestStatus = jsonQuestStatusElement.getAsJsonObject();
 
                 List<QuestRequirementStatus> questStatusRequirementList = new ArrayList<>();
+                int reqCount = 0;
                 for(JsonElement jsonQuestRequirementStatusElement : ConverterHelper.QuestProgress.Players.QuestStatus.getRequirementCompletion(jsonQuestStatus)){
                     questStatusRequirementList.add(new QuestRequirementStatus(
+                            ConverterHelper.QuestProgress.Players.QuestStatus.getId(jsonQuestStatus),
+                            reqCount,
                             ConverterHelper.QuestProgress.Players.QuestStatus.RequirementCompletion.getSubRequirementCompletionStatusList(jsonQuestRequirementStatusElement.getAsJsonArray())
                     ));
+                    reqCount++;
                 }
 
                 questStatusList.add(new QuestStatus(

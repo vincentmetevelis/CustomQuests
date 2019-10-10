@@ -2,6 +2,7 @@ package com.vincentmet.customquests.screens.elements;
 
 import com.vincentmet.customquests.lib.Ref;
 import com.vincentmet.customquests.screens.ScreenQuestingDevice;
+import net.minecraft.entity.player.PlayerEntity;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -21,7 +22,7 @@ public class MultilineLabel implements IQuestingGuiElement {
         this.color = color;this.maxWidth = maxWidth;
     }
     @Override
-    public <T extends ScreenQuestingDevice> void render(T gui, double mouseX, double mouseY) {
+    public <T extends ScreenQuestingDevice> void render(T gui, PlayerEntity player, double mouseX, double mouseY) {
         List<String> lines = new ArrayList<>();
         List<String> spaceSplittedText = Arrays.asList(text.split(" "));
 
@@ -50,7 +51,7 @@ public class MultilineLabel implements IQuestingGuiElement {
     }
 
     @Override
-    public <T extends ScreenQuestingDevice> void onClick(T gui, double mouseX, double mouseY) {
+    public <T extends ScreenQuestingDevice> void onClick(T gui, PlayerEntity player, double mouseX, double mouseY) {
 
     }
 }

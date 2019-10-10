@@ -1,6 +1,7 @@
 package com.vincentmet.customquests;
 
 import com.vincentmet.customquests.lib.Ref;
+import com.vincentmet.customquests.lib.handlers.EventHandler;
 import com.vincentmet.customquests.lib.handlers.JsonHandler;
 import com.vincentmet.customquests.lib.handlers.StructureHandler;
 import com.vincentmet.customquests.network.proxies.ClientProxy;
@@ -35,6 +36,7 @@ public class BaseClass {
         //Config.loadConfig(Config.COMMON_CONFIG, FMLPaths.CONFIGDIR.get().resolve("customquests-common.toml"));
         //Config.loadConfig(Config.SERVER_CONFIG, FMLPaths.CONFIGDIR.get().resolve("customquests-server.toml"));
         MinecraftForge.EVENT_BUS.register(this);
+        MinecraftForge.EVENT_BUS.register(EventHandler.class);
     }
 
     private void setup(final FMLCommonSetupEvent event){

@@ -3,13 +3,10 @@ package com.vincentmet.customquests.lib.converters;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.stream.MalformedJsonException;
-import com.vincentmet.customquests.Objects;
 import com.vincentmet.customquests.lib.Ref;
 import com.vincentmet.customquests.lib.Utils;
 import com.vincentmet.customquests.quests.*;
 import javafx.util.Pair;
-import net.minecraft.client.util.JSONException;
 import net.minecraft.entity.EntityType;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
@@ -17,8 +14,6 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.registries.ForgeRegistries;
-
-import java.nio.charset.MalformedInputException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -372,6 +367,14 @@ public class ConverterHelper {
 						return null;
 					}
 				}
+
+				public static int getAmount(JsonObject json){
+					if(json.has("content") && json.get("content").getAsJsonObject().has("amount") && json.get("content").getAsJsonObject().get("amount").isJsonPrimitive()){
+						return json.get("content").getAsJsonObject().get("amount").getAsInt();
+					}else{
+						return Ref.ERR_MSG_INT_INVALID_JSON;
+					}
+				}
 			}
 
 			public static class TeleportTo{
@@ -397,7 +400,7 @@ public class ConverterHelper {
 		}
 	}
 
-	public static class QuestProgress{ //todo write to json file functions
+	public static class QuestProgress{
 		public static JsonArray getPlayers(JsonObject json){
 			if(json.has("players") && json.get("players").isJsonArray()){
 				return json.get("players").getAsJsonArray();

@@ -1,18 +1,9 @@
 {
-  "players":[
+  "players": [
     {
-      "uuid":"392e085c34d04f808a98f803794b547b",
-      "finished_quests":[],
-      "quest_status":[
-        {
-          "id": 0,
-          "claimed": false,
-          "requirement_completion":[
-            [1, 1],
-            [2, 3]
-          ]
-        }
-      ]
+      "uuid": "392e085c34d04f808a98f803794b547b",
+      "completed_quests": [],
+      "quest_status": []
     }
   ]
 }
