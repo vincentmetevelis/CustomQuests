@@ -255,7 +255,7 @@ public class QuestRequirement {
 
         @Override
         public String getLabelText() {
-            return dim + " - " + blockPos.toString();
+            return "Dim: " + dim.split(":")[1] + "; Pos: [" + blockPos.getX() + ", " + blockPos.getY() + ", " + blockPos.getZ() + "]";
         }
 
         @Override

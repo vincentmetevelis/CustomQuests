@@ -191,7 +191,7 @@ public class StructureHandler {
         Ref.ALL_QUESTS = questsList;
     }
 
-    public static void initQuestingProgress(){ //todo make sure the a new player is correctly generated if one doesn't exist; same goes for quests per player
+    public static void initQuestingProgress(){
         JsonObject jsonProgress = JsonHandler.getQuestingProgressJson();
         List<QuestUserProgress> questUserProgressList = new ArrayList<>();
 
@@ -225,6 +225,8 @@ public class StructureHandler {
                     questStatusList
             ));
         }
+
+        //todo make sure the a new player is correctly generated if one doesn't exist
 
         Ref.ALL_QUESTING_PROGRESS = questUserProgressList;
     }

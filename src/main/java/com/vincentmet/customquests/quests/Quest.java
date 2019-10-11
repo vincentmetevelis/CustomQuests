@@ -6,8 +6,10 @@ import com.vincentmet.customquests.lib.Ref;
 import com.vincentmet.customquests.lib.Triple;
 import javafx.util.Pair;
 import jdk.nashorn.internal.ir.LiteralNode;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.nbt.JsonToNBT;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.ArrayList;
@@ -161,21 +163,6 @@ public class Quest {
         return list;
     }
 
-    public static boolean hasUnclaimedRewardsForPlayer(String uuid, int questId) {
-        if (isQuestCompletedForPlayer(uuid, questId)) {
-            for (QuestUserProgress userprogress : Ref.ALL_QUESTING_PROGRESS) {
-                if (userprogress.getUuid().equals(uuid)) {
-                    for (QuestStatus queststatus : userprogress.getQuestStatuses()) {
-                        if (queststatus.getQuestId() == questId) {
-                            return queststatus.isClaimed();//todo unittest this func
-                        }
-                    }
-                }
-            }
-        }
-        return false;
-    }
-
     public static boolean hasQuestUncompletedDependenciesForPlayer(String uuid, int questId){
         boolean areAllDependenciesCompleted = true;
         for(int dependencyId : Quest.getQuestFromId(questId).getDependencies()){ // get dependencies for current quest
@@ -188,6 +175,33 @@ public class Quest {
 
     public static boolean areQuestsInSameQuestline(int quest1, int quest2){
         return Quest.getQuestFromId(quest1).getQuestline() == Quest.getQuestFromId(quest2).getQuestline();
+    }
+
+    public static boolean isPlayerInRadius(PlayerEntity player, Triple<String, BlockPos, Integer> dimPosRadius){
+        BlockPos qp = dimPosRadius.getMiddle();
+        BlockPos pp = player.getPosition();
+        int r = dimPosRadius.getRight();
+        return player.world.getDimension().getType().toString().substring(14, player.world.getDimension().getType().toString().length()-1).equals(dimPosRadius.getLeft()) && qp.getX() <= pp.getX()+r && qp.getX() >= pp.getX()-r && qp.getY() <= pp.getY()+r && qp.getY() >= pp.getY()-r && qp.getZ() <= pp.getZ()+r && qp.getZ() >= pp.getZ()-r;
+    }
+
+    public static Triple<String, BlockPos, Integer> getDimPosRadius(int questId, int reqId, int subReqId){
+        int reqCount = 0;
+        for(QuestRequirement questRequirement : Quest.getQuestFromId(questId).getRequirements()){
+            if(reqCount == reqId){
+                if(questRequirement.getType() == QuestRequirementType.TRAVEL_TO) {
+                    int subReqCount = 0;
+                    for (IQuestRequirement questSubRequirements : questRequirement.getSubRequirements()) {
+                        if(subReqCount == subReqId){
+                            QuestRequirement.TravelTo subReqTT = ((QuestRequirement.TravelTo)questSubRequirements);
+                            return new Triple<>(subReqTT.getDim(), subReqTT.getBlockPos(), subReqTT.getRadius());
+                        }
+                        subReqCount++;
+                    }
+                }
+            }
+            reqCount++;
+        }
+        return new Triple<>("minecraft:overworld", new BlockPos(0, 0, 0), 0);
     }
 
     public int getQuestline(){

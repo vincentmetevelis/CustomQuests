@@ -13,7 +13,9 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.registry.Registry;
 import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
@@ -23,6 +25,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.rmi.CORBA.Util;
 import java.awt.event.ItemEvent;
@@ -40,7 +43,7 @@ public class EventHandler {//todo check if onCrafted event exists and check for 
 
     @SubscribeEvent
     public static void onItemCraft(PlayerEvent.ItemCraftedEvent event){
-        List<ItemStack> itemsToCheckFor = new ArrayList<>(); //todo set this list to all the active quests that require crafting detection, perhaps make this a Pair<> so the questID can be tracked
+        List<Triple<Integer, Integer, Integer>> itemsToCheckFor = new ArrayList<>(); //todo set this list to all the active quests that require crafting detection
         if(itemsToCheckFor.contains(event.getCrafting())){
             //todo set player questing progress to complete for the quest
         }
@@ -48,7 +51,7 @@ public class EventHandler {//todo check if onCrafted event exists and check for 
 
     @SubscribeEvent
     public static void onItemPickup(PlayerEvent.ItemPickupEvent event){
-        List<Triple<Integer, Integer, Integer>> itemsToCheckFor = Quest.getActiveQuestsWithType(Utils.getUUID("vincentmet"), QuestRequirementType.ITEM_DETECT); //todo set this list to all the active quests that require item detection, perhaps make this a Pair<> so the questID can be tracked
+        List<Triple<Integer, Integer, Integer>> itemsToCheckFor = Quest.getActiveQuestsWithType(Utils.getUUID("vincentmet"), QuestRequirementType.ITEM_DETECT);
         if(itemsToCheckFor.contains(event.getStack())){
             //todo set player questing progress to complete for the quest
         }
@@ -62,91 +65,27 @@ public class EventHandler {//todo check if onCrafted event exists and check for 
         }
 
         if(event.world.getGameTime() % 20 == 0){//todo take into account the gamerule doDaylightCycle
+            for(Quest quest : Ref.ALL_QUESTS){
+                if(QuestUserProgress.areAllRequirementsCompleted(Utils.getUUID("vincentmet"), quest.getId())){
+                    for(QuestUserProgress userprogress : Ref.ALL_QUESTING_PROGRESS){
+                        if(userprogress.getUuid().equals(Utils.getUUID("vincentmet"))){
+                            userprogress.addCompletedQuest(quest.getId());
+                            Ref.shouldSaveNextTick = true;
+                        }
+                    }
+                }
+            }
+
             for(PlayerEntity playerEntity : event.world.getPlayers()){
                 List<Triple<Integer, Integer, Integer>> activeLocationTrackingQuestIds = Quest.getActiveQuestsWithType(Utils.getUUID("vincentmet"), QuestRequirementType.TRAVEL_TO/*playerEntity.getUniqueID().toString().replace("-", "")*/);
                 for(Triple<Integer, Integer, Integer> questAndReqAndSubReqId : activeLocationTrackingQuestIds){
-                    Triple<String, BlockPos, Integer> dimPosRadius = getDimPosRadius(Utils.getUUID("vincentmet"), questAndReqAndSubReqId.getLeft(), questAndReqAndSubReqId.getMiddle(), questAndReqAndSubReqId.getRight());
-                    if(isPlayerInRadius(playerEntity, dimPosRadius)){
+                    Triple<String, BlockPos, Integer> dimPosRadius = Quest.getDimPosRadius(questAndReqAndSubReqId.getLeft(), questAndReqAndSubReqId.getMiddle(), questAndReqAndSubReqId.getRight());
+                    if(Quest.isPlayerInRadius(playerEntity, dimPosRadius)){
                         playerEntity.sendMessage(new TranslationTextComponent("In radius of Quest: " + questAndReqAndSubReqId.getLeft() + "; Requirement: " + questAndReqAndSubReqId.getMiddle() + "; Subrequirement: " + questAndReqAndSubReqId.getRight() + "; @ " + dimPosRadius));
-                        setPlayerProgressToCompleted(Utils.getUUID("vincentmet"), questAndReqAndSubReqId.getLeft(), questAndReqAndSubReqId.getMiddle(), questAndReqAndSubReqId.getRight(), QuestRequirementType.TRAVEL_TO);
+                        QuestUserProgress.setPlayerProgressToCompleted(Utils.getUUID("vincentmet"), questAndReqAndSubReqId.getLeft(), questAndReqAndSubReqId.getMiddle(), questAndReqAndSubReqId.getRight(), QuestRequirementType.TRAVEL_TO);
                     }
                 }
             }
         }
     }
-    //////////////////////////////////To Move
-    private static boolean isPlayerInRadius(PlayerEntity player, Triple<String, BlockPos, Integer> dimPosRadius){
-        BlockPos qp = dimPosRadius.getMiddle();
-        BlockPos pp = player.getPosition();
-        int r = dimPosRadius.getRight();
-        if(/*todo fix dimension condition*//*player.world.getDimension().getType().toString() == dimPosRadius.getLeft() && */qp.getX() <= pp.getX()+r && qp.getX() >= pp.getX()-r && qp.getY() <= pp.getY()+r && qp.getY() >= pp.getY()-r && qp.getZ() <= pp.getZ()+r && qp.getZ() >= pp.getZ()-r){
-            return true;
-        }else{
-            return false;
-        }
-    }
-
-    private static void setPlayerProgressToCompleted(String uuid, int questId, int reqId, int subReqId, QuestRequirementType type){
-        for(QuestUserProgress userprogress : Ref.ALL_QUESTING_PROGRESS) {
-            if(userprogress.getUuid().equals(uuid)) {
-                for(QuestStatus status : userprogress.getQuestStatuses()) {
-                    if(status.getQuestId() == questId){
-                        int reqCount = 0;
-                        for(QuestRequirementStatus reqStatus : status.getQuestRequirementStatuses()){
-                            if(reqCount == reqId){
-                                switch(type){
-                                    case TRAVEL_TO:
-                                        reqStatus.setProgress(subReqId, 1);
-                                        break;
-                                    case KILL_MOB:
-                                        //reqStatus.setProgress(subReqId, 0);
-                                        break;
-                                    case ITEM_DELIVER:
-
-                                        break;
-                                    case CRAFTING_DETECT:
-
-                                        break;
-                                    case ITEM_DETECT:
-
-                                        break;
-                                    case BLOCK_MINE:
-
-                                        break;
-                                    case RF_DELIVER:
-
-                                        break;
-                                    case RF_GENERATE:
-
-                                        break;
-                                }
-                            }
-                            reqCount++;
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    private static Triple<String, BlockPos, Integer> getDimPosRadius(String uuid, int questId, int reqId, int subReqId){
-        int reqCount = 0;
-        for(QuestRequirement questRequirement : Quest.getQuestFromId(questId).getRequirements()){
-            if(reqCount == reqId){
-                if(questRequirement.getType() == QuestRequirementType.TRAVEL_TO) {
-                    int subReqCount = 0;
-                    for (IQuestRequirement questSubRequirements : questRequirement.getSubRequirements()) {
-                        if(subReqCount == subReqId){
-                            QuestRequirement.TravelTo subReqTT = ((QuestRequirement.TravelTo)questSubRequirements);
-                            return new Triple<String, BlockPos, Integer>(subReqTT.getDim(), subReqTT.getBlockPos(), subReqTT.getRadius());
-                        }
-                        subReqCount++;
-                    }
-                }
-            }
-            reqCount++;
-        }
-        return new Triple<>("minecraft:overworld", new BlockPos(0, 0, 0), 0);
-    }
-    /////////////////////////////////End To Move
 }

@@ -3,7 +3,7 @@ package com.vincentmet.customquests.screens.elements;
 import com.vincentmet.customquests.lib.Ref;
 import com.vincentmet.customquests.lib.Utils;
 import com.vincentmet.customquests.quests.IQuestReward;
-import com.vincentmet.customquests.quests.Quest;
+import com.vincentmet.customquests.quests.QuestUserProgress;
 import com.vincentmet.customquests.screens.ScreenQuestingDevice;
 import net.minecraft.entity.player.PlayerEntity;
 
@@ -16,7 +16,8 @@ public class ButtonClaimReward implements IQuestingGuiElement {
     private int y;
     private int quest;
     private List<IQuestReward> questRewards;
-    private String text = "Claim";
+    private String textUnclaimed = "Claim";
+    private String textClaimed = "Claimed!";
 
     public ButtonClaimReward(int posX, int posY, int quest, List<IQuestReward> questRewards){
         this.x = posX;
@@ -27,7 +28,8 @@ public class ButtonClaimReward implements IQuestingGuiElement {
 
     @Override
     public <T extends ScreenQuestingDevice> void render(T gui, PlayerEntity player, double mouseX, double mouseY) {
-        if(Quest.hasUnclaimedRewardsForPlayer(Utils.getUUID("vincentmet"), quest)){
+        String text = QuestUserProgress.isRewardClaimed(Utils.getUUID("vincentmet"), quest) ? textClaimed : textUnclaimed;
+        if(!QuestUserProgress.isRewardClaimed(Utils.getUUID("vincentmet"), quest) && QuestUserProgress.areAllRequirementsCompleted(Utils.getUUID("vincentmet"), quest)){
             if(Utils.isMouseInBounds(mouseX, mouseY, x, y, x + WIDTH, y + HEIGHT)){
                 gui.getMinecraft().getTextureManager().bindTexture(Ref.IMAGE_BUTTON_CLAIM_REWARD_PRESSED);
             }else{
@@ -51,10 +53,14 @@ public class ButtonClaimReward implements IQuestingGuiElement {
 
     @Override
     public <T extends ScreenQuestingDevice> void onClick(T gui, PlayerEntity player, double mouseX, double mouseY) {
-        if(Utils.isMouseInBounds(mouseX, mouseY, x, y, x+WIDTH, y+HEIGHT)){
-            if(Quest.hasUnclaimedRewardsForPlayer(Utils.getUUID("vincentmet"), quest)){
-                for(IQuestReward reward : questRewards){
-                    reward.executeReward(player);
+        if(!QuestUserProgress.isRewardClaimed(Utils.getUUID("vincentmet"), quest) && QuestUserProgress.areAllRequirementsCompleted(Utils.getUUID("vincentmet"), quest)){
+            if(Utils.isMouseInBounds(mouseX, mouseY, x, y, x+WIDTH, y+HEIGHT)){
+                if(!QuestUserProgress.isRewardClaimed(Utils.getUUID("vincentmet"), quest) && QuestUserProgress.areAllRequirementsCompleted(Utils.getUUID("vincentmet"), quest)){
+                    for(IQuestReward reward : questRewards){
+                        reward.executeReward(player);
+                        QuestUserProgress.setRewardsClaimed(Utils.getUUID("vincentmet"), quest);
+                        Ref.shouldSaveNextTick = true;
+                    }
                 }
             }
         }

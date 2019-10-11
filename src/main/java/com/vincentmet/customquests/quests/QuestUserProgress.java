@@ -37,12 +37,73 @@ public class QuestUserProgress {
         Ref.shouldSaveNextTick = true;
     }
 
-    public static boolean areAllRequirementsCompleted(int questId, String uuid){//todo
+    public static boolean areAllRequirementsCompleted(String uuid, int questId){
+        boolean isCompleted = true;
+        for(QuestUserProgress userprogress : Ref.ALL_QUESTING_PROGRESS){
+            if(userprogress.uuid.equals(uuid)){
+                for(QuestStatus reqStatus : userprogress.questStatuses){
+                    if(reqStatus.getQuestId() == questId){
+                        for(QuestRequirementStatus subReqStatus : reqStatus.getQuestRequirementStatuses()){
+                            for(int subReqProgress : subReqStatus.getProgress()){
+
+                                for(QuestRequirement req : Quest.getQuestFromId(questId).getRequirements()){
+                                    for(IQuestRequirement subReq : req.getSubRequirements()){
+                                        if(subReqProgress != subReq.getCompletionNumber()){
+                                            isCompleted = false;
+                                        }
+                                    }
+                                }
+
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return isCompleted;
+    }
+
+    public static boolean isRewardClaimed(String uuid, int questId){
+        for(QuestUserProgress progress : Ref.ALL_QUESTING_PROGRESS){
+            if(progress.getUuid().equals(uuid)){
+                for(QuestStatus reqStatus : progress.questStatuses){
+                    if(reqStatus.getQuestId() == questId){
+                        return reqStatus.isClaimed();
+                    }
+                }
+            }
+        }
         return false;
     }
 
-    public static boolean isRewardClaimed(int questId, String uuid){//todo
-        return false;
+    public static void setRewardsClaimed(String uuid, int questId){
+        for(QuestUserProgress progress : Ref.ALL_QUESTING_PROGRESS){
+            if(progress.getUuid().equals(uuid)){
+                for(QuestStatus reqStatus : progress.questStatuses){
+                    if(reqStatus.getQuestId() == questId){
+                        reqStatus.setClaimed(true);
+                    }
+                }
+            }
+        }
+    }
+
+    public static void setPlayerProgressToCompleted(String uuid, int questId, int reqId, int subReqId, QuestRequirementType type){
+        for(QuestUserProgress userprogress : Ref.ALL_QUESTING_PROGRESS) {
+            if(userprogress.getUuid().equals(uuid)) {
+                for(QuestStatus status : userprogress.getQuestStatuses()) {
+                    if(status.getQuestId() == questId){
+                        int reqCount = 0;
+                        for(QuestRequirementStatus reqStatus : status.getQuestRequirementStatuses()){
+                            if(reqCount == reqId){
+                                reqStatus.setProgress(subReqId, Quest.getQuestFromId(questId).getRequirements().get(reqId).getSubRequirements().get(subReqId).getCompletionNumber());
+                            }
+                            reqCount++;
+                        }
+                    }
+                }
+            }
+        }
     }
 
     public String getUuid() {
@@ -67,8 +128,10 @@ public class QuestUserProgress {
     }
 
     public void addCompletedQuest(int questId){
-        this.completedQuestsIds.add(questId);
-        Ref.shouldSaveNextTick = true;
+        if(!this.completedQuestsIds.contains(questId)){
+            this.completedQuestsIds.add(questId);
+            Ref.shouldSaveNextTick = true;
+        }
     }
     
     public void deleteCompletedQuest(int questId){

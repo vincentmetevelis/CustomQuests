@@ -4,6 +4,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.vincentmet.customquests.lib.Ref;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class QuestLine {
@@ -32,9 +33,21 @@ public class QuestLine {
         return json;
     }
 
-    public static boolean isQuestlineUnlocked(String uuid, int questline){
-        //todo add logic here
-        return false;
+    public static List<Integer> getUnlockedQuestlines(String uuid){ //todo fix this methods (doesn't add all questlines)
+        List<Integer> completedQuestIds = Quest.getCompletedQuests(uuid);
+        List<Integer> unlockedQuestlines = new ArrayList<>();
+        for(Quest quest : Ref.ALL_QUESTS){
+            for(int dependency : quest.getDependencies()){
+                if(completedQuestIds.contains(dependency)){
+                    unlockedQuestlines.add(quest.getQuestline());
+                }
+            }
+        }
+        return unlockedQuestlines;
+    }
+
+    public static boolean isQuestlineUnlocked(String uuid, int questlineId){
+        return getUnlockedQuestlines(uuid).contains(questlineId);
     }
     
     public void setTitle(String title) {
