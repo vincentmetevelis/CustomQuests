@@ -48,7 +48,7 @@ public class QuestUserProgress {
 
                                 for(QuestRequirement req : Quest.getQuestFromId(questId).getRequirements()){
                                     for(IQuestRequirement subReq : req.getSubRequirements()){
-                                        if(subReqProgress != subReq.getCompletionNumber()){
+                                        if(subReqProgress < subReq.getCompletionNumber()){
                                             isCompleted = false;
                                         }
                                     }
@@ -88,7 +88,7 @@ public class QuestUserProgress {
         }
     }
 
-    public static void setPlayerProgressToCompleted(String uuid, int questId, int reqId, int subReqId, QuestRequirementType type){
+    public static void setPlayerProgressToCompleted(String uuid, int questId, int reqId, int subReqId){
         for(QuestUserProgress userprogress : Ref.ALL_QUESTING_PROGRESS) {
             if(userprogress.getUuid().equals(uuid)) {
                 for(QuestStatus status : userprogress.getQuestStatuses()) {
@@ -97,6 +97,24 @@ public class QuestUserProgress {
                         for(QuestRequirementStatus reqStatus : status.getQuestRequirementStatuses()){
                             if(reqCount == reqId){
                                 reqStatus.setProgress(subReqId, Quest.getQuestFromId(questId).getRequirements().get(reqId).getSubRequirements().get(subReqId).getCompletionNumber());
+                            }
+                            reqCount++;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    public static void addPlayerProgress(String uuid, int questId, int reqId, int subReqId, int amount){
+        for(QuestUserProgress userprogress : Ref.ALL_QUESTING_PROGRESS) {
+            if(userprogress.getUuid().equals(uuid)) {
+                for(QuestStatus status : userprogress.getQuestStatuses()) {
+                    if(status.getQuestId() == questId){
+                        int reqCount = 0;
+                        for(QuestRequirementStatus reqStatus : status.getQuestRequirementStatuses()){
+                            if(reqCount == reqId){
+                                reqStatus.setProgress(subReqId, reqStatus.getProgress(subReqId) + amount);
                             }
                             reqCount++;
                         }

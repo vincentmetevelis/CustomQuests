@@ -8,6 +8,7 @@ import javafx.util.Pair;
 import jdk.nashorn.internal.ir.LiteralNode;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.JsonToNBT;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -202,6 +203,26 @@ public class Quest {
             reqCount++;
         }
         return new Triple<>("minecraft:overworld", new BlockPos(0, 0, 0), 0);
+    }
+
+    public static ItemStack getItemstackForCraftingDetect(int questId, int reqId, int subReqId){
+        int reqCount = 0;
+        for(QuestRequirement questRequirement : Quest.getQuestFromId(questId).getRequirements()){
+            if(reqCount == reqId){
+                if(questRequirement.getType() == QuestRequirementType.CRAFTING_DETECT) {
+                    int subReqCount = 0;
+                    for (IQuestRequirement questSubRequirements : questRequirement.getSubRequirements()) {
+                        if(subReqCount == subReqId){
+                            QuestRequirement.ItemCraft subReqC = ((QuestRequirement.ItemCraft)questSubRequirements);
+                            return subReqC.getItemStack();
+                        }
+                        subReqCount++;
+                    }
+                }
+            }
+            reqCount++;
+        }
+        return null;
     }
 
     public int getQuestline(){

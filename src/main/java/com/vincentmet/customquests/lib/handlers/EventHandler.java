@@ -43,9 +43,14 @@ public class EventHandler {//todo check if onCrafted event exists and check for 
 
     @SubscribeEvent
     public static void onItemCraft(PlayerEvent.ItemCraftedEvent event){
-        List<Triple<Integer, Integer, Integer>> itemsToCheckFor = new ArrayList<>(); //todo set this list to all the active quests that require crafting detection
-        if(itemsToCheckFor.contains(event.getCrafting())){
-            //todo set player questing progress to complete for the quest
+        List<Triple<Integer, Integer, Integer>> activeItemCraftQuestIds = Quest.getActiveQuestsWithType(Utils.getUUID("vincentmet"), QuestRequirementType.CRAFTING_DETECT);
+
+        for(Triple<Integer, Integer, Integer> questAndReqAndSubReqId : activeItemCraftQuestIds){
+            ItemStack itemStack = Quest.getItemstackForCraftingDetect(questAndReqAndSubReqId.getLeft(), questAndReqAndSubReqId.getMiddle(), questAndReqAndSubReqId.getRight());
+            if(event.getCrafting().getItem() == itemStack.getItem()/* && event.getCrafting().getTag() == itemStack.getTag()*/){
+                QuestUserProgress.addPlayerProgress(Utils.getUUID("vincentmet"), questAndReqAndSubReqId.getLeft(), questAndReqAndSubReqId.getMiddle(), questAndReqAndSubReqId.getRight(), event.getCrafting().getCount());
+                Ref.shouldSaveNextTick = true;
+            }
         }
     }
 
@@ -82,7 +87,7 @@ public class EventHandler {//todo check if onCrafted event exists and check for 
                     Triple<String, BlockPos, Integer> dimPosRadius = Quest.getDimPosRadius(questAndReqAndSubReqId.getLeft(), questAndReqAndSubReqId.getMiddle(), questAndReqAndSubReqId.getRight());
                     if(Quest.isPlayerInRadius(playerEntity, dimPosRadius)){
                         playerEntity.sendMessage(new TranslationTextComponent("In radius of Quest: " + questAndReqAndSubReqId.getLeft() + "; Requirement: " + questAndReqAndSubReqId.getMiddle() + "; Subrequirement: " + questAndReqAndSubReqId.getRight() + "; @ " + dimPosRadius));
-                        QuestUserProgress.setPlayerProgressToCompleted(Utils.getUUID("vincentmet"), questAndReqAndSubReqId.getLeft(), questAndReqAndSubReqId.getMiddle(), questAndReqAndSubReqId.getRight(), QuestRequirementType.TRAVEL_TO);
+                        QuestUserProgress.setPlayerProgressToCompleted(Utils.getUUID("vincentmet"), questAndReqAndSubReqId.getLeft(), questAndReqAndSubReqId.getMiddle(), questAndReqAndSubReqId.getRight());
                     }
                 }
             }

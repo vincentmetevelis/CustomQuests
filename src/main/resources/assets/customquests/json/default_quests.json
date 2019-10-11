@@ -165,7 +165,7 @@
           "type":"CRAFTING_DETECT",
           "sub_requirements": [
             {
-              "item":"minecraft:apple",
+              "item":"minecraft:iron_block",
               "amount":1,
               "nbt":""
             },
