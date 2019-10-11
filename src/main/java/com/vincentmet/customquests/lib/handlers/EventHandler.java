@@ -33,7 +33,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Mod.EventBusSubscriber(modid = Ref.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
-public class EventHandler {//todo check if onCrafted event exists and check for item in inventory in the world tick eventhandler
+public class EventHandler {
     @SubscribeEvent
     public static void registerItems(RegistryEvent.Register<Item> event){
         event.getRegistry().registerAll(
@@ -47,19 +47,16 @@ public class EventHandler {//todo check if onCrafted event exists and check for 
 
         for(Triple<Integer, Integer, Integer> questAndReqAndSubReqId : activeItemCraftQuestIds){
             ItemStack itemStack = Quest.getItemstackForCraftingDetect(questAndReqAndSubReqId.getLeft(), questAndReqAndSubReqId.getMiddle(), questAndReqAndSubReqId.getRight());
-            if(event.getCrafting().getItem() == itemStack.getItem()/* && event.getCrafting().getTag() == itemStack.getTag()*/){
+            if(event.getCrafting().getItem() == itemStack.getItem() && event.getCrafting().getTag() == itemStack.getTag()){
+                event.getPlayer().sendMessage(new TranslationTextComponent("Crafted item of Quest: " + questAndReqAndSubReqId.getLeft() + "; Requirement: " + questAndReqAndSubReqId.getMiddle() + "; Subrequirement: " + questAndReqAndSubReqId.getRight() + "; " + itemStack));
                 QuestUserProgress.addPlayerProgress(Utils.getUUID("vincentmet"), questAndReqAndSubReqId.getLeft(), questAndReqAndSubReqId.getMiddle(), questAndReqAndSubReqId.getRight(), event.getCrafting().getCount());
-                Ref.shouldSaveNextTick = true;
             }
         }
     }
 
     @SubscribeEvent
-    public static void onItemPickup(PlayerEvent.ItemPickupEvent event){
-        List<Triple<Integer, Integer, Integer>> itemsToCheckFor = Quest.getActiveQuestsWithType(Utils.getUUID("vincentmet"), QuestRequirementType.ITEM_DETECT);
-        if(itemsToCheckFor.contains(event.getStack())){
-            //todo set player questing progress to complete for the quest
-        }
+    public static void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event){
+        //todo check if players are new, and generate QuestUserProgress for them
     }
 
     @SubscribeEvent
@@ -87,6 +84,21 @@ public class EventHandler {//todo check if onCrafted event exists and check for 
                     Triple<String, BlockPos, Integer> dimPosRadius = Quest.getDimPosRadius(questAndReqAndSubReqId.getLeft(), questAndReqAndSubReqId.getMiddle(), questAndReqAndSubReqId.getRight());
                     if(Quest.isPlayerInRadius(playerEntity, dimPosRadius)){
                         playerEntity.sendMessage(new TranslationTextComponent("In radius of Quest: " + questAndReqAndSubReqId.getLeft() + "; Requirement: " + questAndReqAndSubReqId.getMiddle() + "; Subrequirement: " + questAndReqAndSubReqId.getRight() + "; @ " + dimPosRadius));
+                        QuestUserProgress.setPlayerProgressToCompleted(Utils.getUUID("vincentmet"), questAndReqAndSubReqId.getLeft(), questAndReqAndSubReqId.getMiddle(), questAndReqAndSubReqId.getRight());
+                    }
+                }
+
+                List<Triple<Integer, Integer, Integer>> activeItemDetectQuestIds = Quest.getActiveQuestsWithType(Utils.getUUID("vincentmet"), QuestRequirementType.ITEM_DETECT);
+                for(Triple<Integer, Integer, Integer> questAndReqAndSubReqId : activeItemDetectQuestIds){
+                    ItemStack itemStack = Quest.getItemstackForItemDetect(questAndReqAndSubReqId.getLeft(), questAndReqAndSubReqId.getMiddle(), questAndReqAndSubReqId.getRight());
+                    int correctItemInInvCount = 0;
+                    for(ItemStack mainInventoryStack : playerEntity.inventory.mainInventory){
+                        if(mainInventoryStack.getItem() == itemStack.getItem()){
+                            correctItemInInvCount += mainInventoryStack.getCount();
+                        }
+                    }
+                    if(itemStack.getCount() == correctItemInInvCount){
+                        playerEntity.sendMessage(new TranslationTextComponent("In radius of Quest: " + questAndReqAndSubReqId.getLeft() + "; Requirement: " + questAndReqAndSubReqId.getMiddle() + "; Subrequirement: " + questAndReqAndSubReqId.getRight() + "; " + itemStack));
                         QuestUserProgress.setPlayerProgressToCompleted(Utils.getUUID("vincentmet"), questAndReqAndSubReqId.getLeft(), questAndReqAndSubReqId.getMiddle(), questAndReqAndSubReqId.getRight());
                     }
                 }

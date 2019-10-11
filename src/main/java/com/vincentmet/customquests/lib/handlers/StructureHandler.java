@@ -226,8 +226,6 @@ public class StructureHandler {
             ));
         }
 
-        //todo make sure the a new player is correctly generated if one doesn't exist
-
         Ref.ALL_QUESTING_PROGRESS = questUserProgressList;
     }
 }

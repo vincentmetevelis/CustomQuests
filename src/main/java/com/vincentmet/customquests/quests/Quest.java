@@ -225,6 +225,26 @@ public class Quest {
         return null;
     }
 
+    public static ItemStack getItemstackForItemDetect(int questId, int reqId, int subReqId){
+        int reqCount = 0;
+        for(QuestRequirement questRequirement : Quest.getQuestFromId(questId).getRequirements()){
+            if(reqCount == reqId){
+                if(questRequirement.getType() == QuestRequirementType.ITEM_DETECT) {
+                    int subReqCount = 0;
+                    for (IQuestRequirement questSubRequirements : questRequirement.getSubRequirements()) {
+                        if(subReqCount == subReqId){
+                            QuestRequirement.ItemDetect subReqD = ((QuestRequirement.ItemDetect)questSubRequirements);
+                            return subReqD.getItemStack();
+                        }
+                        subReqCount++;
+                    }
+                }
+            }
+            reqCount++;
+        }
+        return null;
+    }
+
     public int getQuestline(){
         for(QuestLine questline : Ref.ALL_QUESTBOOK.getQuestlines()){
             for(int questId : questline.getQuests()){
