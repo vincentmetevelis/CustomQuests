@@ -1,35 +1,24 @@
 package com.vincentmet.customquests.lib.handlers;
 
-import com.google.gson.JsonObject;
 import com.vincentmet.customquests.Objects;
 import com.vincentmet.customquests.items.ItemQuestingDevice;
 import com.vincentmet.customquests.lib.Ref;
 import com.vincentmet.customquests.lib.Triple;
 import com.vincentmet.customquests.lib.Utils;
-import com.vincentmet.customquests.lib.converters.ConverterHelper;
 import com.vincentmet.customquests.quests.*;
 import javafx.util.Pair;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.registry.Registry;
 import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraftforge.common.DimensionManager;
-import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent;
-import net.minecraftforge.event.world.BlockEvent;
-import net.minecraftforge.event.world.WorldEvent;
+import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
-import net.minecraftforge.registries.ForgeRegistries;
-
-import javax.rmi.CORBA.Util;
-import java.awt.event.ItemEvent;
-import java.util.ArrayList;
 import java.util.List;
 
 @Mod.EventBusSubscriber(modid = Ref.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
@@ -50,6 +39,21 @@ public class EventHandler {
             if(event.getCrafting().getItem() == itemStack.getItem() && event.getCrafting().getTag() == itemStack.getTag()){
                 event.getPlayer().sendMessage(new TranslationTextComponent("Crafted item of Quest: " + questAndReqAndSubReqId.getLeft() + "; Requirement: " + questAndReqAndSubReqId.getMiddle() + "; Subrequirement: " + questAndReqAndSubReqId.getRight() + "; " + itemStack));
                 QuestUserProgress.addPlayerProgress(Utils.getUUID("vincentmet"), questAndReqAndSubReqId.getLeft(), questAndReqAndSubReqId.getMiddle(), questAndReqAndSubReqId.getRight(), event.getCrafting().getCount());
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public static void onEntityKill(LivingDeathEvent event){
+        List<Triple<Integer, Integer, Integer>> activeEntityKillQuestIds = Quest.getActiveQuestsWithType(Utils.getUUID("vincentmet"), QuestRequirementType.KILL_MOB);
+        for(Triple<Integer, Integer, Integer> questAndReqAndSubReqId : activeEntityKillQuestIds){
+            Pair<EntityType, Integer> mobAmount = Quest.getMobAmountForMobKill(questAndReqAndSubReqId.getLeft(), questAndReqAndSubReqId.getMiddle(), questAndReqAndSubReqId.getRight());
+            if(event.getEntity().getType() == mobAmount.getKey()){
+                if(event.getSource().getTrueSource() instanceof PlayerEntity){
+                    System.out.println(event.getSource().getTrueSource().getUniqueID().toString());
+                    event.getSource().getTrueSource().sendMessage(new TranslationTextComponent("Killed mob of Quest: " + questAndReqAndSubReqId.getLeft() + "; Requirement: " + questAndReqAndSubReqId.getMiddle() + "; Subrequirement: " + questAndReqAndSubReqId.getRight() + "; " + mobAmount));
+                    QuestUserProgress.addPlayerProgress(Utils.getUUID("vincentmet"), questAndReqAndSubReqId.getLeft(), questAndReqAndSubReqId.getMiddle(), questAndReqAndSubReqId.getRight(), 1);
+                }
             }
         }
     }
@@ -97,7 +101,7 @@ public class EventHandler {
                             correctItemInInvCount += mainInventoryStack.getCount();
                         }
                     }
-                    if(itemStack.getCount() == correctItemInInvCount){
+                    if(itemStack.getCount() <= correctItemInInvCount){
                         playerEntity.sendMessage(new TranslationTextComponent("In radius of Quest: " + questAndReqAndSubReqId.getLeft() + "; Requirement: " + questAndReqAndSubReqId.getMiddle() + "; Subrequirement: " + questAndReqAndSubReqId.getRight() + "; " + itemStack));
                         QuestUserProgress.setPlayerProgressToCompleted(Utils.getUUID("vincentmet"), questAndReqAndSubReqId.getLeft(), questAndReqAndSubReqId.getMiddle(), questAndReqAndSubReqId.getRight());
                     }

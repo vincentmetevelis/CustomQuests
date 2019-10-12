@@ -101,6 +101,14 @@ public class QuestRequirement {
             this.entity = entity;
             Ref.shouldSaveNextTick = true;
         }
+
+        public EntityType getEntity() {
+            return entity;
+        }
+
+        public int getAmount() {
+            return amount;
+        }
     }
 
     public static class ItemDetect implements IQuestRequirement{

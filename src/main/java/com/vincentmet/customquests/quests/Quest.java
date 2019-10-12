@@ -5,11 +5,10 @@ import com.google.gson.JsonObject;
 import com.vincentmet.customquests.lib.Ref;
 import com.vincentmet.customquests.lib.Triple;
 import javafx.util.Pair;
-import jdk.nashorn.internal.ir.LiteralNode;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.JsonToNBT;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -235,6 +234,46 @@ public class Quest {
                         if(subReqCount == subReqId){
                             QuestRequirement.ItemDetect subReqD = ((QuestRequirement.ItemDetect)questSubRequirements);
                             return subReqD.getItemStack();
+                        }
+                        subReqCount++;
+                    }
+                }
+            }
+            reqCount++;
+        }
+        return null;
+    }
+
+    public static ItemStack getItemstackForItemHandIn(int questId, int reqId, int subReqId){
+        int reqCount = 0;
+        for(QuestRequirement questRequirement : Quest.getQuestFromId(questId).getRequirements()){
+            if(reqCount == reqId){
+                if(questRequirement.getType() == QuestRequirementType.ITEM_DELIVER) {
+                    int subReqCount = 0;
+                    for (IQuestRequirement questSubRequirements : questRequirement.getSubRequirements()) {
+                        if(subReqCount == subReqId){
+                            QuestRequirement.ItemSubmit subReqS = ((QuestRequirement.ItemSubmit)questSubRequirements);
+                            return subReqS.getItemStack();
+                        }
+                        subReqCount++;
+                    }
+                }
+            }
+            reqCount++;
+        }
+        return null;
+    }
+
+    public static Pair<EntityType, Integer> getMobAmountForMobKill(int questId, int reqId, int subReqId){
+        int reqCount = 0;
+        for(QuestRequirement questRequirement : Quest.getQuestFromId(questId).getRequirements()){
+            if(reqCount == reqId){
+                if(questRequirement.getType() == QuestRequirementType.KILL_MOB) {
+                    int subReqCount = 0;
+                    for (IQuestRequirement questSubRequirements : questRequirement.getSubRequirements()) {
+                        if(subReqCount == subReqId){
+                            QuestRequirement.KillMob subReqKM = ((QuestRequirement.KillMob)questSubRequirements);
+                            return new Pair<>(subReqKM.getEntity(), subReqKM.getAmount());
                         }
                         subReqCount++;
                     }

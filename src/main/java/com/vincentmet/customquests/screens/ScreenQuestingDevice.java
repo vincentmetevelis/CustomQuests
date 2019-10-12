@@ -41,7 +41,7 @@ public class ScreenQuestingDevice extends Screen {
         final int contentAreaHeight1procent = (int)(contentAreaHeight* 0.01);
         final int nonTextHeight = 20;
 
-        this.renderBackground();
+        this.renderBackground(); //todo this sometimes causes crashes
 
         for(IQuestingGuiElement guiElement : Ref.ALL_GUI_ELEMENTS){
             guiElement.render(this, player, mouseX, mouseY);
@@ -82,10 +82,12 @@ public class ScreenQuestingDevice extends Screen {
                     false
             ).render(this, player, mouseX, mouseY);
             spacingIdRequirements++;
+            int countReq = 0;
             for(QuestRequirement requirement : Quest.getQuestFromId(activeQuest).getRequirements()){
+                int handInOffsetY = contentPosY + 7 + nonTextHeight * spacingIdRequirements;
                 new Label(
                         contentAreaCenterX + contentAreaWidth1procent*2,
-                        contentPosY + 7 + nonTextHeight * spacingIdRequirements,//the "6" is for putting the label a bit more centered in the Y gap
+                        contentPosY + 7 + nonTextHeight * spacingIdRequirements,//the "7" is for putting the label a bit more centered in the Y gap
                         requirement.getType().toString() + ":",
                         0xFF00FF,
                         false,
@@ -103,6 +105,16 @@ public class ScreenQuestingDevice extends Screen {
                     ).render(this, player, mouseX, mouseY);
                     spacingIdRequirements++;
                 }
+                if(requirement.getType() == QuestRequirementType.ITEM_DELIVER){
+                    new ButtonHandInRequirement(
+                            this.width - 64 -5,
+                            handInOffsetY,
+                            activeQuest,
+                            countReq,
+                            requirement
+                    ).render(this, player, mouseX, mouseY);
+                }
+                countReq++;
             }
 
             new Label(
@@ -198,6 +210,19 @@ public class ScreenQuestingDevice extends Screen {
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int mouseButton){
+        final int windowCenterX = this.width / 2;
+        final int windowCenterY = this.height / 2;
+        final int contentPosX = Ref.GUI_QUESTING_MARGIN_LEFT;
+        final int contentPosY = Ref.GUI_QUESTING_MARGIN_TOP;
+        final int contentAreaWidth = this.width - contentPosX;
+        final int contentAreaHeight = this.height - contentPosY;
+        final int contentAreaCenterX = contentPosX + contentAreaWidth / 2;
+        final int contentAreaCenterY = contentPosY + contentAreaHeight / 2;
+        final int contentAreaWidth1procent = (int)(contentAreaWidth * 0.01);
+        final int contentAreaHeight1procent = (int)(contentAreaHeight* 0.01);
+        final int nonTextHeight = 20;
+
+
         for(IQuestingGuiElement guiElement : Ref.ALL_GUI_ELEMENTS){
             guiElement.onClick(this, player, mouseX, mouseY);
         }
@@ -207,6 +232,7 @@ public class ScreenQuestingDevice extends Screen {
             new ButtonQuestline(Ref.GUI_QUESTLINES_MARGIN_LEFT, Ref.GUI_QUESTLINES_MARGIN_TOP + currentQuestlinesGuiHeight, questline).onClick(this, player, mouseX, mouseY);
             currentQuestlinesGuiHeight += 25;
         }
+
         for(int questId : Ref.ALL_QUESTBOOK.getQuestlines().get(activeQuestline).getQuests()){
             Quest quest = Quest.getQuestFromId(questId);
             new ButtonQuest(
@@ -218,6 +244,29 @@ public class ScreenQuestingDevice extends Screen {
         }
 
         if(activeQuest >= 0){
+            int spacingIdRequirements = 0;
+            int spacingIdRewards = 0;
+            int countReq = 0;
+            spacingIdRequirements++;
+            for(QuestRequirement requirement : Quest.getQuestFromId(activeQuest).getRequirements()){
+                int handInOffsetY = contentPosY + 7 + nonTextHeight * spacingIdRequirements;
+                spacingIdRequirements++;
+                for(IQuestRequirement subRequirement : requirement.getSubRequirements()){
+                    spacingIdRequirements++;
+                }
+                if(requirement.getType() == QuestRequirementType.ITEM_DELIVER){
+                    new ButtonHandInRequirement(
+                            this.width - 64 -5,
+                            handInOffsetY,
+                            activeQuest,
+                            countReq,
+                            requirement
+                    ).onClick(this, player, mouseX, mouseY);
+                }
+                countReq++;
+            }
+
+
             List<IQuestReward> rewards = new ArrayList<>();
             for(QuestReward questReward : Quest.getQuestFromId(activeQuest).getRewards()){
                 rewards.add(questReward.getReward());
