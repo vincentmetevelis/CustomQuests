@@ -5,15 +5,20 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.vincentmet.customquests.lib.Ref;
 import net.minecraft.block.Blocks;
+import net.minecraft.client.Minecraft;
 import net.minecraft.command.CommandSource;
+import net.minecraft.command.ICommandSource;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.registries.ForgeRegistries;
+import org.apache.logging.log4j.core.jmx.Server;
 
 public class QuestReward {
     private QuestRewardType type;
@@ -112,7 +117,7 @@ public class QuestReward {
         public void executeReward(PlayerEntity player) {
             final CommandDispatcher<CommandSource> dispatcher = player.getServer().getCommandManager().getDispatcher();
             try {
-                dispatcher.execute(command, player.getCommandSource()); //todo set commandsource to something that has all permissions
+                dispatcher.execute(command, new CommandSource(ICommandSource.field_213139_a_, player.getPositionVec(), player.getPitchYaw(), (ServerWorld) player.world, 5, "CustomQuests", new TranslationTextComponent("Custom Quests"), player.getServer(), player)); //todo set commandsource to something that has all permissions
             } catch (CommandSyntaxException e) {
                 e.printStackTrace();
             }

@@ -3,7 +3,7 @@ loaderVersion="[26,)" #mandatory
 credits="vincentmet" #optional
 [[mods]] #mandatory
 modId="customquests" #mandatory
-version="1.14.4-0.1-DEV1" #mandatory
+version="1.14.4-0.1-DEV2" #mandatory
 displayName="Custom Quests" #mandatory
 description='''
 Quests!!!

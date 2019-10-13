@@ -8,14 +8,14 @@ import java.util.List;
 
 public class QuestRequirementStatus {
     private int questId;
-    private int id;
+    private int requirementId;
     private List<Integer> progress;
 
-    public QuestRequirementStatus(int questId, int id, List<Integer> progress){
-        this.questId = id;
-        this.id = id;
+    public QuestRequirementStatus(int questId, int requirementId, List<Integer> progress){
+        this.questId = questId;
+        this.requirementId = requirementId;
         this.progress = progress;
-        int howManyToGenerate = Quest.getQuestFromId(questId).getRequirements().get(id).getSubRequirements().size() - progress.size();
+        int howManyToGenerate = Quest.getQuestFromId(questId).getRequirements().get(requirementId).getSubRequirements().size() - progress.size();
         int progressSize = progress.size();
         for(int i=progressSize;i<progressSize+howManyToGenerate;i++){
             this.progress.add(0);
@@ -27,8 +27,12 @@ public class QuestRequirementStatus {
         return progress;
     }
 
-    public int getId() {
-        return id;
+    public int getRequirementId() {
+        return requirementId;
+    }
+
+    public int getQuestId() {
+        return questId;
     }
 
     public int getProgress(int index){

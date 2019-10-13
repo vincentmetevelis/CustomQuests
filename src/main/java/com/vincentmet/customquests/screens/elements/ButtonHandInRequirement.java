@@ -19,7 +19,8 @@ public class ButtonHandInRequirement implements IQuestingGuiElement {
     private int questId;
     private int questReqId;
     private QuestRequirement questRequirement;
-    private String text = "Hand in";
+    private String textNotHandedIn = "Hand in";
+    private String textHandedIn = "Handed in!";
 
     public ButtonHandInRequirement(int posX, int posY, int questId, int questReqId, QuestRequirement questRequirements){
         this.x = posX;
@@ -31,7 +32,8 @@ public class ButtonHandInRequirement implements IQuestingGuiElement {
 
     @Override
     public <T extends ScreenQuestingDevice> void render(T gui, PlayerEntity player, double mouseX, double mouseY) {
-        if(questRequirement.getType() == QuestRequirementType.ITEM_DELIVER){
+        String text = QuestUserProgress.isRequirementCompleted(Utils.getUUID("vincentmet"), questId, questReqId) ? textHandedIn : textNotHandedIn;
+        if(questRequirement.getType() == QuestRequirementType.ITEM_DELIVER && !QuestUserProgress.isRequirementCompleted(Utils.getUUID("vincentmet"), questId, questReqId)){
             if(Utils.isMouseInBounds(mouseX, mouseY, x, y, x + WIDTH, y + HEIGHT)){
                 gui.getMinecraft().getTextureManager().bindTexture(Ref.IMAGE_BUTTON_CLAIM_REWARD_PRESSED);
             }else{
@@ -55,17 +57,25 @@ public class ButtonHandInRequirement implements IQuestingGuiElement {
 
     @Override
     public <T extends ScreenQuestingDevice> void onClick(T gui, PlayerEntity player, double mouseX, double mouseY) {
-        if(questRequirement.getType() == QuestRequirementType.ITEM_DELIVER){
+        if(questRequirement.getType() == QuestRequirementType.ITEM_DELIVER && !QuestUserProgress.isRequirementCompleted(Utils.getUUID("vincentmet"), questId, questReqId)){
             if(Utils.isMouseInBounds(mouseX, mouseY, x, y, x+WIDTH, y+HEIGHT)){
                 int countSubReq = 0;
                 for(IQuestRequirement iqr : questRequirement.getSubRequirements()){
                     ItemStack itemStack = Quest.getItemstackForItemHandIn(questId, questReqId, countSubReq);
+                    int slotIndexCount = 0;
                     for(ItemStack mainInventoryStack : player.inventory.mainInventory){
                         if(mainInventoryStack.getItem() == itemStack.getItem()){
-                            QuestUserProgress.addPlayerProgress(Utils.getUUID("vincentmet"), questId, questReqId, countSubReq, mainInventoryStack.getCount());
+                            int itemCountLeftToHandIn = QuestUserProgress.getItemCountLeftToHandIn(Utils.getUUID("vincentmet"), questId, questReqId, countSubReq);
                             System.out.println("Submitted item");
-                            //player.inventory.mainInventory.remove(mainInventoryStack); todo fix this ++ check for quest completion & disable handin buttons for that & don't consume more items than required by quest
+                            if(itemCountLeftToHandIn < mainInventoryStack.getCount()){
+                                QuestUserProgress.addPlayerProgress(Utils.getUUID("vincentmet"), questId, questReqId, countSubReq, itemCountLeftToHandIn);
+                                player.inventory.getStackInSlot(slotIndexCount).setCount(player.inventory.getStackInSlot(slotIndexCount).getCount() - itemCountLeftToHandIn);
+                            }else{
+                                QuestUserProgress.addPlayerProgress(Utils.getUUID("vincentmet"), questId, questReqId, countSubReq, mainInventoryStack.getCount());
+                                player.inventory.removeStackFromSlot(slotIndexCount);
+                            }
                         }
+                        slotIndexCount++;
                     }
                     countSubReq++;
                 }

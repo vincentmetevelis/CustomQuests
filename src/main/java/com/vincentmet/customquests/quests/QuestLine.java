@@ -33,10 +33,13 @@ public class QuestLine {
         return json;
     }
 
-    public static List<Integer> getUnlockedQuestlines(String uuid){ //todo fix this methods (doesn't add all questlines)
+    public static List<Integer> getUnlockedQuestlines(String uuid){
         List<Integer> completedQuestIds = Quest.getCompletedQuests(uuid);
         List<Integer> unlockedQuestlines = new ArrayList<>();
         for(Quest quest : Ref.ALL_QUESTS){
+            if(quest.getDependencies().isEmpty()){
+                unlockedQuestlines.add(quest.getQuestline());
+            }
             for(int dependency : quest.getDependencies()){
                 if(completedQuestIds.contains(dependency)){
                     unlockedQuestlines.add(quest.getQuestline());

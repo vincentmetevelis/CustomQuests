@@ -41,7 +41,7 @@ public class ScreenQuestingDevice extends Screen {
         final int contentAreaHeight1procent = (int)(contentAreaHeight* 0.01);
         final int nonTextHeight = 20;
 
-        this.renderBackground(); //todo this sometimes causes crashes
+        this.renderBackground(); //todo this sometimes causes crashes when gui opens
 
         for(IQuestingGuiElement guiElement : Ref.ALL_GUI_ELEMENTS){
             guiElement.render(this, player, mouseX, mouseY);

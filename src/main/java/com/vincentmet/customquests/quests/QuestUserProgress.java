@@ -4,6 +4,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.vincentmet.customquests.lib.Ref;
 import com.vincentmet.customquests.lib.Utils;
+import net.minecraft.item.ItemStack;
 import org.codehaus.plexus.util.CollectionUtils;
 
 import java.util.ArrayList;
@@ -37,7 +38,7 @@ public class QuestUserProgress {
         Ref.shouldSaveNextTick = true;
     }
 
-    public static boolean areAllRequirementsCompleted(String uuid, int questId){
+    /*public static boolean areAllRequirementsCompleted(String uuid, int questId){
         boolean isCompleted = true;
         for(QuestUserProgress userprogress : Ref.ALL_QUESTING_PROGRESS){
             if(userprogress.uuid.equals(uuid)){
@@ -61,6 +62,67 @@ public class QuestUserProgress {
             }
         }
         return isCompleted;
+    }*/
+
+    public static boolean areAllRequirementsCompleted(String uuid, int questId){
+        boolean isCompleted = true;
+        for(QuestUserProgress userprogress : Ref.ALL_QUESTING_PROGRESS) {
+            if (userprogress.uuid.equals(uuid)) { // get player
+                for (QuestStatus playerStatus : userprogress.questStatuses) {
+                    if(playerStatus.getQuestId() == questId){
+                        int countQrs = 0;
+                        for(QuestRequirementStatus qrs : playerStatus.getQuestRequirementStatuses()){
+                            if(!isRequirementCompleted(uuid, questId, countQrs)){
+                                isCompleted = false;
+                            }
+                            countQrs++;
+                        }
+                    }
+                }
+            }
+        }
+        return isCompleted;
+    }
+
+    public static boolean isRequirementCompleted(String uuid, int questId, int reqId){
+        boolean isCompleted = true;
+        for(QuestUserProgress userprogress : Ref.ALL_QUESTING_PROGRESS){
+            if(userprogress.uuid.equals(uuid)){ // get player
+                for(QuestStatus playerStatus : userprogress.questStatuses){
+                    if(playerStatus.getQuestId() == questId){ //then for the quest id
+                        for(QuestRequirementStatus reqStatus : playerStatus.getQuestRequirementStatuses()){
+                            if(reqStatus.getRequirementId() == reqId){ // with the requirement id
+                                int countSubReqProgress = 0;
+                                for(int subReqProgress : reqStatus.getProgress()){ //get sub requirements
+                                    int countSubReq = 0;
+                                    for(IQuestRequirement subReq : Quest.getQuestFromId(questId).getRequirements().get(reqId).getSubRequirements()){ // then get the sub requirement from ids // make sure the subrequirements are the same
+                                        if(countSubReq == countSubReqProgress){
+                                            if(subReqProgress < subReq.getCompletionNumber()){
+                                                isCompleted = false;
+                                            }
+                                        }
+                                        countSubReq++;
+                                    }
+                                    countSubReqProgress++;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return isCompleted;
+    }
+
+    public static int getItemCountLeftToHandIn(String uuid, int questId, int reqId, int subReqId){
+        for(QuestUserProgress progress : Ref.ALL_QUESTING_PROGRESS){
+            if(progress.getUuid().equals(uuid)){
+                int currentCount = progress.getQuestStatuses().get(questId).getQuestRequirementStatuses().get(reqId).getProgress(subReqId);
+                int questCompletionCount = Quest.getQuestFromId(questId).getRequirements().get(reqId).getSubRequirements().get(subReqId).getCompletionNumber();
+                return questCompletionCount - currentCount;
+            }
+        }
+        return 0;
     }
 
     public static boolean isRewardClaimed(String uuid, int questId){
