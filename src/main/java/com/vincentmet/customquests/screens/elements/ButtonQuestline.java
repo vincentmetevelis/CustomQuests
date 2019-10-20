@@ -22,7 +22,7 @@ public class ButtonQuestline implements IQuestingGuiElement {
 
     @Override
     public <T extends ScreenQuestingDevice> void render(T gui, PlayerEntity player, double mouseX, double mouseY) {
-        if(QuestLine.isQuestlineUnlocked(Utils.getUUID("vincentmet"), questLine.getId())){
+        if(QuestLine.isQuestlineUnlocked(player.getUniqueID().toString().replaceAll("-", ""), questLine.getId())){
             if(Utils.isMouseInBounds(mouseX, mouseY, x, y, x + WIDTH, y + HEIGHT)){
                 gui.getMinecraft().getTextureManager().bindTexture(Ref.IMAGE_BUTTON_QUESTLINE_PRESSED);
             }else{

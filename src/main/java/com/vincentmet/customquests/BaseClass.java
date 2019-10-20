@@ -17,7 +17,7 @@ import net.minecraftforge.fml.loading.FMLPaths;
 
 @Mod(Ref.MODID)
 public class BaseClass {
-    public static IProxy proxy = DistExecutor.runForDist(() -> () -> new ClientProxy(), () -> () -> new ServerProxy());
+    public static IProxy proxy = DistExecutor.runForDist(() -> ClientProxy::new, () -> ServerProxy::new);
     public static BaseClass INSTANCE;
 
     public BaseClass(){

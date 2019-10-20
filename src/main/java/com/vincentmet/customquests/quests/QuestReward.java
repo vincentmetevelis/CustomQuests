@@ -117,7 +117,7 @@ public class QuestReward {
         public void executeReward(PlayerEntity player) {
             final CommandDispatcher<CommandSource> dispatcher = player.getServer().getCommandManager().getDispatcher();
             try {
-                dispatcher.execute(command, new CommandSource(ICommandSource.field_213139_a_, player.getPositionVec(), player.getPitchYaw(), (ServerWorld) player.world, 5, "CustomQuests", new TranslationTextComponent("Custom Quests"), player.getServer(), player)); //todo set commandsource to something that has all permissions
+                dispatcher.execute(command, new CommandSource(ICommandSource.field_213139_a_, player.getPositionVec(), player.getPitchYaw(), (ServerWorld) player.world, 5, "CustomQuests", new TranslationTextComponent("Custom Quests"), player.getServer(), player));
             } catch (CommandSyntaxException e) {
                 e.printStackTrace();
             }

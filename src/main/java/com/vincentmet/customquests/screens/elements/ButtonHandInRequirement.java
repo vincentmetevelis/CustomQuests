@@ -32,8 +32,8 @@ public class ButtonHandInRequirement implements IQuestingGuiElement {
 
     @Override
     public <T extends ScreenQuestingDevice> void render(T gui, PlayerEntity player, double mouseX, double mouseY) {
-        String text = QuestUserProgress.isRequirementCompleted(Utils.getUUID("vincentmet"), questId, questReqId) ? textHandedIn : textNotHandedIn;
-        if(questRequirement.getType() == QuestRequirementType.ITEM_DELIVER && !QuestUserProgress.isRequirementCompleted(Utils.getUUID("vincentmet"), questId, questReqId)){
+        String text = QuestUserProgress.isRequirementCompleted(player.getUniqueID().toString().replaceAll("-", ""), questId, questReqId) ? textHandedIn : textNotHandedIn;
+        if(questRequirement.getType() == QuestRequirementType.ITEM_DELIVER && !QuestUserProgress.isRequirementCompleted(player.getUniqueID().toString().replaceAll("-", ""), questId, questReqId)){
             if(Utils.isMouseInBounds(mouseX, mouseY, x, y, x + WIDTH, y + HEIGHT)){
                 gui.getMinecraft().getTextureManager().bindTexture(Ref.IMAGE_BUTTON_CLAIM_REWARD_PRESSED);
             }else{
@@ -57,7 +57,7 @@ public class ButtonHandInRequirement implements IQuestingGuiElement {
 
     @Override
     public <T extends ScreenQuestingDevice> void onClick(T gui, PlayerEntity player, double mouseX, double mouseY) {
-        if(questRequirement.getType() == QuestRequirementType.ITEM_DELIVER && !QuestUserProgress.isRequirementCompleted(Utils.getUUID("vincentmet"), questId, questReqId)){
+        if(questRequirement.getType() == QuestRequirementType.ITEM_DELIVER && !QuestUserProgress.isRequirementCompleted(player.getUniqueID().toString().replaceAll("-", ""), questId, questReqId)){
             if(Utils.isMouseInBounds(mouseX, mouseY, x, y, x+WIDTH, y+HEIGHT)){
                 int countSubReq = 0;
                 for(IQuestRequirement iqr : questRequirement.getSubRequirements()){
@@ -65,13 +65,13 @@ public class ButtonHandInRequirement implements IQuestingGuiElement {
                     int slotIndexCount = 0;
                     for(ItemStack mainInventoryStack : player.inventory.mainInventory){
                         if(mainInventoryStack.getItem() == itemStack.getItem()){
-                            int itemCountLeftToHandIn = QuestUserProgress.getItemCountLeftToHandIn(Utils.getUUID("vincentmet"), questId, questReqId, countSubReq);
+                            int itemCountLeftToHandIn = QuestUserProgress.getItemCountLeftToHandIn(player.getUniqueID().toString().replaceAll("-", ""), questId, questReqId, countSubReq);
                             System.out.println("Submitted item");
                             if(itemCountLeftToHandIn < mainInventoryStack.getCount()){
-                                QuestUserProgress.addPlayerProgress(Utils.getUUID("vincentmet"), questId, questReqId, countSubReq, itemCountLeftToHandIn);
+                                QuestUserProgress.addPlayerProgress(player.getUniqueID().toString().replaceAll("-", ""), questId, questReqId, countSubReq, itemCountLeftToHandIn);
                                 player.inventory.getStackInSlot(slotIndexCount).setCount(player.inventory.getStackInSlot(slotIndexCount).getCount() - itemCountLeftToHandIn);
                             }else{
-                                QuestUserProgress.addPlayerProgress(Utils.getUUID("vincentmet"), questId, questReqId, countSubReq, mainInventoryStack.getCount());
+                                QuestUserProgress.addPlayerProgress(player.getUniqueID().toString().replaceAll("-", ""), questId, questReqId, countSubReq, mainInventoryStack.getCount());
                                 player.inventory.removeStackFromSlot(slotIndexCount);
                             }
                         }

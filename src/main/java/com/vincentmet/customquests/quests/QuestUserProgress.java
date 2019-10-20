@@ -2,14 +2,25 @@ package com.vincentmet.customquests.quests;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.vincentmet.customquests.lib.Ref;
 import com.vincentmet.customquests.lib.Utils;
+import net.minecraft.client.Minecraft;
+import net.minecraft.command.CommandSource;
+import net.minecraft.command.ICommandSource;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 import org.codehaus.plexus.util.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 
 public class QuestUserProgress {
     private String uuid;
@@ -38,32 +49,6 @@ public class QuestUserProgress {
         Ref.shouldSaveNextTick = true;
     }
 
-    /*public static boolean areAllRequirementsCompleted(String uuid, int questId){
-        boolean isCompleted = true;
-        for(QuestUserProgress userprogress : Ref.ALL_QUESTING_PROGRESS){
-            if(userprogress.uuid.equals(uuid)){
-                for(QuestStatus reqStatus : userprogress.questStatuses){
-                    if(reqStatus.getQuestId() == questId){
-                        for(QuestRequirementStatus subReqStatus : reqStatus.getQuestRequirementStatuses()){
-                            for(int subReqProgress : subReqStatus.getProgress()){
-
-                                for(QuestRequirement req : Quest.getQuestFromId(questId).getRequirements()){
-                                    for(IQuestRequirement subReq : req.getSubRequirements()){
-                                        if(subReqProgress < subReq.getCompletionNumber()){
-                                            isCompleted = false;
-                                        }
-                                    }
-                                }
-
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        return isCompleted;
-    }*/
-
     public static boolean areAllRequirementsCompleted(String uuid, int questId){
         boolean isCompleted = true;
         for(QuestUserProgress userprogress : Ref.ALL_QUESTING_PROGRESS) {
@@ -84,11 +69,20 @@ public class QuestUserProgress {
         return isCompleted;
     }
 
+    public static QuestUserProgress getUserProgressForUuid(String uuid){
+        for(QuestUserProgress userProgress : Ref.ALL_QUESTING_PROGRESS){
+            if(userProgress.getUuid().equals(uuid)){
+                return userProgress;
+            }
+        }
+        return null;
+    }
+
     public static boolean isRequirementCompleted(String uuid, int questId, int reqId){
         boolean isCompleted = true;
         for(QuestUserProgress userprogress : Ref.ALL_QUESTING_PROGRESS){
             if(userprogress.uuid.equals(uuid)){ // get player
-                for(QuestStatus playerStatus : userprogress.questStatuses){
+                for(QuestStatus playerStatus : userprogress.getQuestStatuses()){
                     if(playerStatus.getQuestId() == questId){ //then for the quest id
                         for(QuestRequirementStatus reqStatus : playerStatus.getQuestRequirementStatuses()){
                             if(reqStatus.getRequirementId() == reqId){ // with the requirement id
@@ -202,15 +196,16 @@ public class QuestUserProgress {
         return questStatuses;
     }
 
-    public void setCompletedQuestsIds(List<Integer> completedQuestsIds) {
-        this.completedQuestsIds = completedQuestsIds;
-        Ref.shouldSaveNextTick = true;
-    }
-
-    public void addCompletedQuest(int questId){
+    public void addCompletedQuest(int questId, World world, PlayerEntity player){ //todo this also triggers on single-requirement completion
         if(!this.completedQuestsIds.contains(questId)){
             this.completedQuestsIds.add(questId);
             Ref.shouldSaveNextTick = true;
+            final CommandDispatcher<CommandSource> dispatcher = world.getServer().getCommandManager().getDispatcher();
+            try {
+                dispatcher.execute("title " + player.getDisplayName().getString() + " title \"QUEST COMPLETED!\"", new CommandSource(ICommandSource.field_213139_a_, null, null, (ServerWorld) world, 5, "CustomQuests", new TranslationTextComponent("Custom Quests"), world.getServer(), null));
+            } catch (CommandSyntaxException e) {
+                e.printStackTrace();
+            }
         }
     }
     

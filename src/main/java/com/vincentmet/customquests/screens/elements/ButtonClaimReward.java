@@ -28,8 +28,8 @@ public class ButtonClaimReward implements IQuestingGuiElement {
 
     @Override
     public <T extends ScreenQuestingDevice> void render(T gui, PlayerEntity player, double mouseX, double mouseY) {
-        String text = QuestUserProgress.isRewardClaimed(Utils.getUUID("vincentmet"), quest) ? textClaimed : textUnclaimed;
-        if(!QuestUserProgress.isRewardClaimed(Utils.getUUID("vincentmet"), quest) && QuestUserProgress.areAllRequirementsCompleted(Utils.getUUID("vincentmet"), quest)){
+        String text = QuestUserProgress.isRewardClaimed(player.getUniqueID().toString().replaceAll("-", ""), quest) ? textClaimed : textUnclaimed;
+        if(!QuestUserProgress.isRewardClaimed(player.getUniqueID().toString().replaceAll("-", ""), quest) && QuestUserProgress.areAllRequirementsCompleted(player.getUniqueID().toString().replaceAll("-", ""), quest)){
             if(Utils.isMouseInBounds(mouseX, mouseY, x, y, x + WIDTH, y + HEIGHT)){
                 gui.getMinecraft().getTextureManager().bindTexture(Ref.IMAGE_BUTTON_CLAIM_REWARD_PRESSED);
             }else{
@@ -53,12 +53,12 @@ public class ButtonClaimReward implements IQuestingGuiElement {
 
     @Override
     public <T extends ScreenQuestingDevice> void onClick(T gui, PlayerEntity player, double mouseX, double mouseY) {
-        if(!QuestUserProgress.isRewardClaimed(Utils.getUUID("vincentmet"), quest) && QuestUserProgress.areAllRequirementsCompleted(Utils.getUUID("vincentmet"), quest)){
+        if(!QuestUserProgress.isRewardClaimed(player.getUniqueID().toString().replaceAll("-", ""), quest) && QuestUserProgress.areAllRequirementsCompleted(player.getUniqueID().toString().replaceAll("-", ""), quest)){
             if(Utils.isMouseInBounds(mouseX, mouseY, x, y, x+WIDTH, y+HEIGHT)){
-                if(!QuestUserProgress.isRewardClaimed(Utils.getUUID("vincentmet"), quest) && QuestUserProgress.areAllRequirementsCompleted(Utils.getUUID("vincentmet"), quest)){
+                if(!QuestUserProgress.isRewardClaimed(player.getUniqueID().toString().replaceAll("-", ""), quest) && QuestUserProgress.areAllRequirementsCompleted(player.getUniqueID().toString().replaceAll("-", ""), quest)){
                     for(IQuestReward reward : questRewards){
                         reward.executeReward(player);
-                        QuestUserProgress.setRewardsClaimed(Utils.getUUID("vincentmet"), quest);
+                        QuestUserProgress.setRewardsClaimed(player.getUniqueID().toString().replaceAll("-", ""), quest);
                         Ref.shouldSaveNextTick = true;
                     }
                 }

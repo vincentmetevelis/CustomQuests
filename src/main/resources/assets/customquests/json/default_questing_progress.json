@@ -1,9 +1,3 @@
 {
-  "players": [
-    {
-      "uuid": "392e085c34d04f808a98f803794b547b",
-      "completed_quests": [],
-      "quest_status": []
-    }
-  ]
+  "players": []
 }
