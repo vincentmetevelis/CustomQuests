@@ -1,17 +1,24 @@
 package com.vincentmet.customquests.screens;
 
+import com.mojang.blaze3d.platform.GlStateManager;
 import com.vincentmet.customquests.lib.LineColor;
 import com.vincentmet.customquests.lib.Ref;
 import com.vincentmet.customquests.lib.Utils;
 import com.vincentmet.customquests.quests.*;
 import com.vincentmet.customquests.screens.elements.*;
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import org.lwjgl.opengl.GL11;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@OnlyIn(Dist.CLIENT)
 public class ScreenQuestingDevice extends Screen {
     private PlayerEntity player;
     public static int activeQuestline = 0;

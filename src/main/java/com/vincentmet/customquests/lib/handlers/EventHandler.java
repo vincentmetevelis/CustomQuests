@@ -4,23 +4,28 @@ import com.vincentmet.customquests.Objects;
 import com.vincentmet.customquests.items.ItemQuestingDevice;
 import com.vincentmet.customquests.lib.Ref;
 import com.vincentmet.customquests.lib.Triple;
+import com.vincentmet.customquests.network.packets.MessageNotifyServer;
+import com.vincentmet.customquests.network.packets.MessageQuestBookServerToClient;
+import com.vincentmet.customquests.network.packets.MessageQuestUserProgressServerToClient;
+import com.vincentmet.customquests.network.packets.MessageQuestsServerToClient;
 import com.vincentmet.customquests.quests.*;
 import javafx.util.Pair;
-import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
 import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.gameevent.PlayerEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent;
-
+import net.minecraftforge.fml.network.PacketDistributor;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -63,6 +68,9 @@ public class EventHandler {
 
     @SubscribeEvent
     public static void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event){
+        PacketHandler.CHANNEL.send(PacketDistributor.PLAYER.with(()->(ServerPlayerEntity)event.getPlayer()), new MessageQuestsServerToClient());
+        PacketHandler.CHANNEL.send(PacketDistributor.PLAYER.with(()->(ServerPlayerEntity)event.getPlayer()), new MessageQuestBookServerToClient());
+        PacketHandler.CHANNEL.send(PacketDistributor.PLAYER.with(()->(ServerPlayerEntity)event.getPlayer()), new MessageQuestUserProgressServerToClient());
         if(!event.getPlayer().inventory.hasItemStack(new ItemStack(Objects.Items.itemQuestingDevice))){
             event.getPlayer().inventory.addItemStackToInventory(new ItemStack(Objects.Items.itemQuestingDevice, 1));
         }
@@ -76,7 +84,8 @@ public class EventHandler {
     @SubscribeEvent
     public static void onWorldTick(TickEvent.WorldTickEvent event){
         if(Ref.shouldSaveNextTick){
-            JsonHandler.writeJson();
+            if(event.world.isRemote) PacketHandler.CHANNEL.sendToServer(new MessageNotifyServer());
+            //JsonHandler.writeJson();
             Ref.shouldSaveNextTick = false;
         }
 

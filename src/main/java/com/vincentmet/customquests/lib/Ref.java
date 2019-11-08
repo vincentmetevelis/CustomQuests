@@ -6,7 +6,10 @@ import com.vincentmet.customquests.quests.QuestUserProgress;
 import com.vincentmet.customquests.screens.elements.IQuestingGuiElement;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.gui.fonts.FontResourceManager;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,16 +47,14 @@ public class Ref {
     public static final int ERR_MSG_INT_INVALID_JSON = -1337;
     public static final boolean ERR_MSG_BOOL_INVALID_JSON = false;
     public static boolean shouldSaveNextTick = false;
-    public static String questBookLocation = "";
-    public static String questsLocation = "";
-    public static String questingProgressLocation = "";
-    public static ResourceLocation defaultQuestBookLocation = new ResourceLocation(MODID, "json/default_questbook.json");
-    public static ResourceLocation defaultQuestsLocation = new ResourceLocation(MODID, "json/default_quests.json");
-    public static ResourceLocation defaultQuestingProgressLocation = new ResourceLocation(MODID, "json/default_questing_progress.json");
+    public static String questBookLocation;
+    public static String questsLocation;
+    public static String questingProgressLocation;
     public static QuestMenu ALL_QUESTBOOK;
     public static List<Quest> ALL_QUESTS;
     public static List<QuestUserProgress> ALL_QUESTING_PROGRESS;
     public static List<IQuestingGuiElement> ALL_GUI_ELEMENTS = new ArrayList<>();
 
-    public static final FontRenderer FONT_RENDERER = Minecraft.getInstance().fontRenderer;
+    @OnlyIn(Dist.CLIENT)
+    public static FontRenderer FONT_RENDERER;
 }

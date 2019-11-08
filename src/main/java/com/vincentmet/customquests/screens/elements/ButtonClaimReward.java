@@ -6,9 +6,12 @@ import com.vincentmet.customquests.quests.IQuestReward;
 import com.vincentmet.customquests.quests.QuestUserProgress;
 import com.vincentmet.customquests.screens.ScreenQuestingDevice;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.List;
 
+@OnlyIn(Dist.CLIENT)
 public class ButtonClaimReward implements IQuestingGuiElement {
     public static final int WIDTH = 64;
     public static final int HEIGHT = 20;

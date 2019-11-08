@@ -18,7 +18,6 @@ public class QuestStatus {
         this.questRequirementStatuses = questRequirementStatuses;
         int questReqStat = this.questRequirementStatuses.size();
         int howManyToGenerate = Quest.getQuestFromId(questId).getRequirements().size() - questReqStat;
-        System.out.println(Quest.getQuestFromId(questId).getRequirements().size());
         for(int i=questReqStat;i<questReqStat+howManyToGenerate;i++){
             this.questRequirementStatuses.add(new QuestRequirementStatus(questId, i, new ArrayList<>()));
         }

@@ -116,7 +116,7 @@ public class QuestReward {
         @Override
         public void executeReward(PlayerEntity player) {
             final CommandDispatcher<CommandSource> dispatcher = player.getServer().getCommandManager().getDispatcher();
-            try {
+            try {//todo claiming rewards crashes client
                 dispatcher.execute(command, new CommandSource(ICommandSource.field_213139_a_, player.getPositionVec(), player.getPitchYaw(), (ServerWorld) player.world, 5, "CustomQuests", new TranslationTextComponent("Custom Quests"), player.getServer(), player));
             } catch (CommandSyntaxException e) {
                 e.printStackTrace();

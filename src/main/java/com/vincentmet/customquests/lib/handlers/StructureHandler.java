@@ -13,9 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class StructureHandler {
-    public static void initQuestbook(){
-        JsonObject json = JsonHandler.getQuestbookJson();
-
+    public static void initQuestbook(JsonObject json){
         List<QuestLine> questLineList = new ArrayList<>();
         for(JsonElement jsonQuestlineElement : ConverterHelper.QuestBook.getQuestLines(json)){
             JsonObject jsonQuestline = jsonQuestlineElement.getAsJsonObject();
@@ -35,9 +33,7 @@ public class StructureHandler {
         );
     }
 
-    public static void initQuests() {
-        JsonObject json = JsonHandler.getQuestsJson();
-
+    public static void initQuests(JsonObject json) {
         List<Quest> questsList = new ArrayList<>();
         for (JsonElement jsonQuestElement : json.get("quests").getAsJsonArray()) {
             JsonObject jsonQuest = jsonQuestElement.getAsJsonObject();
@@ -191,8 +187,7 @@ public class StructureHandler {
         Ref.ALL_QUESTS = questsList;
     }
 
-    public static void initQuestingProgress(){
-        JsonObject jsonProgress = JsonHandler.getQuestingProgressJson();
+    public static void initQuestingProgress(JsonObject jsonProgress){
         List<QuestUserProgress> questUserProgressList = new ArrayList<>();
 
         for(JsonElement jsonUserProgressElement : ConverterHelper.QuestProgress.getPlayers(jsonProgress)){
