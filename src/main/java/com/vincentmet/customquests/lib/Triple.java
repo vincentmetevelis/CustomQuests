@@ -1,7 +1,6 @@
 package com.vincentmet.customquests.lib;
 
 public class Triple<L, M, R>{
-
     private L l;
     private M m;
     private R r;

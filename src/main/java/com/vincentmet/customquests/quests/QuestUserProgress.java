@@ -202,7 +202,7 @@ public class QuestUserProgress {
             Ref.shouldSaveNextTick = true;
             final CommandDispatcher<CommandSource> dispatcher = world.getServer().getCommandManager().getDispatcher();
             try {
-                dispatcher.execute("title " + player.getDisplayName().getString() + " title \"QUEST COMPLETED!\"", new CommandSource(ICommandSource.field_213139_a_, null, null, (ServerWorld) world, 5, "CustomQuests", new TranslationTextComponent("Custom Quests"), world.getServer(), null));
+                dispatcher.execute("title " + player.getDisplayName().getString() + " title \"QUEST COMPLETED!\"", world.getServer().getCommandSource());
             } catch (CommandSyntaxException e) {
                 e.printStackTrace();
             }

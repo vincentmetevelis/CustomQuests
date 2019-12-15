@@ -184,11 +184,11 @@ public class ScreenQuestingDevice extends Screen {
                 LineColor lineColor = LineColor.BLACK;
                 for(int dependencyId : quest.getDependencies()){
                     Quest qd = Quest.getQuestFromId(dependencyId);
-                    if(Quest.hasQuestUncompletedDependenciesForPlayer(player.getUniqueID().toString().replaceAll("-", ""), quest.getId())){
+                    if(Quest.hasQuestUncompletedDependenciesForPlayer(Utils.simplifyUUID(player.getUniqueID()), quest.getId())){
                         lineColor = LineColor.RED;
-                    }else if(Quest.isQuestCompletedForPlayer(player.getUniqueID().toString().replaceAll("-", ""), qd.getId()) && Quest.isQuestCompletedForPlayer(player.getUniqueID().toString().replaceAll("-", ""), quest.getId())){
+                    }else if(Quest.isQuestCompletedForPlayer(Utils.simplifyUUID(player.getUniqueID()), qd.getId()) && Quest.isQuestCompletedForPlayer(Utils.simplifyUUID(player.getUniqueID()), quest.getId())){
                         lineColor = LineColor.GREEN;
-                    }else if(Quest.isQuestCompletedForPlayer(player.getUniqueID().toString().replaceAll("-", ""), qd.getId())){
+                    }else if(Quest.isQuestCompletedForPlayer(Utils.simplifyUUID(player.getUniqueID()), qd.getId())){
                         lineColor = LineColor.YELLOW;
                     }
                     if(Quest.areQuestsInSameQuestline(questId, dependencyId)) {
@@ -208,7 +208,7 @@ public class ScreenQuestingDevice extends Screen {
                         Ref.GUI_QUESTING_MARGIN_LEFT + quest.getPosition().getX(),
                         Ref.GUI_QUESTING_MARGIN_TOP + quest.getPosition().getY(),
                         quest,
-                        player.getUniqueID().toString().replaceAll("-", "")
+                        Utils.simplifyUUID(player.getUniqueID())
                 ).render(this, player, mouseX, mouseY);
             }
         }

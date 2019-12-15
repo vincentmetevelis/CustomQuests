@@ -1,10 +1,7 @@
 package com.vincentmet.customquests.lib.handlers;
 
 import com.vincentmet.customquests.lib.Ref;
-import com.vincentmet.customquests.network.packets.MessageNotifyServer;
-import com.vincentmet.customquests.network.packets.MessageQuestBookServerToClient;
-import com.vincentmet.customquests.network.packets.MessageQuestUserProgressServerToClient;
-import com.vincentmet.customquests.network.packets.MessageQuestsServerToClient;
+import com.vincentmet.customquests.network.packets.*;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.network.NetworkRegistry;
 import net.minecraftforge.fml.network.simple.SimpleChannel;
@@ -25,9 +22,8 @@ public class PacketHandler {
     }
 
     public static void init() {
-        CHANNEL.registerMessage(nextID(), MessageQuestsServerToClient.class, MessageQuestsServerToClient::encode, MessageQuestsServerToClient::decode, MessageQuestsServerToClient::handle);
-        CHANNEL.registerMessage(nextID(), MessageQuestBookServerToClient.class, MessageQuestBookServerToClient::encode, MessageQuestBookServerToClient::decode, MessageQuestBookServerToClient::handle);
-        CHANNEL.registerMessage(nextID(), MessageQuestUserProgressServerToClient.class, MessageQuestUserProgressServerToClient::encode, MessageQuestUserProgressServerToClient::decode, MessageQuestUserProgressServerToClient::handle);
-        CHANNEL.registerMessage(nextID(), MessageNotifyServer.class, MessageNotifyServer::encode, MessageNotifyServer::decode, MessageNotifyServer::handle);
+        CHANNEL.registerMessage(nextID(), MessageUpdateQuestProgressServerToClient.class, MessageUpdateQuestProgressServerToClient::encode, MessageUpdateQuestProgressServerToClient::decode, MessageUpdateQuestProgressServerToClient::handle);
+        CHANNEL.registerMessage(nextID(), MessageUpdateQuestbookServerToClient.class, MessageUpdateQuestbookServerToClient::encode, MessageUpdateQuestbookServerToClient::decode, MessageUpdateQuestbookServerToClient::handle);
+        CHANNEL.registerMessage(nextID(), MessageUpdateQuestsServerToClient.class, MessageUpdateQuestsServerToClient::encode, MessageUpdateQuestsServerToClient::decode, MessageUpdateQuestsServerToClient::handle);
     }
 }

@@ -20,18 +20,18 @@ public class JsonHandler {
     private static JsonObject jsonContainerQuestbook;
     private static JsonObject jsonContainerQuestingProgress;
 
-    public static void loadJson() {
+    public static void loadJson(String questsLocation, String questBookLocation, String questingProgressLocation) {
         try{
             JsonParser parser = new JsonParser();
-            jsonContainerQuests = (JsonObject)parser.parse(new FileReader(Ref.questsLocation));
+            jsonContainerQuests = (JsonObject)parser.parse(new FileReader(questsLocation));
         }catch(IOException e){
             try{
-                FileWriter file = new FileWriter(Ref.questsLocation);
+                FileWriter file = new FileWriter(questsLocation);
                 file.write(Utils.getDefaultQuestsJson());
                 file.flush();
                 file.close();
                 JsonParser parser = new JsonParser();
-                jsonContainerQuests = (JsonObject)parser.parse(new FileReader(Ref.questsLocation));
+                jsonContainerQuests = (JsonObject)parser.parse(new FileReader(questsLocation));
             }catch(IOException e1){
                 e1.printStackTrace();
             }
@@ -39,15 +39,15 @@ public class JsonHandler {
 
         try{
             JsonParser parser = new JsonParser();
-            jsonContainerQuestbook = (JsonObject)parser.parse(new FileReader(Ref.questBookLocation));
+            jsonContainerQuestbook = (JsonObject)parser.parse(new FileReader(questBookLocation));
         }catch(IOException e){
             try{
-                FileWriter file = new FileWriter(Ref.questBookLocation);
+                FileWriter file = new FileWriter(questBookLocation);
                 file.write(Utils.getDefaultQuestBookJson());
                 file.flush();
                 file.close();
                 JsonParser parser = new JsonParser();
-                jsonContainerQuestbook = (JsonObject)parser.parse(new FileReader(Ref.questBookLocation));
+                jsonContainerQuestbook = (JsonObject)parser.parse(new FileReader(questBookLocation));
             }catch(IOException e1){
                 e1.printStackTrace();
             }
@@ -55,24 +55,30 @@ public class JsonHandler {
 
         try{
             JsonParser parser = new JsonParser();
-            jsonContainerQuestingProgress = (JsonObject)parser.parse(new FileReader(Ref.questingProgressLocation));
+            jsonContainerQuestingProgress = (JsonObject)parser.parse(new FileReader(questingProgressLocation));
         }catch(IOException e){
             try{
-                FileWriter file = new FileWriter(Ref.questingProgressLocation);
+                FileWriter file = new FileWriter(questingProgressLocation);
                 file.write(Utils.getDefaultQuestingProgressJson());
                 file.flush();
                 file.close();
                 JsonParser parser = new JsonParser();
-                jsonContainerQuestingProgress = (JsonObject)parser.parse(new FileReader(Ref.questingProgressLocation));
+                jsonContainerQuestingProgress = (JsonObject)parser.parse(new FileReader(questingProgressLocation));
             }catch(IOException e1){
                 e1.printStackTrace();
             }
         }
     }
 
-    public static void writeJson(){
+    public static void writeAll(String questsLocation, String questBookLocation, String questingProgressLocation){
+        writeQuests(questsLocation);
+        writeQuestbook(questBookLocation);
+        writeQuestingProgress(questingProgressLocation);
+    }
+
+    public static void writeQuests(String questsLocation) {
         try{
-            FileWriter file = new FileWriter(Ref.questsLocation);
+            FileWriter file = new FileWriter(questsLocation);
 
             JsonObject json = new JsonObject();
             JsonArray questArray = new JsonArray();
@@ -87,9 +93,11 @@ public class JsonHandler {
         }catch(IOException e){
             e.printStackTrace();
         }
+    }
 
+    public static void writeQuestbook(String questBookLocation) {
         try{
-            FileWriter file = new FileWriter(Ref.questBookLocation);
+            FileWriter file = new FileWriter(questBookLocation);
 
             JsonObject json = new JsonObject();
             json.addProperty("title", Ref.ALL_QUESTBOOK.getTitle());
@@ -106,9 +114,11 @@ public class JsonHandler {
         }catch(IOException e){
             e.printStackTrace();
         }
+    }
 
+    public static void writeQuestingProgress(String questingProgressLocation){
         try{
-            FileWriter file = new FileWriter(Ref.questingProgressLocation);
+            FileWriter file = new FileWriter(questingProgressLocation);
 
             JsonObject json = new JsonObject();
             JsonArray playerArray = new JsonArray();

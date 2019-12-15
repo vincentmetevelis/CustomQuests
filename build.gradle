@@ -13,19 +13,17 @@ apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 
-version = '1.14.4-0.1a'
-group = 'com.vincentmet.customquests' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+version = '1.14.4-0.2-DEV1'
+group = 'com.vincentmet.customquests'
 archivesBaseName = 'customquests'
 
-sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
+sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8'
 
 minecraft {
-	mappings channel: 'snapshot', version: '20191114-1.14.3'
+	mappings channel: 'snapshot', version: '20191212-1.14.3'
     runs {
         client {
             workingDirectory project.file('run')
-            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
-            property 'forge.logging.console.level', 'debug'
             mods {
                 customquests {
                     source sourceSets.main
@@ -34,8 +32,6 @@ minecraft {
         }
         server {
             workingDirectory project.file('run')
-			property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
-			property 'forge.logging.console.level', 'debug'
             mods {
                 customquests {
                     source sourceSets.main
@@ -44,8 +40,6 @@ minecraft {
         }
         data {
             workingDirectory project.file('run')
-            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
-            property 'forge.logging.console.level', 'debug'
             args '--mod', 'examplemod', '--all', '--output', file('src/generated/resources/')
             mods {
                 customquests {
@@ -57,7 +51,7 @@ minecraft {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.14.4-28.1.90'
+    minecraft 'net.minecraftforge:forge:1.14.4-28.1.106'
 	//put JEI here as soft dependency
 }
 
@@ -65,7 +59,7 @@ jar {
     manifest {
         attributes([
             "Specification-Title": "Custom Quests",
-            "Specification-Vendor": "Customquests",
+            "Specification-Vendor": "Custom Quests",
             "Specification-Version": "1", // We are version 1 of ourselves
             "Implementation-Title": project.name,
             "Implementation-Version": "${version}",

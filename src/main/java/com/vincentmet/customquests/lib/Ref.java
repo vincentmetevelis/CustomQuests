@@ -11,6 +11,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,9 +51,10 @@ public class Ref {
     public static String questBookLocation;
     public static String questsLocation;
     public static String questingProgressLocation;
+    public static String currWorldDir;
     public static QuestMenu ALL_QUESTBOOK;
-    public static List<Quest> ALL_QUESTS;
-    public static List<QuestUserProgress> ALL_QUESTING_PROGRESS;
+    public static List<Quest> ALL_QUESTS = new ArrayList<>();
+    public static List<QuestUserProgress> ALL_QUESTING_PROGRESS = new ArrayList<>();
     public static List<IQuestingGuiElement> ALL_GUI_ELEMENTS = new ArrayList<>();
 
     @OnlyIn(Dist.CLIENT)

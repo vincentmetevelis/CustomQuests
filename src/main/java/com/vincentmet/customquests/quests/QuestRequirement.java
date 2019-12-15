@@ -79,7 +79,7 @@ public class QuestRequirement {
 
         @Override
         public String getLabelText() {
-            return entity.getName().getString();
+            return amount + "x " + entity.getName().getString();
         }
 
         @Override
@@ -133,7 +133,7 @@ public class QuestRequirement {
 
         @Override
         public String getLabelText() {
-            return itemStack.toString();
+            return itemStack.getCount() + "x " + itemStack.getItem().getName().getString();
         }
 
         @Override
@@ -174,7 +174,7 @@ public class QuestRequirement {
 
         @Override
         public String getLabelText() {
-            return itemStack.toString();
+            return itemStack.getCount() + "x " + itemStack.getItem().getName().getString();
         }
 
         @Override
@@ -215,7 +215,7 @@ public class QuestRequirement {
 
         @Override
         public String getLabelText() {
-            return itemStack.toString();
+            return itemStack.getCount() + "x " + itemStack.getItem().getName().getString();
         }
 
         @Override
@@ -263,7 +263,7 @@ public class QuestRequirement {
 
         @Override
         public String getLabelText() {
-            return "Dim: " + dim.split(":")[1] + "; Pos: [" + blockPos.getX() + ", " + blockPos.getY() + ", " + blockPos.getZ() + "]";
+            return "Dim: " + dim.split(":")[1].replace('_', ' ') + "; Pos: [" + blockPos.getX() + ", " + blockPos.getY() + ", " + blockPos.getZ() + "]";
         }
 
         @Override

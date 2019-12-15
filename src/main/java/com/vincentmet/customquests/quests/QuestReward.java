@@ -86,7 +86,7 @@ public class QuestReward {
 
         @Override
         public String toString() {
-            return itemStack.toString();
+            return itemStack.getCount() + "x " + itemStack.getItem().getName().getString();
         }
 
         @Override
@@ -125,7 +125,7 @@ public class QuestReward {
 
         @Override
         public String toString() {
-            return command;
+            return "/" + command;
         }
 
         @Override
@@ -162,7 +162,7 @@ public class QuestReward {
 
         @Override
         public String toString() {
-            return amount + "x " + entity.getName().getString();
+            return "Summon " + amount + "x " + entity.getName().getString();
         }
 
         @Override
