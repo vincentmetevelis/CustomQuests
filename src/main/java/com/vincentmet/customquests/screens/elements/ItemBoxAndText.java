@@ -4,7 +4,10 @@ import com.vincentmet.customquests.lib.Ref;
 import com.vincentmet.customquests.screens.ScreenQuestingDevice;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
+@OnlyIn(Dist.CLIENT)
 public class ItemBoxAndText implements IQuestingGuiElement {
     private int x;
     private int y;

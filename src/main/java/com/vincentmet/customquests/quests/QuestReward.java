@@ -86,7 +86,7 @@ public class QuestReward {
 
         @Override
         public String toString() {
-            return itemStack.toString();
+            return itemStack.getCount() + "x " + itemStack.getItem().getName().getString();
         }
 
         @Override
@@ -116,7 +116,7 @@ public class QuestReward {
         @Override
         public void executeReward(PlayerEntity player) {
             final CommandDispatcher<CommandSource> dispatcher = player.getServer().getCommandManager().getDispatcher();
-            try {
+            try {//todo claiming rewards crashes client
                 dispatcher.execute(command, new CommandSource(ICommandSource.field_213139_a_, player.getPositionVec(), player.getPitchYaw(), (ServerWorld) player.world, 5, "CustomQuests", new TranslationTextComponent("Custom Quests"), player.getServer(), player));
             } catch (CommandSyntaxException e) {
                 e.printStackTrace();
@@ -125,7 +125,7 @@ public class QuestReward {
 
         @Override
         public String toString() {
-            return command;
+            return "/" + command;
         }
 
         @Override
@@ -157,12 +157,12 @@ public class QuestReward {
 
         @Override
         public void executeReward(PlayerEntity player) {
-            for(int i=0; i<amount;i++)player.getEntityWorld().getServer().getWorld(player.dimension).summonEntity(entity.create(player.world, new CompoundNBT(), new TranslationTextComponent("test"), player, player.getPosition(), SpawnReason.COMMAND, true, false));
+            for(int i=0; i<amount;i++)player.getEntityWorld().getServer().getWorld(player.dimension).summonEntity(entity.create(player.world, new CompoundNBT(), new TranslationTextComponent("Your Reward <3"), player, player.getPosition(), SpawnReason.COMMAND, true, false));
         }
 
         @Override
         public String toString() {
-            return amount + "x " + entity.getName().getString();
+            return "Summon " + amount + "x " + entity.getName().getString();
         }
 
         @Override

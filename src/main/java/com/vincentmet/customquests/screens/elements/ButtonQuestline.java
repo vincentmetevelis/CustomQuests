@@ -6,7 +6,10 @@ import com.vincentmet.customquests.quests.Quest;
 import com.vincentmet.customquests.quests.QuestLine;
 import com.vincentmet.customquests.screens.ScreenQuestingDevice;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
+@OnlyIn(Dist.CLIENT)
 public class ButtonQuestline implements IQuestingGuiElement {
     public static final int WIDTH = 150;
     public static final int HEIGHT = 20;
@@ -22,7 +25,7 @@ public class ButtonQuestline implements IQuestingGuiElement {
 
     @Override
     public <T extends ScreenQuestingDevice> void render(T gui, PlayerEntity player, double mouseX, double mouseY) {
-        if(QuestLine.isQuestlineUnlocked(player.getUniqueID().toString().replaceAll("-", ""), questLine.getId())){
+        if(QuestLine.isQuestlineUnlocked(Utils.simplifyUUID(player.getUniqueID()), questLine.getId())){
             if(Utils.isMouseInBounds(mouseX, mouseY, x, y, x + WIDTH, y + HEIGHT)){
                 gui.getMinecraft().getTextureManager().bindTexture(Ref.IMAGE_BUTTON_QUESTLINE_PRESSED);
             }else{

@@ -9,8 +9,11 @@ import com.vincentmet.customquests.screens.ScreenQuestingDevice;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import org.lwjgl.opengl.GL11;
 
+@OnlyIn(Dist.CLIENT)
 public class Line implements IQuestingGuiElement {
     private int x;
     private int y;

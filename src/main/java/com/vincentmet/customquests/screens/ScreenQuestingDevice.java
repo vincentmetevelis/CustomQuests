@@ -1,17 +1,24 @@
 package com.vincentmet.customquests.screens;
 
+import com.mojang.blaze3d.platform.GlStateManager;
 import com.vincentmet.customquests.lib.LineColor;
 import com.vincentmet.customquests.lib.Ref;
 import com.vincentmet.customquests.lib.Utils;
 import com.vincentmet.customquests.quests.*;
 import com.vincentmet.customquests.screens.elements.*;
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import org.lwjgl.opengl.GL11;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@OnlyIn(Dist.CLIENT)
 public class ScreenQuestingDevice extends Screen {
     private PlayerEntity player;
     public static int activeQuestline = 0;
@@ -177,11 +184,11 @@ public class ScreenQuestingDevice extends Screen {
                 LineColor lineColor = LineColor.BLACK;
                 for(int dependencyId : quest.getDependencies()){
                     Quest qd = Quest.getQuestFromId(dependencyId);
-                    if(Quest.hasQuestUncompletedDependenciesForPlayer(player.getUniqueID().toString().replaceAll("-", ""), quest.getId())){
+                    if(Quest.hasQuestUncompletedDependenciesForPlayer(Utils.simplifyUUID(player.getUniqueID()), quest.getId())){
                         lineColor = LineColor.RED;
-                    }else if(Quest.isQuestCompletedForPlayer(player.getUniqueID().toString().replaceAll("-", ""), qd.getId()) && Quest.isQuestCompletedForPlayer(player.getUniqueID().toString().replaceAll("-", ""), quest.getId())){
+                    }else if(Quest.isQuestCompletedForPlayer(Utils.simplifyUUID(player.getUniqueID()), qd.getId()) && Quest.isQuestCompletedForPlayer(Utils.simplifyUUID(player.getUniqueID()), quest.getId())){
                         lineColor = LineColor.GREEN;
-                    }else if(Quest.isQuestCompletedForPlayer(player.getUniqueID().toString().replaceAll("-", ""), qd.getId())){
+                    }else if(Quest.isQuestCompletedForPlayer(Utils.simplifyUUID(player.getUniqueID()), qd.getId())){
                         lineColor = LineColor.YELLOW;
                     }
                     if(Quest.areQuestsInSameQuestline(questId, dependencyId)) {
@@ -201,7 +208,7 @@ public class ScreenQuestingDevice extends Screen {
                         Ref.GUI_QUESTING_MARGIN_LEFT + quest.getPosition().getX(),
                         Ref.GUI_QUESTING_MARGIN_TOP + quest.getPosition().getY(),
                         quest,
-                        player.getUniqueID().toString().replaceAll("-", "")
+                        Utils.simplifyUUID(player.getUniqueID())
                 ).render(this, player, mouseX, mouseY);
             }
         }

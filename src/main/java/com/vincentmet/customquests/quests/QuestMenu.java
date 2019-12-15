@@ -1,5 +1,7 @@
 package com.vincentmet.customquests.quests;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import com.vincentmet.customquests.lib.Ref;
 import net.minecraft.util.text.TranslationTextComponent;
 
@@ -14,6 +16,18 @@ public class QuestMenu {
         this.title =  title;
         this.description = description;
         this.questlines = questlines;
+    }
+
+    public JsonObject getJson(){
+        JsonObject json = new JsonObject();
+        json.addProperty("title", title);
+        json.addProperty("text", description);
+        JsonArray jsonQuestlineArray = new JsonArray();
+        for(QuestLine questline : questlines){
+            jsonQuestlineArray.add(questline.getJson());
+        }
+        json.add("questlines", jsonQuestlineArray);
+        return json;
     }
 
     public List<QuestLine> getQuestlines() {

@@ -419,9 +419,9 @@ public class ConverterHelper {
 			}
 
 			public static List<Integer> getFinishedQuests(JsonObject json){
-				if(json.has("finished_quests") && json.get("finished_quests").isJsonArray()){
+				if(json.has("completed_quests") && json.get("completed_quests").isJsonArray()){
 					List<Integer> finishedQuestList = new ArrayList<>();
-					for(JsonElement questDependencyId : json.get("finished_quests").getAsJsonArray()){
+					for(JsonElement questDependencyId : json.get("completed_quests").getAsJsonArray()){
 						finishedQuestList.add(questDependencyId.getAsInt());
 					}
 					return finishedQuestList;

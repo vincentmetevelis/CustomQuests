@@ -7,7 +7,10 @@ import com.vincentmet.customquests.screens.ScreenQuestingDevice;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
+@OnlyIn(Dist.CLIENT)
 public class ButtonQuest implements IQuestingGuiElement {
     public static final int WIDTH = 32;
     public static final int HEIGHT = 32;
