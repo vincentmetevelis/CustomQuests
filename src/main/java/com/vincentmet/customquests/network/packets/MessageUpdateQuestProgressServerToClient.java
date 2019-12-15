@@ -40,6 +40,7 @@ public class MessageUpdateQuestProgressServerToClient {
     public static void handle(final MessageUpdateQuestProgressServerToClient message, Supplier<NetworkEvent.Context> ctx) {
         ctx.get().enqueueWork(() -> {
             StructureHandler.initQuestingProgress(message.json);
+            Ref.shouldSaveNextTick = false;
         });
         ctx.get().setPacketHandled(true);
     }
