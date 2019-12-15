@@ -43,7 +43,6 @@ public class EventHandler {
     @SubscribeEvent
     public static void onItemCraft(PlayerEvent.ItemCraftedEvent event){
         List<Triple<Integer, Integer, Integer>> activeItemCraftQuestIds = Quest.getActiveQuestsWithType(Utils.simplifyUUID(event.getPlayer().getUniqueID()), QuestRequirementType.CRAFTING_DETECT);
-
         for(Triple<Integer, Integer, Integer> questAndReqAndSubReqId : activeItemCraftQuestIds){
             ItemStack itemStack = Quest.getItemstackForCraftingDetect(questAndReqAndSubReqId.getLeft(), questAndReqAndSubReqId.getMiddle(), questAndReqAndSubReqId.getRight());
             if(event.getCrafting().getItem() == itemStack.getItem() && event.getCrafting().getTag() == itemStack.getTag()){

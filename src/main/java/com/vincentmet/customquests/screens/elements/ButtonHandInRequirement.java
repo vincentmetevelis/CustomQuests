@@ -1,17 +1,14 @@
 package com.vincentmet.customquests.screens.elements;
 
 import com.vincentmet.customquests.lib.Ref;
-import com.vincentmet.customquests.lib.Triple;
 import com.vincentmet.customquests.lib.Utils;
+import com.vincentmet.customquests.lib.handlers.PacketHandler;
+import com.vincentmet.customquests.network.packets.MessageHandInButtonPressClientToServer;
 import com.vincentmet.customquests.quests.*;
 import com.vincentmet.customquests.screens.ScreenQuestingDevice;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-
-import java.util.List;
 
 @OnlyIn(Dist.CLIENT)
 public class ButtonHandInRequirement implements IQuestingGuiElement {
@@ -62,27 +59,7 @@ public class ButtonHandInRequirement implements IQuestingGuiElement {
     public <T extends ScreenQuestingDevice> void onClick(T gui, PlayerEntity player, double mouseX, double mouseY) {
         if(questRequirement.getType() == QuestRequirementType.ITEM_DELIVER && !QuestUserProgress.isRequirementCompleted(player.getUniqueID().toString().replaceAll("-", ""), questId, questReqId)){
             if(Utils.isMouseInBounds(mouseX, mouseY, x, y, x+WIDTH, y+HEIGHT)){
-                int countSubReq = 0;
-                for(IQuestRequirement iqr : questRequirement.getSubRequirements()){
-                    ItemStack itemStack = Quest.getItemstackForItemHandIn(questId, questReqId, countSubReq);
-                    int slotIndexCount = 0;
-                    for(ItemStack mainInventoryStack : player.inventory.mainInventory){
-                        if(mainInventoryStack.getItem() == itemStack.getItem()){
-                            int itemCountLeftToHandIn = QuestUserProgress.getItemCountLeftToHandIn(player.getUniqueID().toString().replaceAll("-", ""), questId, questReqId, countSubReq);
-                            System.out.println("Submitted item");
-                            if(itemCountLeftToHandIn < mainInventoryStack.getCount()){
-                                QuestUserProgress.addPlayerProgress(player.getUniqueID().toString().replaceAll("-", ""), questId, questReqId, countSubReq, itemCountLeftToHandIn);
-                                player.inventory.getStackInSlot(slotIndexCount).setCount(player.inventory.getStackInSlot(slotIndexCount).getCount() - itemCountLeftToHandIn);
-                            }else{
-                                QuestUserProgress.addPlayerProgress(player.getUniqueID().toString().replaceAll("-", ""), questId, questReqId, countSubReq, mainInventoryStack.getCount());
-                                player.inventory.removeStackFromSlot(slotIndexCount);
-                            }
-                        }
-                        slotIndexCount++;
-                    }
-                    countSubReq++;
-                }
-
+                PacketHandler.CHANNEL.sendToServer(new MessageHandInButtonPressClientToServer(questId, questReqId));
             }
         }
     }

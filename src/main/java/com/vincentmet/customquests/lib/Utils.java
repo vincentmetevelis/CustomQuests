@@ -7,9 +7,11 @@ import com.google.gson.JsonParser;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.vincentmet.customquests.lib.handlers.PacketHandler;
 import com.vincentmet.customquests.network.packets.MessageUpdateQuestProgressServerToClient;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.JsonToNBT;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.network.PacketDistributor;
 import org.apache.commons.lang3.StringUtils;
 import javax.net.ssl.HttpsURLConnection;
@@ -139,11 +141,12 @@ public class Utils {
         return x2 > mouseX && mouseX > x1 && y2 > mouseY && mouseY > y1;
     }
 
-    /*public static void requestServerToSave(){
-
+    public static PlayerEntity getPlayerFromUuid(World world, String uuid){
+        for(PlayerEntity player : world.getPlayers()){
+            if(Utils.simplifyUUID(player.getUniqueID()).equals(uuid)){
+                return player;
+            }
+        }
+        return null;
     }
-
-    public static void sendProgressToAllClients(){
-        PacketHandler.CHANNEL.send(PacketDistributor.PLAYER.noArg(), new MessageUpdateQuestProgressServerToClient());
-    }*/
 }

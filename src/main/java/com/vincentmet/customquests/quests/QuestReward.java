@@ -157,7 +157,7 @@ public class QuestReward {
 
         @Override
         public void executeReward(PlayerEntity player) {
-            for(int i=0; i<amount;i++)player.getEntityWorld().getServer().getWorld(player.dimension).summonEntity(entity.create(player.world, new CompoundNBT(), new TranslationTextComponent("test"), player, player.getPosition(), SpawnReason.COMMAND, true, false));
+            for(int i=0; i<amount;i++)player.getEntityWorld().getServer().getWorld(player.dimension).summonEntity(entity.create(player.world, new CompoundNBT(), new TranslationTextComponent("Your Reward <3"), player, player.getPosition(), SpawnReason.COMMAND, true, false));
         }
 
         @Override
