@@ -1,0 +1,24 @@
+{
+  "parties":[
+    {
+      "id": 0,
+      "creator": "some_uuid",
+      "name":"My First Party",
+      "share_loot": false,
+      "ffa": true,
+      "progress":{
+        "completed_quests": [2,3,5,6,1,4,0],
+        "quest_status": [
+          {
+            "id": 0,
+            "claimed": true,
+            "requirement_completion": [
+              [1,1],
+              [2,3]
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

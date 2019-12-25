@@ -1,9 +1,10 @@
-package com.vincentmet.customquests.screens.elements;
+package com.vincentmet.customquests.screens.elements.buttons;
 
 import com.vincentmet.customquests.lib.Ref;
 import com.vincentmet.customquests.lib.Utils;
 import com.vincentmet.customquests.quests.Quest;
 import com.vincentmet.customquests.screens.ScreenQuestingDevice;
+import com.vincentmet.customquests.screens.elements.IQuestingGuiElement;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;

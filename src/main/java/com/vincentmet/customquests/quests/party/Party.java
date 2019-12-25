@@ -1,24 +1,41 @@
 package com.vincentmet.customquests.quests.party;
 
-import net.minecraft.entity.player.PlayerEntity;
+import com.google.gson.JsonObject;
+import com.vincentmet.customquests.lib.Ref;
+import com.vincentmet.customquests.quests.IJsonProvider;
+import com.vincentmet.customquests.quests.Quest;
+import com.vincentmet.customquests.quests.QuestStatus;
+import com.vincentmet.customquests.quests.QuestUserProgress;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.OptionalInt;
 
 @Nullable
-public class Party {
-    private PlayerEntity creator;
+public class Party implements IJsonProvider {
+    private int id;
+    private String creator;
     private String partyName;
-    private boolean shareLoot;
-    private boolean openForEveryone;
+    private boolean lootShared;
+    private boolean ffa;
+    private QuestPartyProgress progress;
 
-    public Party(PlayerEntity creator, String partyName, boolean shareLoot, boolean openForEveryone){
+    public Party(int id, String creator, String partyName, boolean lootShared, boolean ffa, QuestPartyProgress progress){
+        this.id = id;
         this.creator = creator;
         this.partyName = partyName;
-        this.shareLoot = shareLoot;
-        this.openForEveryone = openForEveryone;
+        this.lootShared = lootShared;
+        this.ffa = ffa;
+        this.progress = progress;
     }
 
-    public PlayerEntity getCreator(){
+    public int getId() {
+        return id;
+    }
+
+    public String getCreator(){
         return creator;
     }
 
@@ -26,11 +43,56 @@ public class Party {
         return partyName;
     }
 
+    public void setPartyName(String partyName) {
+        this.partyName = partyName;
+    }
+
     public boolean isLootShared(){
-        return shareLoot;
+        return lootShared;
+    }
+
+    public void setLootShared(boolean shareLoot) {
+        this.lootShared = shareLoot;
     }
 
     public boolean isOpenForEveryone(){
-        return openForEveryone;
+        return ffa;
+    }
+
+    public QuestPartyProgress getProgress() {
+        return progress;
+    }
+
+    public List<String> getPartyMembers() {
+        List<String> uuids = new ArrayList<>();
+        for(QuestUserProgress questUserProgress : Ref.ALL_QUESTING_PROGRESS){
+            if(questUserProgress.getPartyId() == id){
+                uuids.add(questUserProgress.getUuid());
+            }
+        }
+        return uuids;
+    }
+
+    public JsonObject getJson(){
+        JsonObject json = new JsonObject();
+        json.addProperty("id", id);
+        json.addProperty("creator", creator);
+        json.addProperty("name", partyName);
+        json.addProperty("lootShared", lootShared);
+        json.addProperty("ffa", ffa);
+        json.add("progress", progress.getJson());
+        return json;
+    }
+
+    private static int nextId(){
+        return Ref.ALL_QUESTING_PARTIES.stream()
+                .mapToInt(Party::getId)
+                .reduce(0, (left, right) -> left == right ? left + 1 : left);
+    }
+
+    public static Party createNewParty(String creatorUuid, String partyName){
+        Party party = new Party(nextId(), creatorUuid, partyName, false, false, new QuestPartyProgress(new ArrayList<>(), new ArrayList<>()));
+        Ref.ALL_QUESTING_PARTIES.add(party);
+        return party;
     }
 }

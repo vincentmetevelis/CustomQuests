@@ -59,6 +59,10 @@ public class Utils {
         return "{\"players\":[]}";
     }
 
+    public static String getDefaultQuestingPartiesJson(){
+        return "{\"parties\":[]}";
+    }
+
     public static String getUUID(String username){
         if(UsernameUuidCache.isNameAlreadyInCache(username)){
             return UsernameUuidCache.getUuidForName(username);

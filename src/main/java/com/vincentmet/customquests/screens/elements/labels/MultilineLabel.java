@@ -1,7 +1,8 @@
-package com.vincentmet.customquests.screens.elements;
+package com.vincentmet.customquests.screens.elements.labels;
 
 import com.vincentmet.customquests.lib.Ref;
 import com.vincentmet.customquests.screens.ScreenQuestingDevice;
+import com.vincentmet.customquests.screens.elements.IQuestingGuiElement;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;

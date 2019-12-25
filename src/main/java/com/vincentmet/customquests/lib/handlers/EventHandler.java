@@ -59,7 +59,6 @@ public class EventHandler {
                 Pair<EntityType, Integer> mobAmount = Quest.getMobAmountForMobKill(questAndReqAndSubReqId.getLeft(), questAndReqAndSubReqId.getMiddle(), questAndReqAndSubReqId.getRight());
                 if (event.getEntity().getType() == mobAmount.getKey()) {
                     if (event.getSource().getTrueSource() instanceof PlayerEntity) {
-                        System.out.println("Ready");
                         QuestUserProgress.addPlayerProgress(Utils.simplifyUUID(event.getSource().getTrueSource().getUniqueID()), questAndReqAndSubReqId.getLeft(), questAndReqAndSubReqId.getMiddle(), questAndReqAndSubReqId.getRight(), 1);
                         Ref.shouldSaveNextTick = true;
                     }
@@ -75,20 +74,21 @@ public class EventHandler {
         }
 
         if(QuestUserProgress.getUserProgressForUuid(Utils.simplifyUUID(event.getPlayer().getUniqueID()))==null){
-            Ref.ALL_QUESTING_PROGRESS.add(new QuestUserProgress(Utils.simplifyUUID(event.getPlayer().getUniqueID()), new ArrayList<>(), new ArrayList<>()));
+            Ref.ALL_QUESTING_PROGRESS.add(new QuestUserProgress(Utils.simplifyUUID(event.getPlayer().getUniqueID()), Ref.ERR_MSG_INT_INVALID_JSON, new ArrayList<>(), new ArrayList<>()));
             Ref.shouldSaveNextTick = true;
         }
 
         PacketHandler.CHANNEL.send(PacketDistributor.PLAYER.with(()->(ServerPlayerEntity)event.getPlayer()), new MessageUpdateQuestsServerToClient());
         PacketHandler.CHANNEL.send(PacketDistributor.PLAYER.with(()->(ServerPlayerEntity)event.getPlayer()), new MessageUpdateQuestbookServerToClient());
         PacketHandler.CHANNEL.send(PacketDistributor.PLAYER.with(()->(ServerPlayerEntity)event.getPlayer()), new MessageUpdateQuestProgressServerToClient());
+        PacketHandler.CHANNEL.send(PacketDistributor.PLAYER.with(()->(ServerPlayerEntity)event.getPlayer()), new MessageUpdateQuestPartiesServerToClient());
     }
 
     @SubscribeEvent
     public static void onWorldTick(TickEvent.WorldTickEvent event){
         if(!event.world.isRemote) {
             if(Ref.shouldSaveNextTick){
-                JsonHandler.writeAll(Ref.questsLocation, Ref.questBookLocation, Ref.questingProgressLocation);
+                JsonHandler.writeAll(Ref.questsLocation, Ref.questBookLocation, Ref.questingProgressLocation, Ref.questingPartiesLocation);
                 for(PlayerEntity player : event.world.getPlayers()){
                     PacketHandler.CHANNEL.send(PacketDistributor.PLAYER.with(()->(ServerPlayerEntity)player), new MessageUpdateQuestProgressServerToClient(new JsonObject()));
                 }
@@ -158,11 +158,13 @@ public class EventHandler {
                 JsonHandler.loadJson(
                         Ref.questsLocation = FMLPaths.CONFIGDIR.get().toString() + "\\Quests.json",
                         Ref.questBookLocation = FMLPaths.CONFIGDIR.get().toString() + "\\QuestsBook.json",
-                        Ref.questingProgressLocation = Ref.currWorldDir + "\\QuestingProgress.json"
+                        Ref.questingProgressLocation = Ref.currWorldDir + "\\QuestingProgress.json",
+                        Ref.questingPartiesLocation = Ref.currWorldDir + "\\QuestingParties.json"
                 );
                 StructureHandler.initQuests(JsonHandler.getQuestsJson());
                 StructureHandler.initQuestbook(JsonHandler.getQuestbookJson());
                 StructureHandler.initQuestingProgress(JsonHandler.getQuestingProgressJson());
+                StructureHandler.initQuestingParties(JsonHandler.getQuestingPartiesJson());
             }
         }
     }

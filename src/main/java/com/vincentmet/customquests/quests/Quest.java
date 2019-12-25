@@ -15,7 +15,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Quest {
+public class Quest implements IJsonProvider{
     private int id;
     private String title;
     private String description;

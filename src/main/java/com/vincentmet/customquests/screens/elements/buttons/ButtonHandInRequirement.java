@@ -1,40 +1,41 @@
-package com.vincentmet.customquests.screens.elements;
+package com.vincentmet.customquests.screens.elements.buttons;
 
 import com.vincentmet.customquests.lib.Ref;
 import com.vincentmet.customquests.lib.Utils;
 import com.vincentmet.customquests.lib.handlers.PacketHandler;
-import com.vincentmet.customquests.network.packets.MessageRewardButtonPressClientToServer;
-import com.vincentmet.customquests.quests.IQuestReward;
-import com.vincentmet.customquests.quests.QuestUserProgress;
+import com.vincentmet.customquests.network.packets.MessageHandInButtonPressClientToServer;
+import com.vincentmet.customquests.quests.*;
 import com.vincentmet.customquests.screens.ScreenQuestingDevice;
+import com.vincentmet.customquests.screens.elements.IQuestingGuiElement;
+import com.vincentmet.customquests.screens.elements.labels.Label;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import java.util.List;
-
 @OnlyIn(Dist.CLIENT)
-public class ButtonClaimReward implements IQuestingGuiElement {
+public class ButtonHandInRequirement implements IQuestingGuiElement {
     public static final int WIDTH = 64;
     public static final int HEIGHT = 20;
     private int x;
     private int y;
-    private int quest;
-    private List<IQuestReward> questRewards;
-    private String textUnclaimed = "Claim";
-    private String textClaimed = "Claimed!";
+    private int questId;
+    private int questReqId;
+    private QuestRequirement questRequirement;
+    private String textNotHandedIn = "Hand in";
+    private String textHandedIn = "Handed in!";
 
-    public ButtonClaimReward(int posX, int posY, int quest, List<IQuestReward> questRewards){
+    public ButtonHandInRequirement(int posX, int posY, int questId, int questReqId, QuestRequirement questRequirements){
         this.x = posX;
         this.y = posY;
-        this.quest = quest;
-        this.questRewards = questRewards;
+        this.questId = questId;
+        this.questReqId = questReqId;
+        this.questRequirement = questRequirements;
     }
 
     @Override
     public <T extends ScreenQuestingDevice> void render(T gui, PlayerEntity player, double mouseX, double mouseY) {
-        String text = QuestUserProgress.isRewardClaimed(player.getUniqueID().toString().replaceAll("-", ""), quest) ? textClaimed : textUnclaimed;
-        if(!QuestUserProgress.isRewardClaimed(player.getUniqueID().toString().replaceAll("-", ""), quest) && QuestUserProgress.areAllRequirementsCompleted(player.getUniqueID().toString().replaceAll("-", ""), quest)){
+        String text = QuestUserProgress.isRequirementCompleted(player.getUniqueID().toString().replaceAll("-", ""), questId, questReqId) ? textHandedIn : textNotHandedIn;
+        if(questRequirement.getType() == QuestRequirementType.ITEM_DELIVER && !QuestUserProgress.isRequirementCompleted(player.getUniqueID().toString().replaceAll("-", ""), questId, questReqId)){
             if(Utils.isMouseInBounds(mouseX, mouseY, x, y, x + WIDTH, y + HEIGHT)){
                 gui.getMinecraft().getTextureManager().bindTexture(Ref.IMAGE_BUTTON_CLAIM_REWARD_PRESSED);
             }else{
@@ -58,11 +59,9 @@ public class ButtonClaimReward implements IQuestingGuiElement {
 
     @Override
     public <T extends ScreenQuestingDevice> void onClick(T gui, PlayerEntity player, double mouseX, double mouseY) {
-        if(!QuestUserProgress.isRewardClaimed(player.getUniqueID().toString().replaceAll("-", ""), quest) && QuestUserProgress.areAllRequirementsCompleted(player.getUniqueID().toString().replaceAll("-", ""), quest)){
+        if(questRequirement.getType() == QuestRequirementType.ITEM_DELIVER && !QuestUserProgress.isRequirementCompleted(player.getUniqueID().toString().replaceAll("-", ""), questId, questReqId)){
             if(Utils.isMouseInBounds(mouseX, mouseY, x, y, x+WIDTH, y+HEIGHT)){
-                if(!QuestUserProgress.isRewardClaimed(player.getUniqueID().toString().replaceAll("-", ""), quest) && QuestUserProgress.areAllRequirementsCompleted(player.getUniqueID().toString().replaceAll("-", ""), quest)){
-                    PacketHandler.CHANNEL.sendToServer(new MessageRewardButtonPressClientToServer(quest));
-                }
+                PacketHandler.CHANNEL.sendToServer(new MessageHandInButtonPressClientToServer(questId, questReqId));
             }
         }
     }

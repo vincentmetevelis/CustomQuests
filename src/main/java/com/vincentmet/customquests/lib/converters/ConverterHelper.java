@@ -418,6 +418,14 @@ public class ConverterHelper {
 				}
 			}
 
+			public static int getPartyId(JsonObject json){
+				if(json.has("party") && json.get("party").isJsonPrimitive()){
+					return json.get("party").getAsInt();
+				}else{
+					return Ref.ERR_MSG_INT_INVALID_JSON;
+				}
+			}
+
 			public static List<Integer> getFinishedQuests(JsonObject json){
 				if(json.has("completed_quests") && json.get("completed_quests").isJsonArray()){
 					List<Integer> finishedQuestList = new ArrayList<>();
@@ -470,6 +478,123 @@ public class ConverterHelper {
 							subRequirementDependencyList.add(questSubDependencyId.getAsInt());
 						}
 						return subRequirementDependencyList;
+					}
+				}
+			}
+		}
+	}
+	public static class Parties{
+		public static JsonArray getParties(JsonObject json){
+			if(json.has("parties") && json.get("parties").isJsonArray()){
+				return json.get("parties").getAsJsonArray();
+			}else{
+				return new JsonArray();
+			}
+		}
+
+		public static class Party{
+			public static int getId(JsonObject json){
+				if(json.has("id") && json.get("id").isJsonPrimitive()){
+					return json.get("id").getAsInt();
+				}else{
+					return Ref.ERR_MSG_INT_INVALID_JSON;
+				}
+			}
+
+			public static String getCreator(JsonObject json){
+				if(json.has("creator") && json.get("creator").isJsonPrimitive()){
+					return json.get("creator").getAsString();
+				}else{
+					return Ref.ERR_MSG_STR_INVALID_JSON;
+				}
+			}
+
+			public static String getPartyName(JsonObject json){
+				if(json.has("name") && json.get("name").isJsonPrimitive()){
+					return json.get("name").getAsString();
+				}else{
+					return Ref.ERR_MSG_STR_INVALID_JSON;
+				}
+			}
+
+			public static boolean isLootShared(JsonObject json){
+				if(json.has("share_loot") && json.get("share_loot").isJsonPrimitive()){
+					return json.get("share_loot").getAsBoolean();
+				}else{
+					return Ref.ERR_MSG_BOOL_INVALID_JSON;
+				}
+			}
+
+			public static boolean isFFA(JsonObject json){
+				if(json.has("ffa") && json.get("ffa").isJsonPrimitive()){
+					return json.get("ffa").getAsBoolean();
+				}else{
+					return Ref.ERR_MSG_BOOL_INVALID_JSON;
+				}
+			}
+
+			public static JsonObject getPartyProgress(JsonObject json){
+				if(json.has("progress") && json.get("progress").isJsonObject()){
+					return json.get("progress").getAsJsonObject();
+				}else{
+					return new JsonObject();
+				}
+			}
+
+			public static class Progress{
+				public static List<Integer> getFinishedQuests(JsonObject json){
+					if(json.has("completed_quests") && json.get("completed_quests").isJsonArray()){
+						List<Integer> finishedQuestList = new ArrayList<>();
+						for(JsonElement questDependencyId : json.get("completed_quests").getAsJsonArray()){
+							finishedQuestList.add(questDependencyId.getAsInt());
+						}
+						return finishedQuestList;
+					}else{
+						return new ArrayList<>();
+					}
+				}
+
+				public static JsonArray getQuestStatus(JsonObject json){
+					if(json.has("quest_status") && json.get("quest_status").isJsonArray()){
+						return json.get("quest_status").getAsJsonArray();
+					}else{
+						return new JsonArray();
+					}
+				}
+
+				public static class QuestStatus{
+					public static int getId(JsonObject json){
+						if(json.has("id") && json.get("id").isJsonPrimitive()){
+							return json.get("id").getAsInt();
+						}else{
+							return Ref.ERR_MSG_INT_INVALID_JSON;
+						}
+					}
+
+					public static boolean getIsClaimed(JsonObject json){
+						if(json.has("claimed") && json.get("claimed").isJsonPrimitive()){
+							return json.get("claimed").getAsBoolean();
+						}else{
+							return Ref.ERR_MSG_BOOL_INVALID_JSON;
+						}
+					}
+
+					public static JsonArray getRequirementCompletion(JsonObject json){
+						if(json.has("requirement_completion") && json.get("requirement_completion").isJsonArray()){
+							return json.get("requirement_completion").getAsJsonArray();
+						}else{
+							return new JsonArray();
+						}
+					}
+
+					public static class RequirementCompletion{
+						public static List<Integer> getSubRequirementCompletionStatusList(JsonArray json) {
+							List<Integer> subRequirementDependencyList = new ArrayList<>();
+							for (JsonElement questSubDependencyId : json.getAsJsonArray()) {
+								subRequirementDependencyList.add(questSubDependencyId.getAsInt());
+							}
+							return subRequirementDependencyList;
+						}
 					}
 				}
 			}

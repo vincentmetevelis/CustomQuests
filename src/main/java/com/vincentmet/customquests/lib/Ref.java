@@ -3,6 +3,7 @@ package com.vincentmet.customquests.lib;
 import com.vincentmet.customquests.quests.Quest;
 import com.vincentmet.customquests.quests.QuestMenu;
 import com.vincentmet.customquests.quests.QuestUserProgress;
+import com.vincentmet.customquests.quests.party.Party;
 import com.vincentmet.customquests.screens.elements.IQuestingGuiElement;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
@@ -51,10 +52,12 @@ public class Ref {
     public static String questBookLocation;
     public static String questsLocation;
     public static String questingProgressLocation;
+    public static String questingPartiesLocation;
     public static String currWorldDir;
     public static QuestMenu ALL_QUESTBOOK;
     public static List<Quest> ALL_QUESTS = new ArrayList<>();
     public static List<QuestUserProgress> ALL_QUESTING_PROGRESS = new ArrayList<>();
+    public static List<Party> ALL_QUESTING_PARTIES = new ArrayList<>();
     public static List<IQuestingGuiElement> ALL_GUI_ELEMENTS = new ArrayList<>();
 
     @OnlyIn(Dist.CLIENT)

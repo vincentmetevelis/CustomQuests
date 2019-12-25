@@ -6,7 +6,7 @@ import com.vincentmet.customquests.lib.Ref;
 import java.util.ArrayList;
 import java.util.List;
 
-public class QuestRequirementStatus {
+public class QuestRequirementStatus implements IJsonArrayProvider{
     private int questId;
     private int requirementId;
     private List<Integer> progress;

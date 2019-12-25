@@ -20,7 +20,7 @@ archivesBaseName = 'customquests'
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8'
 
 minecraft {
-	mappings channel: 'snapshot', version: '20191215-1.14.3'
+	mappings channel: 'snapshot', version: '20191225-1.14.3'
     runs {
         client {
             workingDirectory project.file('run')
@@ -40,7 +40,7 @@ minecraft {
         }
         data {
             workingDirectory project.file('run')
-            args '--mod', 'examplemod', '--all', '--output', file('src/generated/resources/')
+            args '--mod', 'customquests', '--all', '--output', file('src/generated/resources/')
             mods {
                 customquests {
                     source sourceSets.main
@@ -51,7 +51,7 @@ minecraft {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.14.4-28.1.106'
+    minecraft 'net.minecraftforge:forge:1.14.4-28.1.109'
 	//put JEI here as soft dependency
 }
 

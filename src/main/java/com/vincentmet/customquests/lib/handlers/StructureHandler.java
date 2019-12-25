@@ -5,6 +5,8 @@ import com.google.gson.JsonObject;
 import com.vincentmet.customquests.lib.Ref;
 import com.vincentmet.customquests.lib.converters.ConverterHelper;
 import com.vincentmet.customquests.quests.*;
+import com.vincentmet.customquests.quests.party.Party;
+import com.vincentmet.customquests.quests.party.QuestPartyProgress;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -13,6 +15,39 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class StructureHandler {
+    public static void initQuestingParties(JsonObject json){
+        List<Party> questPartyList = new ArrayList<>();
+
+        for(JsonElement jsonPartyElement : ConverterHelper.Parties.getParties(json)) {
+            JsonObject jsonParty = jsonPartyElement.getAsJsonObject();
+            questPartyList.add(initSingleParty(jsonParty));
+        }
+        Ref.ALL_QUESTING_PARTIES = questPartyList;
+    }
+
+    public static Party initSingleParty(JsonObject json){
+        return new Party(
+                ConverterHelper.Parties.Party.getId(json),
+                ConverterHelper.Parties.Party.getCreator(json),
+                ConverterHelper.Parties.Party.getPartyName(json),
+                ConverterHelper.Parties.Party.isLootShared(json),
+                ConverterHelper.Parties.Party.isFFA(json),
+                initSinglePartyProgress(ConverterHelper.Parties.Party.getPartyProgress(json))
+        );
+    }
+
+    public static QuestPartyProgress initSinglePartyProgress(JsonObject json){
+        List<QuestStatus> questStatusList = new ArrayList<>();
+        for(JsonElement jsonQuestStatusElement : ConverterHelper.QuestProgress.Players.getQuestStatus(json)){
+            JsonObject jsonQuestStatus = jsonQuestStatusElement.getAsJsonObject();
+            questStatusList.add(initSingleQuestProgressForUser(jsonQuestStatus));
+        }
+        return new QuestPartyProgress(
+                ConverterHelper.QuestProgress.Players.getFinishedQuests(json),
+                questStatusList
+        );
+    }
+
     public static void initQuestbook(JsonObject json){
         List<QuestLine> questLineList = new ArrayList<>();
         for(JsonElement jsonQuestlineElement : ConverterHelper.QuestBook.getQuestLines(json)){
@@ -207,6 +242,7 @@ public class StructureHandler {
         }
         return new QuestUserProgress(
                 ConverterHelper.QuestProgress.Players.getUUID(jsonUserProgress),
+                ConverterHelper.QuestProgress.Players.getPartyId(jsonUserProgress),
                 ConverterHelper.QuestProgress.Players.getFinishedQuests(jsonUserProgress),
                 questStatusList
         );
