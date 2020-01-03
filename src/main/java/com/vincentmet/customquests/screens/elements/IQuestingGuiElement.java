@@ -1,9 +1,12 @@
 package com.vincentmet.customquests.screens.elements;
 
-import com.vincentmet.customquests.screens.ScreenQuestingDevice;
 import net.minecraft.entity.player.PlayerEntity;
 
 public interface IQuestingGuiElement {
-    <T extends ScreenQuestingDevice> void render(T gui, PlayerEntity player, double mouseX, double mouseY);
-    <T extends ScreenQuestingDevice> void onClick(T gui, PlayerEntity player, double mouseX, double mouseY);
+    int getWidth();
+    int getHeight();
+    boolean isVisible();
+    void update(IQuestingGuiElement gui, PlayerEntity player, double mouseX, double mouseY, int width, int height);
+    void render(IQuestingGuiElement gui, PlayerEntity player, double mouseX, double mouseY);
+    void onClick(IQuestingGuiElement gui, PlayerEntity player, double mouseX, double mouseY);
 }

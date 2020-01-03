@@ -14,13 +14,13 @@ import com.vincentmet.customquests.screens.elements.labels.ItemBoxAndText;
 import com.vincentmet.customquests.screens.elements.labels.Label;
 import com.vincentmet.customquests.screens.elements.labels.Line;
 import com.vincentmet.customquests.screens.elements.labels.MultilineLabel;
+import com.vincentmet.customquests.screens.questingdeveicesubscreens.*;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @OnlyIn(Dist.CLIENT)
 public class ScreenQuestingDevice extends Screen {
@@ -34,13 +34,72 @@ public class ScreenQuestingDevice extends Screen {
     private static int rewardButtonX;
     private static int rewardButtonY;
 
+    public static Map<String, IQuestingGuiElement> screens = new HashMap<>();
+    public static SubScreensQuestingDevice activeScreen = SubScreensQuestingDevice.MAIN_MENU;
+
     public ScreenQuestingDevice(ITextComponent titleIn, PlayerEntity player) {
         super(titleIn);
         this.player = player;
+
+        screens.put("menu", new SubScreenMainMenu(this));
+        screens.put("parties", new SubScreenParties(this));
+        screens.put("questlines", new SubScreenQuestlines(this));
+        screens.put("settings", new SubScreenSettings(this));
+        screens.put("quest_details", new SubScreenQuestDetails(this));
     }
 
     @Override
     public void render(int mouseX, int mouseY, float partialTicks) {
+        switch(activeScreen){
+            case MAIN_MENU:
+                screens.entrySet().stream().filter(stringIQuestingSubScreenEntry -> stringIQuestingSubScreenEntry.getKey().equals("menu")).forEach(stringIQuestingSubScreenEntry -> {
+                    stringIQuestingSubScreenEntry.getValue().update(null, player, mouseX, mouseY, this.width, this.height);
+                    stringIQuestingSubScreenEntry.getValue().render(null, player, mouseX, mouseY);
+                });
+                break;
+            case PARTY_SCREEN:
+                screens.entrySet().stream().filter(stringIQuestingSubScreenEntry -> stringIQuestingSubScreenEntry.getKey().equals("parties")).forEach(stringIQuestingSubScreenEntry -> {
+                    stringIQuestingSubScreenEntry.getValue().update(null, player, mouseX, mouseY, this.width, this.height);
+                    stringIQuestingSubScreenEntry.getValue().render(null, player, mouseX, mouseY);
+                });
+                break;
+            case QUESTLINES:
+                screens.entrySet().stream().filter(stringIQuestingSubScreenEntry -> stringIQuestingSubScreenEntry.getKey().equals("questlines")).forEach(stringIQuestingSubScreenEntry -> {
+                    stringIQuestingSubScreenEntry.getValue().update(null, player, mouseX, mouseY, this.width, this.height);
+                    stringIQuestingSubScreenEntry.getValue().render(null, player, mouseX, mouseY);
+                });
+                break;
+            case SETTINGS:
+                screens.entrySet().stream().filter(stringIQuestingSubScreenEntry -> stringIQuestingSubScreenEntry.getKey().equals("settings")).forEach(stringIQuestingSubScreenEntry -> {
+                    stringIQuestingSubScreenEntry.getValue().update(null, player, mouseX, mouseY, this.width, this.height);
+                    stringIQuestingSubScreenEntry.getValue().render(null, player, mouseX, mouseY);
+                });
+                break;
+            case QUEST_DETAILS:
+                screens.entrySet().stream().filter(stringIQuestingSubScreenEntry -> stringIQuestingSubScreenEntry.getKey().equals("quest_details")).forEach(stringIQuestingSubScreenEntry -> {
+                    stringIQuestingSubScreenEntry.getValue().update(null, player, mouseX, mouseY, this.width, this.height);
+                    stringIQuestingSubScreenEntry.getValue().render(null, player, mouseX, mouseY);
+                });
+                break;
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         final int windowCenterX = this.width / 2;
         final int windowCenterY = this.height / 2;
         final int contentPosX = Ref.GUI_QUESTING_MARGIN_LEFT;
@@ -55,37 +114,34 @@ public class ScreenQuestingDevice extends Screen {
 
         this.renderBackground();
 
-        for(IQuestingGuiElement guiElement : Ref.ALL_GUI_ELEMENTS){
-            guiElement.render(this, player, mouseX, mouseY);
-        }
-
-        new ButtonParties(0, 0).render(this, player, mouseX, mouseY);
+        new ButtonParties(this, 0, 0).render(null, player, mouseX, mouseY);
 
         if(isPartyScreenOpen) {
             //todo party stuff drawing
             new Label(
+                    this,
                     windowCenterX,
                     5,
                     "Parties",
                     0xFFFFFF,
                     true,
                     false
-            ).render(this, player, mouseX, mouseY);
+            ).render(null, player, mouseX, mouseY);
 
             int currentPartyGuiHeight = 0;
             for(Party party : Ref.ALL_QUESTING_PARTIES){
-                new ButtonParty(Ref.GUI_QUESTLINES_MARGIN_LEFT, Ref.GUI_QUESTLINES_MARGIN_TOP + currentPartyGuiHeight, party).render(this, player, mouseX, mouseY);
+                new ButtonParty(this, Ref.GUI_QUESTLINES_MARGIN_LEFT, Ref.GUI_QUESTLINES_MARGIN_TOP + currentPartyGuiHeight, party).render(null, player, mouseX, mouseY);
                 currentPartyGuiHeight += 25;
             }
             if(activeParty>=0){
                 int currentPartySettingsGuiHeight = 0;
-                new ButtonPartySetting(Ref.GUI_QUESTING_MARGIN_LEFT, Ref.GUI_QUESTLINES_MARGIN_TOP + currentPartySettingsGuiHeight, "Join").render(this, player, mouseX, mouseY);
+                new ButtonPartySetting(this, Ref.GUI_QUESTING_MARGIN_LEFT, Ref.GUI_QUESTLINES_MARGIN_TOP + currentPartySettingsGuiHeight, "Join").render(null, player, mouseX, mouseY);
                 currentPartySettingsGuiHeight += 25;
             }
         }else {
             int currentQuestlinesGuiHeight = 0;
             for (QuestLine questline : Ref.ALL_QUESTBOOK.getQuestlines()) {
-                new ButtonQuestline(Ref.GUI_QUESTLINES_MARGIN_LEFT, Ref.GUI_QUESTLINES_MARGIN_TOP + currentQuestlinesGuiHeight, questline).render(this, player, mouseX, mouseY);
+                new ButtonQuestline(this, Ref.GUI_QUESTLINES_MARGIN_LEFT, Ref.GUI_QUESTLINES_MARGIN_TOP + currentQuestlinesGuiHeight, questline).render(null, player, mouseX, mouseY);
                 currentQuestlinesGuiHeight += 25;
             }
 
@@ -93,83 +149,91 @@ public class ScreenQuestingDevice extends Screen {
                 int spacingIdRequirements = 0;
                 int spacingIdRewards = 0;
                 new Label(
+                        this,
                         contentAreaCenterX - (font.getStringWidth(Quest.getQuestFromId(activeQuest).getTitle()) / 2),
                         5,
                         Quest.getQuestFromId(activeQuest).getTitle(),
                         0xFF00FF,
                         false,
                         false
-                ).render(this, player, mouseX, mouseY);
+                ).render(null, player, mouseX, mouseY);
                 //left side of the line
                 new MultilineLabel(
+                        this,
                         contentPosX,
                         contentPosY,
                         Quest.getQuestFromId(activeQuest).getDescription(),
                         0xFFFF00,
                         (int) (contentAreaWidth * 0.5)
-                ).render(this, player, mouseX, mouseY);
+                ).render(null, player, mouseX, mouseY);
                 //right side of the line
                 new Label(
+                        this,
                         contentAreaCenterX + contentAreaWidth1procent * 2,
                         contentPosY,
                         "Requirements:",
                         0xFF000F,
                         false,
                         false
-                ).render(this, player, mouseX, mouseY);
+                ).render(null, player, mouseX, mouseY);
                 spacingIdRequirements++;
                 int countReq = 0;
                 for (QuestRequirement requirement : Quest.getQuestFromId(activeQuest).getRequirements()) {
                     int handInOffsetY = contentPosY + 7 + nonTextHeight * spacingIdRequirements;
                     new Label(
+                            this,
                             contentAreaCenterX + contentAreaWidth1procent * 2,
                             contentPosY + 7 + nonTextHeight * spacingIdRequirements,//the "7" is for putting the label a bit more centered in the Y gap
                             requirement.getType().toString() + ":",
                             0xFF00FF,
                             false,
                             false
-                    ).render(this, player, mouseX, mouseY);
+                    ).render(null, player, mouseX, mouseY);
                     spacingIdRequirements++;
                     for (IQuestRequirement subRequirement : requirement.getSubRequirements()) {
                         new ItemBoxAndText(
+                                this,
                                 contentAreaCenterX + contentAreaWidth1procent * 4,
                                 contentPosY + nonTextHeight * spacingIdRequirements,
                                 subRequirement.getItemStack(),
                                 subRequirement.getLabelText(),
                                 0xFFFFFF,
                                 false
-                        ).render(this, player, mouseX, mouseY);
+                        ).render(null, player, mouseX, mouseY);
                         spacingIdRequirements++;
                     }
                     if (requirement.getType() == QuestRequirementType.ITEM_DELIVER) {
                         new ButtonHandInRequirement(
+                                this,
                                 this.width - 64 - 5,
                                 handInOffsetY,
                                 activeQuest,
                                 countReq,
                                 requirement
-                        ).render(this, player, mouseX, mouseY);
+                        ).render(null, player, mouseX, mouseY);
                     }
                     countReq++;
                 }
 
                 new Label(
+                        this,
                         contentAreaCenterX + contentAreaWidth1procent * 2,
                         contentAreaCenterY + 7,
                         "Rewards:",
                         0xFF000F,
                         false,
                         false
-                ).render(this, player, mouseX, mouseY);
+                ).render(null, player, mouseX, mouseY);
                 for (QuestReward reward : Quest.getQuestFromId(activeQuest).getRewards()) {
                     new ItemBoxAndText(
+                            this,
                             contentAreaCenterX + contentAreaWidth1procent * 4,
                             contentAreaCenterY + nonTextHeight + nonTextHeight * spacingIdRewards,
                             reward.getReward().getItemStack(),
                             reward.getReward().toString(),
                             0xFFFFFF,
                             false
-                    ).render(this, player, mouseX, mouseY);
+                    ).render(null, player, mouseX, mouseY);
                     spacingIdRewards++;
                 }
                 List<IQuestReward> rewards = new ArrayList<>();
@@ -177,37 +241,40 @@ public class ScreenQuestingDevice extends Screen {
                     rewards.add(questReward.getReward());
                 }
                 new ButtonClaimReward(
+                        this,
                         ScreenQuestingDevice.rewardButtonX = contentAreaCenterX + contentAreaWidth1procent * 4,
                         ScreenQuestingDevice.rewardButtonY = contentAreaCenterY + nonTextHeight + nonTextHeight * spacingIdRewards,
-                        activeQuest,
-                        rewards
-                ).render(this, player, mouseX, mouseY);
+                        activeQuest
+                ).render(null, player, mouseX, mouseY);
 
                 new Line(
+                        this,
                         contentAreaCenterX,
                         contentAreaCenterY,
                         this.width - contentAreaWidth1procent * 2,
                         contentAreaCenterY,
                         LineColor.WHITE,
                         Ref.GUI_QUESTING_LINE_THICKNESS
-                ).render(this, player, mouseX, mouseY);
+                ).render(null, player, mouseX, mouseY);
                 new Line(
+                        this,
                         contentAreaCenterX,
                         contentPosY,
                         contentAreaCenterX,
                         this.height - contentAreaHeight1procent * 2,
                         LineColor.WHITE,
                         Ref.GUI_QUESTING_LINE_THICKNESS
-                ).render(this, player, mouseX, mouseY);
+                ).render(null, player, mouseX, mouseY);
             } else {
                 new Label(
+                        this,
                         windowCenterX,
                         5,
                         Ref.ALL_QUESTBOOK.getTitle(),
                         0xFFFFFF,
                         false,
                         false
-                ).render(this, player, mouseX, mouseY);
+                ).render(null, player, mouseX, mouseY);
                 for (int questId : Ref.ALL_QUESTBOOK.getQuestlines().get(activeQuestline).getQuests()) {
                     Quest quest = Quest.getQuestFromId(questId);
                     LineColor lineColor = LineColor.BLACK;
@@ -222,11 +289,12 @@ public class ScreenQuestingDevice extends Screen {
                         }
                         if (Quest.areQuestsInSameQuestline(questId, dependencyId)) {
                             new Line(
+                                    this,
                                     quest.getPosition(),
                                     qd.getPosition(),
                                     lineColor,
                                     Ref.GUI_QUESTING_LINE_THICKNESS
-                            ).render(this, player, mouseX, mouseY);
+                            ).render(null, player, mouseX, mouseY);
                         }
                     }
                 }
@@ -234,11 +302,12 @@ public class ScreenQuestingDevice extends Screen {
                 for (int questId : Ref.ALL_QUESTBOOK.getQuestlines().get(activeQuestline).getQuests()) {
                     Quest quest = Quest.getQuestFromId(questId);
                     new ButtonQuest(
+                            this,
                             Ref.GUI_QUESTING_MARGIN_LEFT + quest.getPosition().getX(),
                             Ref.GUI_QUESTING_MARGIN_TOP + quest.getPosition().getY(),
                             quest,
                             Utils.simplifyUUID(player.getUniqueID())
-                    ).render(this, player, mouseX, mouseY);
+                    ).render(null, player, mouseX, mouseY);
                 }
             }
         }
@@ -259,34 +328,30 @@ public class ScreenQuestingDevice extends Screen {
         final int contentAreaHeight1procent = (int)(contentAreaHeight* 0.01);
         final int nonTextHeight = 20;
 
-
-        for(IQuestingGuiElement guiElement : Ref.ALL_GUI_ELEMENTS){
-            guiElement.onClick(this, player, mouseX, mouseY);
-        }
-
-        new ButtonParties(0, 0).onClick(this, player, mouseX, mouseY);
+        new ButtonParties(this, 0, 0).onClick(null, player, mouseX, mouseY);
         if(isPartyScreenOpen){
             //todo party stuff handling
             int currentPartyGuiHeight = 0;
             for(Party party : Ref.ALL_QUESTING_PARTIES){
-                new ButtonParty(Ref.GUI_QUESTLINES_MARGIN_LEFT, Ref.GUI_QUESTLINES_MARGIN_TOP + currentPartyGuiHeight, party).onClick(this, player, mouseX, mouseY);
+                new ButtonParty(this, Ref.GUI_QUESTLINES_MARGIN_LEFT, Ref.GUI_QUESTLINES_MARGIN_TOP + currentPartyGuiHeight, party).onClick(null, player, mouseX, mouseY);
                 currentPartyGuiHeight += 25;
             }
         }else{
             int currentQuestlinesGuiHeight = 0;
             for(QuestLine questline : Ref.ALL_QUESTBOOK.getQuestlines()){
-                new ButtonQuestline(Ref.GUI_QUESTLINES_MARGIN_LEFT, Ref.GUI_QUESTLINES_MARGIN_TOP + currentQuestlinesGuiHeight, questline).onClick(this, player, mouseX, mouseY);
+                new ButtonQuestline(this, Ref.GUI_QUESTLINES_MARGIN_LEFT, Ref.GUI_QUESTLINES_MARGIN_TOP + currentQuestlinesGuiHeight, questline).onClick(null, player, mouseX, mouseY);
                 currentQuestlinesGuiHeight += 25;
             }
 
             for(int questId : Ref.ALL_QUESTBOOK.getQuestlines().get(activeQuestline).getQuests()){
                 Quest quest = Quest.getQuestFromId(questId);
                 new ButtonQuest(
+                        this,
                         Ref.GUI_QUESTING_MARGIN_LEFT + quest.getPosition().getX(),
                         Ref.GUI_QUESTING_MARGIN_TOP + quest.getPosition().getY(),
                         quest,
                         Utils.simplifyUUID(player.getUniqueID())
-                ).onClick(this, player, mouseX, mouseY);
+                ).onClick(null, player, mouseX, mouseY);
             }
 
             if(activeQuest >= 0){
@@ -302,12 +367,13 @@ public class ScreenQuestingDevice extends Screen {
                     }
                     if(requirement.getType() == QuestRequirementType.ITEM_DELIVER){
                         new ButtonHandInRequirement(
+                                this,
                                 this.width - 64 -5,
                                 handInOffsetY,
                                 activeQuest,
                                 countReq,
                                 requirement
-                        ).onClick(this, player, mouseX, mouseY);
+                        ).onClick(null, player, mouseX, mouseY);
                     }
                     countReq++;
                 }
@@ -318,11 +384,11 @@ public class ScreenQuestingDevice extends Screen {
                     rewards.add(questReward.getReward());
                 }
                 new ButtonClaimReward(
+                        this,
                         ScreenQuestingDevice.rewardButtonX,
                         ScreenQuestingDevice.rewardButtonY,
-                        activeQuest,
-                        rewards
-                ).onClick(this, player, mouseX, mouseY);
+                        activeQuest
+                ).onClick(null, player, mouseX, mouseY);
             }
         }
 

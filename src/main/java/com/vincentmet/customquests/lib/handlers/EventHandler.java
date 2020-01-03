@@ -151,15 +151,13 @@ public class EventHandler {
     @SubscribeEvent
     public static void onWorldStart(WorldEvent.Load event){
         if(event.getWorld() instanceof ServerWorld){
-            if(Ref.currWorldDir == null){
-                Ref.currWorldDir = ((ServerWorld)event.getWorld()).getSaveHandler().getWorldDirectory().getAbsolutePath();
-            }
+            Ref.currWorldDir = ((ServerWorld)event.getWorld()).getSaveHandler().getWorldDirectory().getAbsolutePath().replace('\\', '/');
             if(!event.getWorld().isRemote()){
                 JsonHandler.loadJson(
-                        Ref.questsLocation = FMLPaths.CONFIGDIR.get().toString() + "\\Quests.json",
-                        Ref.questBookLocation = FMLPaths.CONFIGDIR.get().toString() + "\\QuestsBook.json",
-                        Ref.questingProgressLocation = Ref.currWorldDir + "\\QuestingProgress.json",
-                        Ref.questingPartiesLocation = Ref.currWorldDir + "\\QuestingParties.json"
+                        Ref.questsLocation = FMLPaths.CONFIGDIR.get().toString().replace('\\', '/') + "/Quests.json",
+                        Ref.questBookLocation = FMLPaths.CONFIGDIR.get().toString().replace('\\', '/') + "/QuestsBook.json",
+                        Ref.questingProgressLocation = Ref.currWorldDir + "/QuestingProgress.json",
+                        Ref.questingPartiesLocation = Ref.currWorldDir + "/QuestingParties.json"
                 );
                 StructureHandler.initQuests(JsonHandler.getQuestsJson());
                 StructureHandler.initQuestbook(JsonHandler.getQuestbookJson());

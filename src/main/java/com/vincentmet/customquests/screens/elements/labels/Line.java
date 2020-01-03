@@ -6,6 +6,7 @@ import com.vincentmet.customquests.quests.QuestPosition;
 import com.vincentmet.customquests.screens.ScreenQuestingDevice;
 import com.vincentmet.customquests.screens.elements.IQuestingGuiElement;
 import com.vincentmet.customquests.screens.elements.buttons.ButtonQuest;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -13,6 +14,7 @@ import org.lwjgl.opengl.GL11;
 
 @OnlyIn(Dist.CLIENT)
 public class Line implements IQuestingGuiElement {
+    private Screen root;
     private int x;
     private int y;
     private double angle;
@@ -20,7 +22,8 @@ public class Line implements IQuestingGuiElement {
     private LineColor color;
     private int thickness;
 
-    public Line(int posX1, int posY1, int posX2, int posY2, LineColor color, int thickness){
+    public Line(Screen root, int posX1, int posY1, int posX2, int posY2, LineColor color, int thickness){
+        this.root = root;
         this.x = posX1;
         this.y = posY1;
         int dx = posX1 - posX2;
@@ -31,7 +34,8 @@ public class Line implements IQuestingGuiElement {
         this.thickness = thickness;
     }
 
-    public Line(int posX, int posY, double angle, int length, LineColor color, int thickness){
+    public Line(Screen root, int posX, int posY, double angle, int length, LineColor color, int thickness){
+        this.root = root;
         this.x = posX;
         this.y = posY;
         this.angle = angle;
@@ -40,7 +44,8 @@ public class Line implements IQuestingGuiElement {
         this.thickness = thickness;
     }
 
-    public Line(QuestPosition quest, QuestPosition dependency, LineColor color, int thickness){
+    public Line(Screen root, QuestPosition quest, QuestPosition dependency, LineColor color, int thickness){
+        this.root = root;
         int iconWidthCentered = (ButtonQuest.WIDTH / 2) - (int)Math.floor((float)thickness/2);
         int iconHeightCentered = (ButtonQuest.HEIGHT / 2) - (int)Math.floor((float)thickness/2);
 
@@ -56,18 +61,38 @@ public class Line implements IQuestingGuiElement {
     }
 
     @Override
-    public <T extends ScreenQuestingDevice> void render(T gui, PlayerEntity player, double mouseX, double mouseY) {
+    public void update(IQuestingGuiElement gui, PlayerEntity player, double mouseX, double mouseY, int width, int height) {
+
+    }
+
+    @Override
+    public void render(IQuestingGuiElement gui, PlayerEntity player, double mouseX, double mouseY) {
         GL11.glPushMatrix();
         GL11.glTranslatef(this.x, this.y, 0);
         GL11.glRotated(this.angle, 0, 0, 1);
         GL11.glTranslatef(-this.x, -this.y, 0);
-        gui.getMinecraft().getTextureManager().bindTexture(this.color.getResourceLocation());
-        gui.blit(this.x, this.y, 0, 0, this.length, this.thickness);
+        root.getMinecraft().getTextureManager().bindTexture(this.color.getResourceLocation());
+        root.blit(this.x, this.y, 0, 0, this.length, this.thickness);
         GL11.glPopMatrix();
     }
 
     @Override
-    public <T extends ScreenQuestingDevice> void onClick(T gui, PlayerEntity player, double mouseX, double mouseY) {
+    public void onClick(IQuestingGuiElement gui, PlayerEntity player, double mouseX, double mouseY) {
 
+    }
+
+    @Override
+    public int getWidth() {
+        return 0;
+    }
+
+    @Override
+    public int getHeight() {
+        return 0;
+    }
+
+    @Override
+    public boolean isVisible() {
+        return true;
     }
 }

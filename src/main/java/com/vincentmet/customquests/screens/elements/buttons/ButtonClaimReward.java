@@ -9,63 +9,86 @@ import com.vincentmet.customquests.quests.QuestUserProgress;
 import com.vincentmet.customquests.screens.ScreenQuestingDevice;
 import com.vincentmet.customquests.screens.elements.IQuestingGuiElement;
 import com.vincentmet.customquests.screens.elements.labels.Label;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
+import javax.rmi.CORBA.Util;
 import java.util.List;
 
 @OnlyIn(Dist.CLIENT)
 public class ButtonClaimReward implements IQuestingGuiElement {
+    private Screen root;
     public static final int WIDTH = 64;
     public static final int HEIGHT = 20;
     private int x;
     private int y;
     private int quest;
-    private List<IQuestReward> questRewards;
     private String textUnclaimed = "Claim";
     private String textClaimed = "Claimed!";
 
-    public ButtonClaimReward(int posX, int posY, int quest, List<IQuestReward> questRewards){
+    public ButtonClaimReward(Screen root, int posX, int posY, int quest){
+        this.root = root;
         this.x = posX;
         this.y = posY;
         this.quest = quest;
-        this.questRewards = questRewards;
     }
 
     @Override
-    public <T extends ScreenQuestingDevice> void render(T gui, PlayerEntity player, double mouseX, double mouseY) {
-        String text = QuestUserProgress.isRewardClaimed(player.getUniqueID().toString().replaceAll("-", ""), quest) ? textClaimed : textUnclaimed;
-        if(!QuestUserProgress.isRewardClaimed(player.getUniqueID().toString().replaceAll("-", ""), quest) && QuestUserProgress.areAllRequirementsCompleted(player.getUniqueID().toString().replaceAll("-", ""), quest)){
+    public void update(IQuestingGuiElement gui, PlayerEntity player, double mouseX, double mouseY, int width, int height) {
+
+    }
+
+    @Override
+    public void render(IQuestingGuiElement gui, PlayerEntity player, double mouseX, double mouseY) {
+        String text = QuestUserProgress.isRewardClaimed(Utils.simplifyUUID(player.getUniqueID()), quest) ? textClaimed : textUnclaimed;
+        if(!QuestUserProgress.isRewardClaimed(Utils.simplifyUUID(player.getUniqueID()), quest) && QuestUserProgress.areAllRequirementsCompleted(Utils.simplifyUUID(player.getUniqueID()), quest)){
             if(Utils.isMouseInBounds(mouseX, mouseY, x, y, x + WIDTH, y + HEIGHT)){
-                gui.getMinecraft().getTextureManager().bindTexture(Ref.IMAGE_BUTTON_CLAIM_REWARD_PRESSED);
+                root.getMinecraft().getTextureManager().bindTexture(Ref.IMAGE_BUTTON_CLAIM_REWARD_PRESSED);
             }else{
-                gui.getMinecraft().getTextureManager().bindTexture(Ref.IMAGE_BUTTON_CLAIM_REWARD_UNPRESSED);
+                root.getMinecraft().getTextureManager().bindTexture(Ref.IMAGE_BUTTON_CLAIM_REWARD_UNPRESSED);
             }
         }else{
-            gui.getMinecraft().getTextureManager().bindTexture(Ref.IMAGE_BUTTON_CLAIM_REWARD_DISABLED);
+            root.getMinecraft().getTextureManager().bindTexture(Ref.IMAGE_BUTTON_CLAIM_REWARD_DISABLED);
         }
-        gui.blit(x, y, 0, 0, WIDTH, HEIGHT);
+        root.blit(x, y, 0, 0, WIDTH, HEIGHT);
 
 
         new Label(
+                root,
                 x+(WIDTH/2)-Ref.FONT_RENDERER.getStringWidth(text)/2,
                 y+(HEIGHT/2)-Ref.FONT_RENDERER.FONT_HEIGHT/2,
                 text,
                 0xFFFFFF,
                 false,
                 false
-        ).render(gui, player, mouseX, mouseY);
+        ).render(this, player, mouseX, mouseY);
     }
 
     @Override
-    public <T extends ScreenQuestingDevice> void onClick(T gui, PlayerEntity player, double mouseX, double mouseY) {
-        if(!QuestUserProgress.isRewardClaimed(player.getUniqueID().toString().replaceAll("-", ""), quest) && QuestUserProgress.areAllRequirementsCompleted(player.getUniqueID().toString().replaceAll("-", ""), quest)){
+    public void onClick(IQuestingGuiElement gui, PlayerEntity player, double mouseX, double mouseY) {
+        if(!QuestUserProgress.isRewardClaimed(Utils.simplifyUUID(player.getUniqueID()), quest) && QuestUserProgress.areAllRequirementsCompleted(Utils.simplifyUUID(player.getUniqueID()), quest)){
             if(Utils.isMouseInBounds(mouseX, mouseY, x, y, x+WIDTH, y+HEIGHT)){
-                if(!QuestUserProgress.isRewardClaimed(player.getUniqueID().toString().replaceAll("-", ""), quest) && QuestUserProgress.areAllRequirementsCompleted(player.getUniqueID().toString().replaceAll("-", ""), quest)){
+                if(!QuestUserProgress.isRewardClaimed(Utils.simplifyUUID(player.getUniqueID()), quest) && QuestUserProgress.areAllRequirementsCompleted(Utils.simplifyUUID(player.getUniqueID()), quest)){
                     PacketHandler.CHANNEL.sendToServer(new MessageRewardButtonPressClientToServer(quest));
                 }
             }
         }
+    }
+
+    @Override
+    public int getWidth() {
+        return 0;
+    }
+
+    @Override
+    public int getHeight() {
+        return 0;
+    }
+
+    @Override
+    public boolean isVisible() {
+        return true;
     }
 }

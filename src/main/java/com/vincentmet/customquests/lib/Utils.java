@@ -153,4 +153,8 @@ public class Utils {
         }
         return null;
     }
+
+    public static char getTextOverflowIcon(){
+        return '\u2026';
+    }
 }

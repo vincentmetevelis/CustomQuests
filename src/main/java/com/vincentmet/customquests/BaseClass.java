@@ -33,6 +33,7 @@ public class BaseClass {
         MinecraftForge.EVENT_BUS.register(this);
         MinecraftForge.EVENT_BUS.register(EventHandler.class);
         MinecraftForge.EVENT_BUS.addListener(this::onServerStart);
+
     }
 
     private void setup(final FMLCommonSetupEvent event){
@@ -41,7 +42,6 @@ public class BaseClass {
     }
 
     public void onServerStart(FMLServerStartingEvent event){
-        System.out.println("OVER");
         new CustomQuestsCommand(event.getCommandDispatcher());
     }
 }
