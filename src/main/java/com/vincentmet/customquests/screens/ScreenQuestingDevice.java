@@ -35,7 +35,7 @@ public class ScreenQuestingDevice extends Screen {
     private static int rewardButtonY;
 
     public static Map<String, IQuestingGuiElement> screens = new HashMap<>();
-    public static SubScreensQuestingDevice activeScreen = SubScreensQuestingDevice.MAIN_MENU;
+    public static SubScreensQuestingDevice activeScreen = SubScreensQuestingDevice.QUESTLINES;
 
     public ScreenQuestingDevice(ITextComponent titleIn, PlayerEntity player) {
         super(titleIn);
@@ -50,6 +50,7 @@ public class ScreenQuestingDevice extends Screen {
 
     @Override
     public void render(int mouseX, int mouseY, float partialTicks) {
+        this.renderBackground();
         switch(activeScreen){
             case MAIN_MENU:
                 screens.entrySet().stream().filter(stringIQuestingSubScreenEntry -> stringIQuestingSubScreenEntry.getKey().equals("menu")).forEach(stringIQuestingSubScreenEntry -> {
@@ -112,8 +113,6 @@ public class ScreenQuestingDevice extends Screen {
         final int contentAreaHeight1procent = (int)(contentAreaHeight* 0.01);
         final int nonTextHeight = 20;
 
-        this.renderBackground();
-
         new ButtonParties(this, 0, 0).render(null, player, mouseX, mouseY);
 
         if(isPartyScreenOpen) {
@@ -139,12 +138,6 @@ public class ScreenQuestingDevice extends Screen {
                 currentPartySettingsGuiHeight += 25;
             }
         }else {
-            int currentQuestlinesGuiHeight = 0;
-            for (QuestLine questline : Ref.ALL_QUESTBOOK.getQuestlines()) {
-                new ButtonQuestline(this, Ref.GUI_QUESTLINES_MARGIN_LEFT, Ref.GUI_QUESTLINES_MARGIN_TOP + currentQuestlinesGuiHeight, questline).render(null, player, mouseX, mouseY);
-                currentQuestlinesGuiHeight += 25;
-            }
-
             if (activeQuest >= 0) {
                 int spacingIdRequirements = 0;
                 int spacingIdRewards = 0;
@@ -316,6 +309,33 @@ public class ScreenQuestingDevice extends Screen {
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int mouseButton){
+        switch(activeScreen){
+            case MAIN_MENU:
+                screens.entrySet().stream().filter(stringIQuestingSubScreenEntry -> stringIQuestingSubScreenEntry.getKey().equals("menu")).forEach(stringIQuestingSubScreenEntry -> {
+                    stringIQuestingSubScreenEntry.getValue().onClick(null, player, mouseX, mouseY);
+                });
+                break;
+            case PARTY_SCREEN:
+                screens.entrySet().stream().filter(stringIQuestingSubScreenEntry -> stringIQuestingSubScreenEntry.getKey().equals("parties")).forEach(stringIQuestingSubScreenEntry -> {
+                    stringIQuestingSubScreenEntry.getValue().onClick(null, player, mouseX, mouseY);
+                });
+                break;
+            case QUESTLINES:
+                screens.entrySet().stream().filter(stringIQuestingSubScreenEntry -> stringIQuestingSubScreenEntry.getKey().equals("questlines")).forEach(stringIQuestingSubScreenEntry -> {
+                    stringIQuestingSubScreenEntry.getValue().onClick(null, player, mouseX, mouseY);
+                });
+                break;
+            case SETTINGS:
+                screens.entrySet().stream().filter(stringIQuestingSubScreenEntry -> stringIQuestingSubScreenEntry.getKey().equals("settings")).forEach(stringIQuestingSubScreenEntry -> {
+                    stringIQuestingSubScreenEntry.getValue().onClick(null, player, mouseX, mouseY);
+                });
+                break;
+            case QUEST_DETAILS:
+                screens.entrySet().stream().filter(stringIQuestingSubScreenEntry -> stringIQuestingSubScreenEntry.getKey().equals("quest_details")).forEach(stringIQuestingSubScreenEntry -> {
+                    stringIQuestingSubScreenEntry.getValue().onClick(null, player, mouseX, mouseY);
+                });
+                break;
+        }
         final int windowCenterX = this.width / 2;
         final int windowCenterY = this.height / 2;
         final int contentPosX = Ref.GUI_QUESTING_MARGIN_LEFT;
@@ -337,12 +357,6 @@ public class ScreenQuestingDevice extends Screen {
                 currentPartyGuiHeight += 25;
             }
         }else{
-            int currentQuestlinesGuiHeight = 0;
-            for(QuestLine questline : Ref.ALL_QUESTBOOK.getQuestlines()){
-                new ButtonQuestline(this, Ref.GUI_QUESTLINES_MARGIN_LEFT, Ref.GUI_QUESTLINES_MARGIN_TOP + currentQuestlinesGuiHeight, questline).onClick(null, player, mouseX, mouseY);
-                currentQuestlinesGuiHeight += 25;
-            }
-
             for(int questId : Ref.ALL_QUESTBOOK.getQuestlines().get(activeQuestline).getQuests()){
                 Quest quest = Quest.getQuestFromId(questId);
                 new ButtonQuest(
@@ -391,8 +405,6 @@ public class ScreenQuestingDevice extends Screen {
                 ).onClick(null, player, mouseX, mouseY);
             }
         }
-
-
         return super.mouseClicked(mouseX, mouseY, mouseButton);
     }
 

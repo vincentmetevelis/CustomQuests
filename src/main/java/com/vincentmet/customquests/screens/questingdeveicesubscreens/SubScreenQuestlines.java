@@ -14,9 +14,9 @@ import java.util.List;
 public class SubScreenQuestlines implements IQuestingGuiElement {
     private Screen root;
     private static int MARGIN_QUESTLINE_BUTTONS_LEFT = 20;
+    private static int MARGIN_QUESTLINE_BUTTONS_TOP = 20;
     private int width = 0;
     private int height = 0;
-    private int thirthyProcentLeft = 0;
     private List<ButtonQuestline> questlineButtons = new ArrayList<>();
 
     public SubScreenQuestlines(Screen root){
@@ -43,7 +43,6 @@ public class SubScreenQuestlines implements IQuestingGuiElement {
     public void update(IQuestingGuiElement gui, PlayerEntity player, double mouseX, double mouseY, int width, int height) {
         this.width = width;
         this.height = height;
-        this.thirthyProcentLeft = (int)(width * 0.3);
     }
 
     @Override
@@ -60,7 +59,7 @@ public class SubScreenQuestlines implements IQuestingGuiElement {
         questlineButtons.clear();
         int currentQuestlinesGuiHeight = 0;
         for (QuestLine questline : Ref.ALL_QUESTBOOK.getQuestlines()) {
-            questlineButtons.add(new ButtonQuestline(root, MARGIN_QUESTLINE_BUTTONS_LEFT, currentQuestlinesGuiHeight++ * 25, questline));
+            questlineButtons.add(new ButtonQuestline(root, MARGIN_QUESTLINE_BUTTONS_LEFT, MARGIN_QUESTLINE_BUTTONS_TOP + currentQuestlinesGuiHeight++ * 25, questline));
         }
     }
 }

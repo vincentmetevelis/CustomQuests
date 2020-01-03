@@ -62,7 +62,7 @@ public class ButtonQuestline implements IQuestingGuiElement {
     public void onClick(IQuestingGuiElement parent, PlayerEntity player, double mouseX, double mouseY) {
         if(Utils.isMouseInBounds(mouseX, mouseY, x, y, x+WIDTH, y+HEIGHT)){
             ScreenQuestingDevice.activeQuestline = questLine.getId();
-            ScreenQuestingDevice.activeQuest = -1;
+            ScreenQuestingDevice.activeQuest = -1;//todo move these vars the subscreen, instead of Screen
         }
     }
 
