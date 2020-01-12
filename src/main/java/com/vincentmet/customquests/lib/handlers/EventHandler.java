@@ -2,7 +2,6 @@ package com.vincentmet.customquests.lib.handlers;
 
 import com.google.gson.JsonObject;
 import com.vincentmet.customquests.Objects;
-import com.vincentmet.customquests.items.ItemQuestingDevice;
 import com.vincentmet.customquests.lib.Ref;
 import com.vincentmet.customquests.lib.Triple;
 import com.vincentmet.customquests.lib.Utils;
@@ -32,11 +31,12 @@ import java.util.List;
 
 @Mod.EventBusSubscriber(modid = Ref.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class EventHandler {
+    private EventHandler(){}
     private static long lastMillis = System.currentTimeMillis();
     @SubscribeEvent
     public static void registerItems(RegistryEvent.Register<Item> event){
         event.getRegistry().registerAll(
-                Objects.Items.itemQuestingDevice = new ItemQuestingDevice(new Item.Properties().maxStackSize(1).group(Objects.ItemGroups.tabCustomQuests)).setRegistryName("item_questing_device")
+                Objects.Items.itemQuestingDevice
         );
     }
 
@@ -57,12 +57,9 @@ public class EventHandler {
             List<Triple<Integer, Integer, Integer>> activeEntityKillQuestIds = Quest.getActiveQuestsWithType(Utils.simplifyUUID(event.getSource().getTrueSource().getUniqueID()), QuestRequirementType.KILL_MOB);
             for (Triple<Integer, Integer, Integer> questAndReqAndSubReqId : activeEntityKillQuestIds) {
                 Pair<EntityType, Integer> mobAmount = Quest.getMobAmountForMobKill(questAndReqAndSubReqId.getLeft(), questAndReqAndSubReqId.getMiddle(), questAndReqAndSubReqId.getRight());
-                if (event.getEntity().getType() == mobAmount.getKey()) {
-                    if (event.getSource().getTrueSource() instanceof PlayerEntity) {
-                        System.out.println("Ready");
-                        QuestUserProgress.addPlayerProgress(Utils.simplifyUUID(event.getSource().getTrueSource().getUniqueID()), questAndReqAndSubReqId.getLeft(), questAndReqAndSubReqId.getMiddle(), questAndReqAndSubReqId.getRight(), 1);
-                        Ref.shouldSaveNextTick = true;
-                    }
+                if (event.getEntity().getType() == mobAmount.getKey() && event.getSource().getTrueSource() instanceof PlayerEntity) {
+                    QuestUserProgress.addPlayerProgress(Utils.simplifyUUID(event.getSource().getTrueSource().getUniqueID()), questAndReqAndSubReqId.getLeft(), questAndReqAndSubReqId.getMiddle(), questAndReqAndSubReqId.getRight(), 1);
+                    Ref.shouldSaveNextTick = true;
                 }
             }
         }
@@ -75,20 +72,21 @@ public class EventHandler {
         }
 
         if(QuestUserProgress.getUserProgressForUuid(Utils.simplifyUUID(event.getPlayer().getUniqueID()))==null){
-            Ref.ALL_QUESTING_PROGRESS.add(new QuestUserProgress(Utils.simplifyUUID(event.getPlayer().getUniqueID()), new ArrayList<>(), new ArrayList<>()));
+            Ref.ALL_QUESTING_PROGRESS.add(new QuestUserProgress(Utils.simplifyUUID(event.getPlayer().getUniqueID()), Ref.ERR_MSG_INT_INVALID_JSON, new ArrayList<>(), new ArrayList<>()));
             Ref.shouldSaveNextTick = true;
         }
 
         PacketHandler.CHANNEL.send(PacketDistributor.PLAYER.with(()->(ServerPlayerEntity)event.getPlayer()), new MessageUpdateQuestsServerToClient());
         PacketHandler.CHANNEL.send(PacketDistributor.PLAYER.with(()->(ServerPlayerEntity)event.getPlayer()), new MessageUpdateQuestbookServerToClient());
         PacketHandler.CHANNEL.send(PacketDistributor.PLAYER.with(()->(ServerPlayerEntity)event.getPlayer()), new MessageUpdateQuestProgressServerToClient());
+        PacketHandler.CHANNEL.send(PacketDistributor.PLAYER.with(()->(ServerPlayerEntity)event.getPlayer()), new MessageUpdateQuestPartiesServerToClient());
     }
 
     @SubscribeEvent
     public static void onWorldTick(TickEvent.WorldTickEvent event){
         if(!event.world.isRemote) {
             if(Ref.shouldSaveNextTick){
-                JsonHandler.writeAll(Ref.questsLocation, Ref.questBookLocation, Ref.questingProgressLocation);
+                JsonHandler.writeAll(Ref.questsLocation, Ref.questBookLocation, Ref.questingProgressLocation, Ref.questingPartiesLocation);
                 for(PlayerEntity player : event.world.getPlayers()){
                     PacketHandler.CHANNEL.send(PacketDistributor.PLAYER.with(()->(ServerPlayerEntity)player), new MessageUpdateQuestProgressServerToClient(new JsonObject()));
                 }
@@ -116,7 +114,6 @@ public class EventHandler {
                 Triple<String, BlockPos, Integer> dimPosRadius = Quest.getDimPosRadius(questAndReqAndSubReqId.getLeft(), questAndReqAndSubReqId.getMiddle(), questAndReqAndSubReqId.getRight());
                 if(Quest.isPlayerInRadius(playerEntity, dimPosRadius)){
                     QuestUserProgress.setPlayerProgressToCompleted(Utils.simplifyUUID(playerEntity.getUniqueID()), questAndReqAndSubReqId.getLeft(), questAndReqAndSubReqId.getMiddle(), questAndReqAndSubReqId.getRight());
-                    System.out.println("In radius of: " + dimPosRadius);
                     Ref.shouldSaveNextTick = true;
                 }
             }
@@ -151,18 +148,18 @@ public class EventHandler {
     @SubscribeEvent
     public static void onWorldStart(WorldEvent.Load event){
         if(event.getWorld() instanceof ServerWorld){
-            if(Ref.currWorldDir == null){
-                Ref.currWorldDir = ((ServerWorld)event.getWorld()).getSaveHandler().getWorldDirectory().getAbsolutePath();
-            }
+            Ref.currWorldDir = ((ServerWorld)event.getWorld()).getSaveHandler().getWorldDirectory().getAbsolutePath().replace('\\', '/');
             if(!event.getWorld().isRemote()){
                 JsonHandler.loadJson(
-                        Ref.questsLocation = FMLPaths.CONFIGDIR.get().toString() + "\\Quests.json",
-                        Ref.questBookLocation = FMLPaths.CONFIGDIR.get().toString() + "\\QuestsBook.json",
-                        Ref.questingProgressLocation = Ref.currWorldDir + "\\QuestingProgress.json"
+                        Ref.questsLocation = FMLPaths.CONFIGDIR.get().toString().replace('\\', '/') + "/Quests.json",
+                        Ref.questBookLocation = FMLPaths.CONFIGDIR.get().toString().replace('\\', '/') + "/QuestsBook.json",
+                        Ref.questingProgressLocation = Ref.currWorldDir + "/QuestingProgress.json",
+                        Ref.questingPartiesLocation = Ref.currWorldDir + "/QuestingParties.json"
                 );
                 StructureHandler.initQuests(JsonHandler.getQuestsJson());
                 StructureHandler.initQuestbook(JsonHandler.getQuestbookJson());
                 StructureHandler.initQuestingProgress(JsonHandler.getQuestingProgressJson());
+                StructureHandler.initQuestingParties(JsonHandler.getQuestingPartiesJson());
             }
         }
     }

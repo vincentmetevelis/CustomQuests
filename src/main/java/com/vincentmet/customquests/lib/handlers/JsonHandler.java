@@ -8,6 +8,7 @@ import com.vincentmet.customquests.lib.Utils;
 import com.vincentmet.customquests.quests.Quest;
 import com.vincentmet.customquests.quests.QuestLine;
 import com.vincentmet.customquests.quests.QuestUserProgress;
+import com.vincentmet.customquests.quests.party.Party;
 import net.minecraft.client.renderer.entity.model.RendererModel;
 
 import java.io.FileReader;
@@ -19,8 +20,16 @@ public class JsonHandler {
     private static JsonObject jsonContainerQuests;
     private static JsonObject jsonContainerQuestbook;
     private static JsonObject jsonContainerQuestingProgress;
+    private static JsonObject jsonContainerQuestingParties;
 
-    public static void loadJson(String questsLocation, String questBookLocation, String questingProgressLocation) {
+    public static void loadJson(String questsLocation, String questBookLocation, String questingProgressLocation, String questingPartiesLocation) {
+        loadQuests(questsLocation);
+        loadQuestbook(questBookLocation);
+        loadQuestingProgress(questingProgressLocation);
+        loadQuestingParties(questingPartiesLocation);
+    }
+
+    public static void loadQuests(String questsLocation){
         try{
             JsonParser parser = new JsonParser();
             jsonContainerQuests = (JsonObject)parser.parse(new FileReader(questsLocation));
@@ -36,7 +45,9 @@ public class JsonHandler {
                 e1.printStackTrace();
             }
         }
+    }
 
+    public static void loadQuestbook(String questBookLocation){
         try{
             JsonParser parser = new JsonParser();
             jsonContainerQuestbook = (JsonObject)parser.parse(new FileReader(questBookLocation));
@@ -52,7 +63,9 @@ public class JsonHandler {
                 e1.printStackTrace();
             }
         }
+    }
 
+    public static void loadQuestingProgress(String questingProgressLocation){
         try{
             JsonParser parser = new JsonParser();
             jsonContainerQuestingProgress = (JsonObject)parser.parse(new FileReader(questingProgressLocation));
@@ -70,10 +83,29 @@ public class JsonHandler {
         }
     }
 
-    public static void writeAll(String questsLocation, String questBookLocation, String questingProgressLocation){
+    public static void loadQuestingParties(String questingPartiesLocation){
+        try{
+            JsonParser parser = new JsonParser();
+            jsonContainerQuestingParties = (JsonObject)parser.parse(new FileReader(questingPartiesLocation));
+        }catch(IOException e){
+            try{
+                FileWriter file = new FileWriter(questingPartiesLocation);
+                file.write(Utils.getDefaultQuestingPartiesJson());
+                file.flush();
+                file.close();
+                JsonParser parser = new JsonParser();
+                jsonContainerQuestingParties = (JsonObject)parser.parse(new FileReader(questingPartiesLocation));
+            }catch(IOException e1){
+                e1.printStackTrace();
+            }
+        }
+    }
+
+    public static void writeAll(String questsLocation, String questBookLocation, String questingProgressLocation, String questingPartiesLocation){
         writeQuests(questsLocation);
         writeQuestbook(questBookLocation);
         writeQuestingProgress(questingProgressLocation);
+        writeQuestingParties(questingPartiesLocation);
     }
 
     public static void writeQuests(String questsLocation) {
@@ -135,6 +167,25 @@ public class JsonHandler {
         }
     }
 
+    public static void writeQuestingParties(String questingPartiesLocation){
+        try{
+            FileWriter file = new FileWriter(questingPartiesLocation);
+
+            JsonObject json = new JsonObject();
+            JsonArray partyArray = new JsonArray();
+            for(Party party : Ref.ALL_QUESTING_PARTIES){
+                partyArray.add(party.getJson());
+            }
+            json.add("parties", partyArray);
+            file.write(json.toString());
+
+            file.flush();
+            file.close();
+        }catch(IOException e){
+            e.printStackTrace();
+        }
+    }
+
     public static JsonObject getQuestbookJson(){
         return jsonContainerQuestbook;
     }
@@ -145,5 +196,9 @@ public class JsonHandler {
 
     public static JsonObject getQuestingProgressJson(){
         return jsonContainerQuestingProgress;
+    }
+
+    public static JsonObject getQuestingPartiesJson(){
+        return jsonContainerQuestingParties;
     }
 }

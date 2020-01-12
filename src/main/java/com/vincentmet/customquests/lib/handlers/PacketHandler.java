@@ -27,5 +27,6 @@ public class PacketHandler {
         CHANNEL.registerMessage(nextID(), MessageUpdateQuestsServerToClient.class, MessageUpdateQuestsServerToClient::encode, MessageUpdateQuestsServerToClient::decode, MessageUpdateQuestsServerToClient::handle);
         CHANNEL.registerMessage(nextID(), MessageRewardButtonPressClientToServer.class, MessageRewardButtonPressClientToServer::encode, MessageRewardButtonPressClientToServer::decode, MessageRewardButtonPressClientToServer::handle);
         CHANNEL.registerMessage(nextID(), MessageHandInButtonPressClientToServer.class, MessageHandInButtonPressClientToServer::encode, MessageHandInButtonPressClientToServer::decode, MessageHandInButtonPressClientToServer::handle);
+        CHANNEL.registerMessage(nextID(), MessageUpdateQuestPartiesServerToClient.class, MessageUpdateQuestPartiesServerToClient::encode, MessageUpdateQuestPartiesServerToClient::decode, MessageUpdateQuestPartiesServerToClient::handle);
     }
 }

@@ -3,6 +3,7 @@ package com.vincentmet.customquests.lib;
 import com.vincentmet.customquests.quests.Quest;
 import com.vincentmet.customquests.quests.QuestMenu;
 import com.vincentmet.customquests.quests.QuestUserProgress;
+import com.vincentmet.customquests.quests.party.Party;
 import com.vincentmet.customquests.screens.elements.IQuestingGuiElement;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
@@ -17,10 +18,8 @@ import java.util.List;
 
 public class Ref {
     public static final String MODID = "customquests";
-    public static final String NAME = "Custom Quests";
-    public static final String VERSION = "1.14.4-0.1";
-    public static final String RESOURCE_PATH = MODID + ":";
     
+    public static final ResourceLocation IMAGE_BUTTON_MODULAR = new ResourceLocation(Ref.MODID, "textures/gui/button_template.png");
     public static final ResourceLocation IMAGE_BUTTON_HEXAGON_UNPRESSED = new ResourceLocation(MODID, "textures/gui/button_hexagon_unpressed.png");
     public static final ResourceLocation IMAGE_BUTTON_HEXAGON_PRESSED = new ResourceLocation(MODID, "textures/gui/button_hexagon_pressed.png");
     public static final ResourceLocation IMAGE_BUTTON_HEXAGON_DISABLED = new ResourceLocation(MODID, "textures/gui/button_hexagon_disabled.png");
@@ -28,6 +27,9 @@ public class Ref {
     public static final ResourceLocation IMAGE_BUTTON_QUESTLINE_UNPRESSED = new ResourceLocation(MODID, "textures/gui/button_rect_unpressed.png");
     public static final ResourceLocation IMAGE_BUTTON_QUESTLINE_PRESSED = new ResourceLocation(MODID, "textures/gui/button_rect_pressed.png");
     public static final ResourceLocation IMAGE_BUTTON_QUESTLINE_DISABLED = new ResourceLocation(MODID, "textures/gui/button_rect_disabled.png");
+    public static final ResourceLocation IMAGE_BUTTON_SQUARE_UNPRESSED = new ResourceLocation(MODID, "textures/gui/button_square_unpressed.png");
+    public static final ResourceLocation IMAGE_BUTTON_SQUARE_PRESSED = new ResourceLocation(MODID, "textures/gui/button_square_pressed.png");
+    public static final ResourceLocation IMAGE_BUTTON_SQUARE_DISABLED = new ResourceLocation(MODID, "textures/gui/button_square_disabled.png");
     public static final ResourceLocation IMAGE_BUTTON_CLAIM_REWARD_UNPRESSED = new ResourceLocation(MODID, "textures/gui/button_rect_small_unpressed.png");//also used for hand in button for "hand-in" quests
     public static final ResourceLocation IMAGE_BUTTON_CLAIM_REWARD_DISABLED = new ResourceLocation(MODID, "textures/gui/button_rect_small_disabled.png");//also used for hand in button for "hand-in" quests
     public static final ResourceLocation IMAGE_BUTTON_CLAIM_REWARD_PRESSED = new ResourceLocation(MODID, "textures/gui/button_rect_small_pressed.png");//also used for hand in button for "hand-in" quests
@@ -37,7 +39,8 @@ public class Ref {
     public static final ResourceLocation IMAGE_COLOR_YELLOW = new ResourceLocation(MODID, "textures/gui/yellow.png");
     public static final ResourceLocation IMAGE_COLOR_WHITE = new ResourceLocation(MODID, "textures/gui/white.png");
     public static final ResourceLocation IMAGE_ITEMBOX_BACKGROUND = new ResourceLocation(MODID, "textures/gui/item_background.png");
-
+    public static final ResourceLocation IMAGE_ICON_HOME = new ResourceLocation(MODID, "textures/gui/home_icon.png");
+    public static final ResourceLocation IMAGE_ICON_BACK = new ResourceLocation(MODID, "textures/gui/back_icon.png");
     public static final int GUI_QUESTING_LINE_THICKNESS = 1;
     public static final int GUI_QUESTING_MARGIN_LEFT = 200;
     public static final int GUI_QUESTING_MARGIN_TOP = 20;
@@ -51,11 +54,12 @@ public class Ref {
     public static String questBookLocation;
     public static String questsLocation;
     public static String questingProgressLocation;
+    public static String questingPartiesLocation;
     public static String currWorldDir;
     public static QuestMenu ALL_QUESTBOOK;
     public static List<Quest> ALL_QUESTS = new ArrayList<>();
     public static List<QuestUserProgress> ALL_QUESTING_PROGRESS = new ArrayList<>();
-    public static List<IQuestingGuiElement> ALL_GUI_ELEMENTS = new ArrayList<>();
+    public static List<Party> ALL_QUESTING_PARTIES = new ArrayList<>();
 
     @OnlyIn(Dist.CLIENT)
     public static FontRenderer FONT_RENDERER;

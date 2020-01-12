@@ -1,10 +1,10 @@
-modLoader="javafml" #mandatory
-loaderVersion="[28,)" #mandatory
-credits="vincentmet" #optional
-[[mods]] #mandatory
-modId="customquests" #mandatory
-version="1.14.4-1.0.0" #mandatory
-displayName="Custom Quests" #mandatory
+modLoader="javafml"
+loaderVersion="[28,)"
+credits="vincentmet"
+[[mods]]
+modId="customquests"
+version="1.14.4-1.0.0"
+displayName="Custom Quests"
 description='''
 Quests!!!
 '''

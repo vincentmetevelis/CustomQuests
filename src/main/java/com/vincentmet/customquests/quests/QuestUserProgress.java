@@ -6,6 +6,7 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.vincentmet.customquests.lib.Ref;
 import com.vincentmet.customquests.lib.Utils;
+import com.vincentmet.customquests.quests.party.Party;
 import net.minecraft.client.Minecraft;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.ICommandSource;
@@ -22,13 +23,15 @@ import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
-public class QuestUserProgress {
+public class QuestUserProgress implements IJsonProvider{
     private String uuid;
+    private int partyId;
     private List<Integer> completedQuestsIds;
     private List<QuestStatus> questStatuses;
 
-    public QuestUserProgress(String uuid, List<Integer> completedQuestsIds, List<QuestStatus> questStatuses){
+    public QuestUserProgress(String uuid, int partyId, List<Integer> completedQuestsIds, List<QuestStatus> questStatuses){
         this.uuid = uuid;
+        this.partyId = partyId;
         this.completedQuestsIds = completedQuestsIds;
         this.questStatuses = questStatuses;
         List<Integer> allQuestIds = new ArrayList<>();
@@ -52,7 +55,7 @@ public class QuestUserProgress {
     public static boolean areAllRequirementsCompleted(String uuid, int questId){
         boolean isCompleted = true;
         for(QuestUserProgress userprogress : Ref.ALL_QUESTING_PROGRESS) {
-            if (userprogress.uuid.equals(uuid)) { // get player
+            if (userprogress.uuid.equals(uuid)) {
                 for (QuestStatus playerStatus : userprogress.questStatuses) {
                     if(playerStatus.getQuestId() == questId){
                         int countQrs = 0;
@@ -188,6 +191,23 @@ public class QuestUserProgress {
         return Utils.getDisplayName(uuid);
     }
 
+    public int getPartyId() {
+        return partyId;
+    }
+
+    public void setPartyId(int partyId) {
+        this.partyId = partyId;
+    }
+
+    public Party getParty(){
+        for(Party party : Ref.ALL_QUESTING_PARTIES){
+            if(party.getId() == partyId){
+                return party;
+            }
+        }
+        return null;
+    }
+
     public List<Integer> getCompletedQuestsIds() {
         return completedQuestsIds;
     }
@@ -196,13 +216,14 @@ public class QuestUserProgress {
         return questStatuses;
     }
 
-    public void addCompletedQuest(int questId, World world, PlayerEntity player){ //todo this also triggers on single-requirement completion
+    public void addCompletedQuest(int questId, World world, PlayerEntity player){
         if(!this.completedQuestsIds.contains(questId)){
             this.completedQuestsIds.add(questId);
             Ref.shouldSaveNextTick = true;
             final CommandDispatcher<CommandSource> dispatcher = world.getServer().getCommandManager().getDispatcher();
             try {
-                dispatcher.execute("title " + player.getDisplayName().getString() + " title \"QUEST COMPLETED!\"", world.getServer().getCommandSource());
+                dispatcher.execute("title " + player.getDisplayName().getString() + " title \"QUEST COMPLETED!\"", world.getServer().getCommandSource().withFeedbackDisabled());
+                dispatcher.execute("title " + player.getDisplayName().getString() + " subtitle \"" + Quest.getQuestFromId(questId).getTitle() + "\"", world.getServer().getCommandSource().withFeedbackDisabled());
             } catch (CommandSyntaxException e) {
                 e.printStackTrace();
             }

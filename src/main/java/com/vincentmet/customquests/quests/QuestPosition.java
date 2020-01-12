@@ -3,7 +3,7 @@ package com.vincentmet.customquests.quests;
 import com.google.gson.JsonArray;
 import com.vincentmet.customquests.lib.Ref;
 
-public class QuestPosition {
+public class QuestPosition implements IJsonArrayProvider{
     private int x;
     private int y;
 

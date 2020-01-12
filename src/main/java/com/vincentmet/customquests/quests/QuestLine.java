@@ -7,7 +7,7 @@ import com.vincentmet.customquests.lib.Ref;
 import java.util.ArrayList;
 import java.util.List;
 
-public class QuestLine {
+public class QuestLine implements IJsonProvider{
     private int id;
     private String title;
     private String description;

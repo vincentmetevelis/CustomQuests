@@ -7,7 +7,7 @@ import net.minecraft.util.text.TranslationTextComponent;
 
 import java.util.List;
 
-public class QuestMenu {
+public class QuestMenu implements IJsonProvider{
     private String title;
     private String description;
     private List<QuestLine> questlines;

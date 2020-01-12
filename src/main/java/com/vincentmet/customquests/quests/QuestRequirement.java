@@ -11,7 +11,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.List;
 
-public class QuestRequirement {
+public class QuestRequirement implements IJsonProvider{
     private QuestRequirementType requirementType;
     private List<IQuestRequirement> subRequirements;
 

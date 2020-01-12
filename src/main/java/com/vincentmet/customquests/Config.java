@@ -8,17 +8,18 @@ import java.nio.file.Path;
 
 @Mod.EventBusSubscriber
 public class Config {
+    private Config(){}
     public static final String CATEGORY_GENERAL = "general";
 
     public static final ForgeConfigSpec.Builder SERVER_BUILDER = new ForgeConfigSpec.Builder();
     public static final ForgeConfigSpec.Builder COMMON_BUILDER = new ForgeConfigSpec.Builder();
     public static final ForgeConfigSpec.Builder CLIENT_BUILDER = new ForgeConfigSpec.Builder();
 
-    public static ForgeConfigSpec SERVER_CONFIG;
-    public static ForgeConfigSpec COMMON_CONFIG;
-    public static ForgeConfigSpec CLIENT_CONFIG;
+    public static final ForgeConfigSpec SERVER_CONFIG;
+    public static final ForgeConfigSpec COMMON_CONFIG;
+    public static final ForgeConfigSpec CLIENT_CONFIG;
 
-    public static ForgeConfigSpec.IntValue some_value;
+    public static final ForgeConfigSpec.IntValue some_value;
 
     static{
         COMMON_BUILDER.comment("General setting i guess").push(CATEGORY_GENERAL);

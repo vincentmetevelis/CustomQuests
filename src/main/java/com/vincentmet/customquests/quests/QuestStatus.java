@@ -7,7 +7,7 @@ import com.vincentmet.customquests.lib.Ref;
 import java.util.ArrayList;
 import java.util.List;
 
-public class QuestStatus {
+public class QuestStatus implements IJsonProvider{
     private int questId;
     private boolean claimed;
     private List<QuestRequirementStatus> questRequirementStatuses;

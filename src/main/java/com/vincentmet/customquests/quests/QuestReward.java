@@ -20,7 +20,7 @@ import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.logging.log4j.core.jmx.Server;
 
-public class QuestReward {
+public class QuestReward implements IJsonProvider{
     private QuestRewardType type;
     private IQuestReward reward;
 
@@ -116,8 +116,8 @@ public class QuestReward {
         @Override
         public void executeReward(PlayerEntity player) {
             final CommandDispatcher<CommandSource> dispatcher = player.getServer().getCommandManager().getDispatcher();
-            try {//todo claiming rewards crashes client
-                dispatcher.execute(command, new CommandSource(ICommandSource.field_213139_a_, player.getPositionVec(), player.getPitchYaw(), (ServerWorld) player.world, 5, "CustomQuests", new TranslationTextComponent("Custom Quests"), player.getServer(), player));
+            try {
+                dispatcher.execute(command, player.getServer().getCommandSource().withFeedbackDisabled());
             } catch (CommandSyntaxException e) {
                 e.printStackTrace();
             }
