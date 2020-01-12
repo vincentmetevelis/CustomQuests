@@ -4,8 +4,9 @@ import com.vincentmet.customquests.lib.Ref;
 import com.vincentmet.customquests.lib.Utils;
 import com.vincentmet.customquests.quests.Quest;
 import com.vincentmet.customquests.screens.ScreenQuestingDevice;
+import com.vincentmet.customquests.screens.SubScreensQuestingDevice;
 import com.vincentmet.customquests.screens.elements.IQuestingGuiElement;
-import net.minecraft.client.Minecraft;
+import com.vincentmet.customquests.screens.questingdeveicesubscreens.SubScreenQuestDetails;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -31,12 +32,12 @@ public class ButtonQuest implements IQuestingGuiElement {
     }
 
     @Override
-    public void update(IQuestingGuiElement gui, PlayerEntity player, double mouseX, double mouseY, int width, int height) {
+    public void update(PlayerEntity player, double mouseX, double mouseY, int width, int height) {
 
     }
 
     @Override
-    public void render(IQuestingGuiElement gui, PlayerEntity player, double mouseX, double mouseY) {
+    public void render(PlayerEntity player, double mouseX, double mouseY) {
         if(Quest.isQuestCompletedForPlayer(uuid, quest.getId())){
             root.getMinecraft().getTextureManager().bindTexture(Ref.IMAGE_BUTTON_HEXAGON_COMPLETED);
         }else if(Quest.hasQuestUncompletedDependenciesForPlayer(uuid, quest.getId())){
@@ -53,22 +54,23 @@ public class ButtonQuest implements IQuestingGuiElement {
     }
 
     @Override
-    public void onClick(IQuestingGuiElement gui, PlayerEntity player, double mouseX, double mouseY) {
+    public void onClick(PlayerEntity player, double mouseX, double mouseY) {
         if(!Quest.hasQuestUncompletedDependenciesForPlayer(uuid, quest.getId())){
             if(Utils.isMouseInBounds(mouseX, mouseY, x, y, x+WIDTH, y+HEIGHT)){
-                ScreenQuestingDevice.activeQuest = quest.getId();
+                SubScreenQuestDetails.setActiveQuest(quest.getId());
+                ScreenQuestingDevice.setActiveScreen(SubScreensQuestingDevice.QUEST_DETAILS);
             }
         }
     }
 
     @Override
     public int getWidth() {
-        return 0;
+        return WIDTH;
     }
 
     @Override
     public int getHeight() {
-        return 0;
+        return HEIGHT;
     }
 
     @Override

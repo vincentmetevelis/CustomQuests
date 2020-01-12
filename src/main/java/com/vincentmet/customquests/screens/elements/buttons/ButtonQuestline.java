@@ -3,9 +3,10 @@ package com.vincentmet.customquests.screens.elements.buttons;
 import com.vincentmet.customquests.lib.Ref;
 import com.vincentmet.customquests.lib.Utils;
 import com.vincentmet.customquests.quests.QuestLine;
-import com.vincentmet.customquests.screens.ScreenQuestingDevice;
 import com.vincentmet.customquests.screens.elements.IQuestingGuiElement;
 import com.vincentmet.customquests.screens.elements.labels.Label;
+import com.vincentmet.customquests.screens.questingdeveicesubscreens.SubScreenQuestDetails;
+import com.vincentmet.customquests.screens.questingdeveicesubscreens.questlines.QuestingWeb;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.entity.player.PlayerEntity;
@@ -20,21 +21,23 @@ public class ButtonQuestline implements IQuestingGuiElement {
     private int x;
     private int y;
     private QuestLine questLine;
+    private Label label;
 
-    public ButtonQuestline(Screen root, int posX, int posY, QuestLine questline){
+    public ButtonQuestline(Screen root, int x, int y, QuestLine questline){
         this.root = root;
-        this.x = posX;
-        this.y = posY;
+        this.x = x;
+        this.y = y;
         this.questLine = questline;
     }
 
     @Override
-    public void update(IQuestingGuiElement parent, PlayerEntity player, double mouseX, double mouseY, int width, int height) {
-
+    public void update(PlayerEntity player, double mouseX, double mouseY, int width, int height) {
+        reloadLabel();
+        label.update(player, mouseX, mouseY, 0, 0);
     }
 
     @Override
-    public void render(IQuestingGuiElement parent, PlayerEntity player, double mouseX, double mouseY) {
+    public void render(PlayerEntity player, double mouseX, double mouseY) {
         if(QuestLine.isQuestlineUnlocked(Utils.simplifyUUID(player.getUniqueID()), questLine.getId())){
             if(Utils.isMouseInBounds(mouseX, mouseY, x, y, x + WIDTH, y + HEIGHT)){
                 Minecraft.getInstance().getTextureManager().bindTexture(Ref.IMAGE_BUTTON_QUESTLINE_PRESSED);
@@ -45,39 +48,42 @@ public class ButtonQuestline implements IQuestingGuiElement {
             Minecraft.getInstance().getTextureManager().bindTexture(Ref.IMAGE_BUTTON_QUESTLINE_DISABLED);
         }
         root.blit(x, y, 0, 0, WIDTH, HEIGHT);
-
-
-        new Label(
-                root,
-                x+(WIDTH/2)-Ref.FONT_RENDERER.getStringWidth(questLine.getTitle())/2,
-                y+(HEIGHT/2)-Ref.FONT_RENDERER.FONT_HEIGHT/2,
-                questLine.getTitle(),
-                0xFFFFFF,
-                false,
-                false
-        ).render(this, player, mouseX, mouseY);
+        label.render(player, mouseX, mouseY);
     }
 
     @Override
-    public void onClick(IQuestingGuiElement parent, PlayerEntity player, double mouseX, double mouseY) {
+    public void onClick(PlayerEntity player, double mouseX, double mouseY) {
         if(Utils.isMouseInBounds(mouseX, mouseY, x, y, x+WIDTH, y+HEIGHT)){
-            ScreenQuestingDevice.activeQuestline = questLine.getId();
-            ScreenQuestingDevice.activeQuest = -1;//todo move these vars the subscreen, instead of Screen
+            QuestingWeb.setActiveQuestline(questLine.getId());
+            SubScreenQuestDetails.setActiveQuest(-1);
         }
+        label.onClick(player, mouseX, mouseY);
     }
 
     @Override
     public int getWidth() {
-        return 0;
+        return WIDTH;
     }
 
     @Override
     public int getHeight() {
-        return 0;
+        return HEIGHT;
     }
 
     @Override
     public boolean isVisible() {
         return true;
+    }
+
+    public void reloadLabel(){
+        this.label = new Label(
+                root,
+                questLine.getTitle(),
+                x + (WIDTH/2),
+                y+(HEIGHT/2),
+                0xFFFFFF,
+                true,
+                true
+        );
     }
 }

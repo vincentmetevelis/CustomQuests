@@ -29,17 +29,17 @@ public class SubScreenMainMenu implements IQuestingGuiElement {
     }
 
     @Override
-    public void update(IQuestingGuiElement gui, PlayerEntity player, double mouseX, double mouseY, int width, int height) {
+    public void update(PlayerEntity player, double mouseX, double mouseY, int width, int height) {
         this.width = width;
         this.height = height;
     }
 
     @Override
-    public void render(IQuestingGuiElement gui, PlayerEntity player, double mouseX, double mouseY) {
+    public void render(PlayerEntity player, double mouseX, double mouseY) {
     }
 
     @Override
-    public void onClick(IQuestingGuiElement gui, PlayerEntity player, double mouseX, double mouseY) {
+    public void onClick(PlayerEntity player, double mouseX, double mouseY) {
 
     }
 }

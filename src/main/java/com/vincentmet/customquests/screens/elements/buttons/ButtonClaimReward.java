@@ -4,18 +4,13 @@ import com.vincentmet.customquests.lib.Ref;
 import com.vincentmet.customquests.lib.Utils;
 import com.vincentmet.customquests.lib.handlers.PacketHandler;
 import com.vincentmet.customquests.network.packets.MessageRewardButtonPressClientToServer;
-import com.vincentmet.customquests.quests.IQuestReward;
 import com.vincentmet.customquests.quests.QuestUserProgress;
-import com.vincentmet.customquests.screens.ScreenQuestingDevice;
 import com.vincentmet.customquests.screens.elements.IQuestingGuiElement;
 import com.vincentmet.customquests.screens.elements.labels.Label;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-
-import javax.rmi.CORBA.Util;
-import java.util.List;
 
 @OnlyIn(Dist.CLIENT)
 public class ButtonClaimReward implements IQuestingGuiElement {
@@ -36,12 +31,12 @@ public class ButtonClaimReward implements IQuestingGuiElement {
     }
 
     @Override
-    public void update(IQuestingGuiElement gui, PlayerEntity player, double mouseX, double mouseY, int width, int height) {
+    public void update(PlayerEntity player, double mouseX, double mouseY, int width, int height) {
 
     }
 
     @Override
-    public void render(IQuestingGuiElement gui, PlayerEntity player, double mouseX, double mouseY) {
+    public void render(PlayerEntity player, double mouseX, double mouseY) {
         String text = QuestUserProgress.isRewardClaimed(Utils.simplifyUUID(player.getUniqueID()), quest) ? textClaimed : textUnclaimed;
         if(!QuestUserProgress.isRewardClaimed(Utils.simplifyUUID(player.getUniqueID()), quest) && QuestUserProgress.areAllRequirementsCompleted(Utils.simplifyUUID(player.getUniqueID()), quest)){
             if(Utils.isMouseInBounds(mouseX, mouseY, x, y, x + WIDTH, y + HEIGHT)){
@@ -57,17 +52,17 @@ public class ButtonClaimReward implements IQuestingGuiElement {
 
         new Label(
                 root,
+                text,
                 x+(WIDTH/2)-Ref.FONT_RENDERER.getStringWidth(text)/2,
                 y+(HEIGHT/2)-Ref.FONT_RENDERER.FONT_HEIGHT/2,
-                text,
                 0xFFFFFF,
                 false,
                 false
-        ).render(this, player, mouseX, mouseY);
+        ).render(player, mouseX, mouseY);
     }
 
     @Override
-    public void onClick(IQuestingGuiElement gui, PlayerEntity player, double mouseX, double mouseY) {
+    public void onClick(PlayerEntity player, double mouseX, double mouseY) {
         if(!QuestUserProgress.isRewardClaimed(Utils.simplifyUUID(player.getUniqueID()), quest) && QuestUserProgress.areAllRequirementsCompleted(Utils.simplifyUUID(player.getUniqueID()), quest)){
             if(Utils.isMouseInBounds(mouseX, mouseY, x, y, x+WIDTH, y+HEIGHT)){
                 if(!QuestUserProgress.isRewardClaimed(Utils.simplifyUUID(player.getUniqueID()), quest) && QuestUserProgress.areAllRequirementsCompleted(Utils.simplifyUUID(player.getUniqueID()), quest)){

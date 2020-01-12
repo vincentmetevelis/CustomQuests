@@ -2,7 +2,6 @@ package com.vincentmet.customquests.lib.handlers;
 
 import com.google.gson.JsonObject;
 import com.vincentmet.customquests.Objects;
-import com.vincentmet.customquests.items.ItemQuestingDevice;
 import com.vincentmet.customquests.lib.Ref;
 import com.vincentmet.customquests.lib.Triple;
 import com.vincentmet.customquests.lib.Utils;
@@ -32,11 +31,12 @@ import java.util.List;
 
 @Mod.EventBusSubscriber(modid = Ref.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class EventHandler {
+    private EventHandler(){}
     private static long lastMillis = System.currentTimeMillis();
     @SubscribeEvent
     public static void registerItems(RegistryEvent.Register<Item> event){
         event.getRegistry().registerAll(
-                Objects.Items.itemQuestingDevice = new ItemQuestingDevice(new Item.Properties().maxStackSize(1).group(Objects.ItemGroups.tabCustomQuests)).setRegistryName("item_questing_device")
+                Objects.Items.itemQuestingDevice
         );
     }
 
@@ -57,11 +57,9 @@ public class EventHandler {
             List<Triple<Integer, Integer, Integer>> activeEntityKillQuestIds = Quest.getActiveQuestsWithType(Utils.simplifyUUID(event.getSource().getTrueSource().getUniqueID()), QuestRequirementType.KILL_MOB);
             for (Triple<Integer, Integer, Integer> questAndReqAndSubReqId : activeEntityKillQuestIds) {
                 Pair<EntityType, Integer> mobAmount = Quest.getMobAmountForMobKill(questAndReqAndSubReqId.getLeft(), questAndReqAndSubReqId.getMiddle(), questAndReqAndSubReqId.getRight());
-                if (event.getEntity().getType() == mobAmount.getKey()) {
-                    if (event.getSource().getTrueSource() instanceof PlayerEntity) {
-                        QuestUserProgress.addPlayerProgress(Utils.simplifyUUID(event.getSource().getTrueSource().getUniqueID()), questAndReqAndSubReqId.getLeft(), questAndReqAndSubReqId.getMiddle(), questAndReqAndSubReqId.getRight(), 1);
-                        Ref.shouldSaveNextTick = true;
-                    }
+                if (event.getEntity().getType() == mobAmount.getKey() && event.getSource().getTrueSource() instanceof PlayerEntity) {
+                    QuestUserProgress.addPlayerProgress(Utils.simplifyUUID(event.getSource().getTrueSource().getUniqueID()), questAndReqAndSubReqId.getLeft(), questAndReqAndSubReqId.getMiddle(), questAndReqAndSubReqId.getRight(), 1);
+                    Ref.shouldSaveNextTick = true;
                 }
             }
         }
@@ -116,7 +114,6 @@ public class EventHandler {
                 Triple<String, BlockPos, Integer> dimPosRadius = Quest.getDimPosRadius(questAndReqAndSubReqId.getLeft(), questAndReqAndSubReqId.getMiddle(), questAndReqAndSubReqId.getRight());
                 if(Quest.isPlayerInRadius(playerEntity, dimPosRadius)){
                     QuestUserProgress.setPlayerProgressToCompleted(Utils.simplifyUUID(playerEntity.getUniqueID()), questAndReqAndSubReqId.getLeft(), questAndReqAndSubReqId.getMiddle(), questAndReqAndSubReqId.getRight());
-                    System.out.println("In radius of: " + dimPosRadius);
                     Ref.shouldSaveNextTick = true;
                 }
             }

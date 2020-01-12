@@ -30,18 +30,18 @@ public class SubScreenSettings implements IQuestingGuiElement {
     }
 
     @Override
-    public void update(IQuestingGuiElement gui, PlayerEntity player, double mouseX, double mouseY, int width, int height) {
+    public void update(PlayerEntity player, double mouseX, double mouseY, int width, int height) {
         this.lastWidth = width;
         this.lastHeight = height;
     }
 
     @Override
-    public void render(IQuestingGuiElement gui, PlayerEntity player, double mouseX, double mouseY) {
+    public void render(PlayerEntity player, double mouseX, double mouseY) {
 
     }
 
     @Override
-    public void onClick(IQuestingGuiElement gui, PlayerEntity player, double mouseX, double mouseY) {
+    public void onClick(PlayerEntity player, double mouseX, double mouseY) {
 
     }
 }

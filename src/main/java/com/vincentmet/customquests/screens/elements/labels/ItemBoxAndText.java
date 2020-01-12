@@ -1,7 +1,6 @@
 package com.vincentmet.customquests.screens.elements.labels;
 
 import com.vincentmet.customquests.lib.Ref;
-import com.vincentmet.customquests.screens.ScreenQuestingDevice;
 import com.vincentmet.customquests.screens.elements.IQuestingGuiElement;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.entity.player.PlayerEntity;
@@ -30,27 +29,27 @@ public class ItemBoxAndText implements IQuestingGuiElement {
     }
 
     @Override
-    public void update(IQuestingGuiElement gui, PlayerEntity player, double mouseX, double mouseY, int width, int height) {
+    public void update(PlayerEntity player, double mouseX, double mouseY, int width, int height) {
 
     }
 
     @Override
-    public void render(IQuestingGuiElement gui, PlayerEntity player, double mouseX, double mouseY) {
+    public void render(PlayerEntity player, double mouseX, double mouseY) {
         if(centered){
             int itembox_width = 18;
             int margin = 2;
             int text_width = Ref.FONT_RENDERER.getStringWidth(text);
             int half_total_width = (itembox_width + margin + text_width) / 2;
-            new ItemBox(root, x - half_total_width, y, itemstack).render(this, player, mouseX, mouseY);
-            new Label(root, x - half_total_width + itembox_width + margin, y + (18/2 - 8/2), text, color, false, false).render(this, player, mouseX, mouseY);
+            new ItemBox(root, x - half_total_width, y, itemstack).render(player, mouseX, mouseY);
+            new Label(root, text, x - half_total_width + itembox_width + margin, y + (18/2 - 8/2), color, false, false).render(player, mouseX, mouseY);
         }else{
-            new ItemBox(root, x, y, itemstack).render(this, player, mouseX, mouseY);
-            new Label(root, x + 20, y + (18/2 - 8/2), text, color, false, false).render(this, player, mouseX, mouseY);
+            new ItemBox(root, x, y, itemstack).render(player, mouseX, mouseY);
+            new Label(root, text, x + 20, y + (18/2 - 8/2), color, false, false).render(player, mouseX, mouseY);
         }
     }
 
     @Override
-    public void onClick(IQuestingGuiElement gui, PlayerEntity player, double mouseX, double mouseY) {
+    public void onClick(PlayerEntity player, double mouseX, double mouseY) {
 
     }
 

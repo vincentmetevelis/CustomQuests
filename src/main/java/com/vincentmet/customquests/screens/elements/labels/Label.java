@@ -1,12 +1,12 @@
 package com.vincentmet.customquests.screens.elements.labels;
 
 import com.vincentmet.customquests.lib.Ref;
-import com.vincentmet.customquests.screens.ScreenQuestingDevice;
 import com.vincentmet.customquests.screens.elements.IQuestingGuiElement;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import com.vincentmet.customquests.lib.Utils;
 
 @OnlyIn(Dist.CLIENT)
 public class Label implements IQuestingGuiElement {
@@ -15,48 +15,44 @@ public class Label implements IQuestingGuiElement {
     private int y;
     private String text;
     private int color;
-    private boolean xCentered;
-    private boolean yCentered;
 
-    public Label(Screen root, int posX, int posY, String text, int color, boolean xCentered, boolean yCentered){
+    public Label(Screen root, String text, int x, int y, int color, boolean xCentered, boolean yCentered){
         this.root = root;
-        this.x = posX;
-        this.y = posY;
-        this.text = text;
+        this.text = Utils.colorify(text);
+        this.x = x;
+        this.y = y;
         this.color = color;
-        this.xCentered = xCentered;
-        this.yCentered = xCentered;
         if(xCentered){
-            x -= (Ref.FONT_RENDERER.getStringWidth(text)/2);
+            this.x -= (Ref.FONT_RENDERER.getStringWidth(this.text)>>1);
         }
         if(yCentered){
-            y -= (Ref.FONT_RENDERER.FONT_HEIGHT/2);
+            this.y -= (Ref.FONT_RENDERER.FONT_HEIGHT>>1);
         }
     }
 
     @Override
-    public void update(IQuestingGuiElement gui, PlayerEntity player, double mouseX, double mouseY, int width, int height) {
+    public void update(PlayerEntity player, double mouseX, double mouseY, int width, int height) {
 
     }
 
     @Override
-    public void render(IQuestingGuiElement gui, PlayerEntity player, double mouseX, double mouseY) {
-        root.drawString(Ref.FONT_RENDERER, text, x, y, color);
+    public void render(PlayerEntity player, double mouseX, double mouseY) {
+        root.drawString(Ref.FONT_RENDERER, this.text, this.x, this.y, this.color);
     }
 
     @Override
-    public void onClick(IQuestingGuiElement gui, PlayerEntity player, double mouseX, double mouseY) {
+    public void onClick(PlayerEntity player, double mouseX, double mouseY) {
 
     }
 
     @Override
     public int getWidth() {
-        return 0;
+        return Ref.FONT_RENDERER.getStringWidth(text);
     }
 
     @Override
     public int getHeight() {
-        return 0;
+        return Ref.FONT_RENDERER.FONT_HEIGHT;
     }
 
     @Override

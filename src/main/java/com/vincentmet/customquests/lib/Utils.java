@@ -5,14 +5,11 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import com.vincentmet.customquests.lib.handlers.PacketHandler;
-import com.vincentmet.customquests.network.packets.MessageUpdateQuestProgressServerToClient;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.JsonToNBT;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.network.PacketDistributor;
 import org.apache.commons.lang3.StringUtils;
 import javax.net.ssl.HttpsURLConnection;
 import java.io.*;
@@ -21,29 +18,9 @@ import java.util.UUID;
 
 public class Utils {
     public static String colorify(String string){
-        for(int i=0;i<StringUtils.countMatches(string, "~AQUA~");i++)           string = string.replace("~AQUA~",           TextFormatting.AQUA + "");
-        for(int i=0;i<StringUtils.countMatches(string, "~BLACK~");i++)          string = string.replace("~BLACK~",          TextFormatting.BLACK + "");
-        for(int i=0;i<StringUtils.countMatches(string, "~BLUE~");i++)           string = string.replace("~BLUE~",           TextFormatting.BLUE + "");
-        for(int i=0;i<StringUtils.countMatches(string, "~BOLD~");i++)           string = string.replace("~BOLD~",           TextFormatting.BOLD + "");
-        for(int i=0;i<StringUtils.countMatches(string, "~DARK_AQUA~");i++)      string = string.replace("~DARK_AQUA~",      TextFormatting.DARK_AQUA + "");
-        for(int i=0;i<StringUtils.countMatches(string, "~DARK_BLUE~");i++)      string = string.replace("~DARK_BLUE~",      TextFormatting.DARK_BLUE + "");
-        for(int i=0;i<StringUtils.countMatches(string, "~DARK_GRAY~");i++)      string = string.replace("~DARK_GRAY~",      TextFormatting.DARK_GRAY + "");
-        for(int i=0;i<StringUtils.countMatches(string, "~DARK_GREEN~");i++)     string = string.replace("~DARK_GREEN~",     TextFormatting.DARK_GREEN + "");
-        for(int i=0;i<StringUtils.countMatches(string, "~DARK_PURPLE~");i++)    string = string.replace("~DARK_PURPLE~",    TextFormatting.DARK_PURPLE + "");
-        for(int i=0;i<StringUtils.countMatches(string, "~DARK_RED~");i++)       string = string.replace("~DARK_RED~",       TextFormatting.DARK_RED + "");
-        for(int i=0;i<StringUtils.countMatches(string, "~GOLD~");i++)           string = string.replace("~GOLD~",           TextFormatting.GOLD + "");
-        for(int i=0;i<StringUtils.countMatches(string, "~GRAY~");i++)           string = string.replace("~GRAY~",           TextFormatting.GRAY + "");
-        for(int i=0;i<StringUtils.countMatches(string, "~GREEN~");i++)          string = string.replace("~GREEN~",          TextFormatting.GREEN + "");
-        for(int i=0;i<StringUtils.countMatches(string, "~ITALIC~");i++)         string = string.replace("~ITALIC~",         TextFormatting.ITALIC + "");
-        for(int i=0;i<StringUtils.countMatches(string, "~LIGHT_PURPLE~");i++)   string = string.replace("~LIGHT_PURPLE~",   TextFormatting.LIGHT_PURPLE + "");
-        for(int i=0;i<StringUtils.countMatches(string, "~OBFUSCATED~");i++)     string = string.replace("~OBFUSCATED~",     TextFormatting.OBFUSCATED + "");
-        for(int i=0;i<StringUtils.countMatches(string, "~RED~");i++)            string = string.replace("~RED~",            TextFormatting.RED + "");
-        for(int i=0;i<StringUtils.countMatches(string, "~RESET~");i++)          string = string.replace("~RESET~",          TextFormatting.RESET + "");
-        for(int i=0;i<StringUtils.countMatches(string, "~STRIKETHROUGH~");i++)  string = string.replace("~STRIKETHROUGH~",  TextFormatting.STRIKETHROUGH + "");
-        for(int i=0;i<StringUtils.countMatches(string, "~UNDERLINE~");i++)      string = string.replace("~UNDERLINE~",      TextFormatting.UNDERLINE + "");
-        for(int i=0;i<StringUtils.countMatches(string, "~WHITE~");i++)          string = string.replace("~WHITE~",          TextFormatting.WHITE + "");
-        for(int i=0;i<StringUtils.countMatches(string, "~YELLOW~");i++)         string = string.replace("~YELLOW~",         TextFormatting.YELLOW + "");
-
+        for (TextFormatting textFormatting : TextFormatting.values()) {
+            string = string.replaceAll(String.format("~%s~", textFormatting.getFriendlyName().toUpperCase()), textFormatting.toString());
+        }
         return string;
     }
 

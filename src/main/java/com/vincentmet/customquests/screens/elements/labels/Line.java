@@ -3,7 +3,6 @@ package com.vincentmet.customquests.screens.elements.labels;
 import com.vincentmet.customquests.lib.LineColor;
 import com.vincentmet.customquests.lib.Ref;
 import com.vincentmet.customquests.quests.QuestPosition;
-import com.vincentmet.customquests.screens.ScreenQuestingDevice;
 import com.vincentmet.customquests.screens.elements.IQuestingGuiElement;
 import com.vincentmet.customquests.screens.elements.buttons.ButtonQuest;
 import net.minecraft.client.gui.screen.Screen;
@@ -61,12 +60,12 @@ public class Line implements IQuestingGuiElement {
     }
 
     @Override
-    public void update(IQuestingGuiElement gui, PlayerEntity player, double mouseX, double mouseY, int width, int height) {
+    public void update(PlayerEntity player, double mouseX, double mouseY, int width, int height) {
 
     }
 
     @Override
-    public void render(IQuestingGuiElement gui, PlayerEntity player, double mouseX, double mouseY) {
+    public void render(PlayerEntity player, double mouseX, double mouseY) {
         GL11.glPushMatrix();
         GL11.glTranslatef(this.x, this.y, 0);
         GL11.glRotated(this.angle, 0, 0, 1);
@@ -77,7 +76,7 @@ public class Line implements IQuestingGuiElement {
     }
 
     @Override
-    public void onClick(IQuestingGuiElement gui, PlayerEntity player, double mouseX, double mouseY) {
+    public void onClick(PlayerEntity player, double mouseX, double mouseY) {
 
     }
 

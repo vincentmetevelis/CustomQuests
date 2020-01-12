@@ -5,6 +5,7 @@ import com.vincentmet.customquests.lib.Utils;
 import com.vincentmet.customquests.quests.party.Party;
 import com.vincentmet.customquests.screens.ScreenQuestingDevice;
 import com.vincentmet.customquests.screens.elements.labels.Label;
+import com.vincentmet.customquests.screens.questingdeveicesubscreens.SubScreenParties;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraftforge.api.distmarker.Dist;
@@ -27,12 +28,12 @@ public class ButtonParty implements IQuestingGuiElement {
     }
 
     @Override
-    public void update(IQuestingGuiElement gui, PlayerEntity player, double mouseX, double mouseY, int width, int height) {
+    public void update(PlayerEntity player, double mouseX, double mouseY, int width, int height) {
 
     }
 
     @Override
-    public void render(IQuestingGuiElement gui, PlayerEntity player, double mouseX, double mouseY) {
+    public void render(PlayerEntity player, double mouseX, double mouseY) {
         if(party.isOpenForEveryone() || party.getPartyMembers().contains(Utils.simplifyUUID(player.getUniqueID())) || party.getCreator().equals(Utils.simplifyUUID(player.getUniqueID()))){
             if(Utils.isMouseInBounds(mouseX, mouseY, x, y, x + WIDTH, y + HEIGHT)){
                 root.getMinecraft().getTextureManager().bindTexture(Ref.IMAGE_BUTTON_QUESTLINE_PRESSED);
@@ -47,19 +48,19 @@ public class ButtonParty implements IQuestingGuiElement {
 
         new Label(
                 root,
+                party.getPartyName(),
                 x+(WIDTH/2)-Ref.FONT_RENDERER.getStringWidth(party.getPartyName())/2,
                 y+(HEIGHT/2)-Ref.FONT_RENDERER.FONT_HEIGHT/2,
-                party.getPartyName(),
                 0xFFFFFF,
                 false,
                 false
-        ).render(this, player, mouseX, mouseY);
+        ).render(player, mouseX, mouseY);
     }
 
     @Override
-    public void onClick(IQuestingGuiElement gui, PlayerEntity player, double mouseX, double mouseY) {
+    public void onClick(PlayerEntity player, double mouseX, double mouseY) {
         if(Utils.isMouseInBounds(mouseX, mouseY, x, y, x+WIDTH, y+HEIGHT)){
-            ScreenQuestingDevice.activeParty = party.getId();
+            SubScreenParties.setActiveParty(party.getId());
         }
     }
 

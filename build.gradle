@@ -13,14 +13,14 @@ apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 
-version = '1.14.4-1.0.0-DEV1'
+version = '1.14.4-1.0.1'
 group = 'com.vincentmet.customquests'
 archivesBaseName = 'customquests'
 
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8'
 
 minecraft {
-	mappings channel: 'snapshot', version: '20200101-1.14.3'
+	mappings channel: 'snapshot', version: '20200112-1.14.3'
     runs {
         client {
             workingDirectory project.file('run')
@@ -51,7 +51,7 @@ minecraft {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.14.4-28.1.111'
+    minecraft 'net.minecraftforge:forge:1.14.4-28.1.114'
 	//put JEI here as soft dependency
 }
 

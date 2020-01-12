@@ -6,7 +6,7 @@ public interface IQuestingGuiElement {
     int getWidth();
     int getHeight();
     boolean isVisible();
-    void update(IQuestingGuiElement gui, PlayerEntity player, double mouseX, double mouseY, int width, int height);
-    void render(IQuestingGuiElement gui, PlayerEntity player, double mouseX, double mouseY);
-    void onClick(IQuestingGuiElement gui, PlayerEntity player, double mouseX, double mouseY);
+    void update(PlayerEntity player, double mouseX, double mouseY, int width, int height);
+    void render(PlayerEntity player, double mouseX, double mouseY);
+    void onClick(PlayerEntity player, double mouseX, double mouseY);
 }
