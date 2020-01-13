@@ -1,5 +1,6 @@
 package com.vincentmet.customquests.screens;
 
+import com.vincentmet.customquests.lib.ButtonDrawer;
 import com.vincentmet.customquests.screens.elements.*;
 import com.vincentmet.customquests.screens.elements.buttons.ButtonQuestlines;
 import com.vincentmet.customquests.screens.questingdeveicesubscreens.*;
@@ -54,7 +55,7 @@ public class ScreenQuestingDevice extends Screen {
         //this.buttonSettings.update(player, mouseX, mouseY, 0, 0);
         //this.buttonSettings.render(player, mouseX, mouseY);
 
-        //ButtonDrawer.draw(200, 200, 50, 50, ButtonDrawer.ButtonState.PRESSED);
+        ButtonDrawer.draw(200, 200, 50, 50, ButtonDrawer.ButtonTexture.DEFAULT);
 
         super.render(mouseX, mouseY, partialTicks);
     }
