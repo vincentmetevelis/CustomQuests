@@ -3,15 +3,19 @@ package com.vincentmet.customquests.screens.elements.buttons;
 import com.vincentmet.customquests.lib.Ref;
 import com.vincentmet.customquests.lib.Utils;
 import com.vincentmet.customquests.quests.Quest;
+import com.vincentmet.customquests.quests.QuestUserProgress;
 import com.vincentmet.customquests.screens.ScreenQuestingDevice;
 import com.vincentmet.customquests.screens.SubScreensQuestingDevice;
 import com.vincentmet.customquests.screens.elements.IQuestingGuiElement;
 import com.vincentmet.customquests.screens.questingdeveicesubscreens.SubScreenQuestDetails;
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.event.RenderHandEvent;
+import org.lwjgl.opengl.GL11;
 
 @OnlyIn(Dist.CLIENT)
 public class ButtonQuest implements IQuestingGuiElement {
@@ -38,7 +42,9 @@ public class ButtonQuest implements IQuestingGuiElement {
 
     @Override
     public void render(PlayerEntity player, double mouseX, double mouseY) {
-        if(Quest.isQuestCompletedForPlayer(uuid, quest.getId())){
+        if(Quest.isQuestCompletedForPlayer(uuid, quest.getId()) && !QuestUserProgress.isRewardClaimed(uuid, quest.getId())){
+            root.getMinecraft().getTextureManager().bindTexture(Ref.IMAGE_BUTTON_HEXAGON_UNCLAIMED);
+        }else if(Quest.isQuestCompletedForPlayer(uuid, quest.getId())){
             root.getMinecraft().getTextureManager().bindTexture(Ref.IMAGE_BUTTON_HEXAGON_COMPLETED);
         }else if(Quest.hasQuestUncompletedDependenciesForPlayer(uuid, quest.getId())){
             root.getMinecraft().getTextureManager().bindTexture(Ref.IMAGE_BUTTON_HEXAGON_DISABLED);
@@ -50,7 +56,9 @@ public class ButtonQuest implements IQuestingGuiElement {
             }
         }
         root.blit(x, y, 0, 0, WIDTH, HEIGHT);
+        RenderHelper.enableGUIStandardItemLighting();
         root.getMinecraft().getItemRenderer().renderItemIntoGUI(new ItemStack(quest.getIcon()), x + 8, y + 7);
+
     }
 
     @Override

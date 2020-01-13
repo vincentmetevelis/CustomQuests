@@ -1,10 +1,7 @@
 package com.vincentmet.customquests.screens;
 
 import com.vincentmet.customquests.screens.elements.*;
-import com.vincentmet.customquests.screens.elements.buttons.ButtonHome;
-import com.vincentmet.customquests.screens.elements.buttons.ButtonParties;
 import com.vincentmet.customquests.screens.elements.buttons.ButtonQuestlines;
-import com.vincentmet.customquests.screens.elements.buttons.ButtonSettings;
 import com.vincentmet.customquests.screens.questingdeveicesubscreens.*;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.entity.player.PlayerEntity;
@@ -56,6 +53,8 @@ public class ScreenQuestingDevice extends Screen {
         //this.buttonParties.render(player, mouseX, mouseY);
         //this.buttonSettings.update(player, mouseX, mouseY, 0, 0);
         //this.buttonSettings.render(player, mouseX, mouseY);
+
+        //ButtonDrawer.draw(200, 200, 50, 50, ButtonDrawer.ButtonState.PRESSED);
 
         super.render(mouseX, mouseY, partialTicks);
     }

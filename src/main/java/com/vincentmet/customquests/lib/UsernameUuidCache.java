@@ -1,7 +1,6 @@
 package com.vincentmet.customquests.lib;
 
-import javafx.util.Pair;
-
+import com.mojang.datafixers.util.Pair;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,7 +13,7 @@ public class UsernameUuidCache {
 
     public static boolean isNameAlreadyInCache(String displayname){
         for(Pair<String, String> pair : cache){
-            if(pair.getKey().toLowerCase().equals(displayname.toLowerCase())){
+            if(pair.getFirst().toLowerCase().equals(displayname.toLowerCase())){
                 return true;
             }
         }
@@ -23,7 +22,7 @@ public class UsernameUuidCache {
 
     public static boolean isUuidAlreadyInCache(String uuid){
         for(Pair<String, String> pair : cache){
-            if(pair.getValue().toLowerCase().equals(uuid.toLowerCase())){
+            if(pair.getSecond().toLowerCase().equals(uuid.toLowerCase())){
                 return true;
             }
         }
@@ -32,8 +31,8 @@ public class UsernameUuidCache {
 
     public static String getNameForUuid(String uuid){
         for (Pair<String, String> pair : cache){
-            if(pair.getValue().equals(uuid)){
-                return pair.getKey();
+            if(pair.getSecond().equals(uuid)){
+                return pair.getFirst();
             }
         }
         return null;
@@ -41,8 +40,8 @@ public class UsernameUuidCache {
 
     public static String getUuidForName(String name){
         for (Pair<String, String> pair : cache){
-            if(pair.getKey().equals(name)){
-                return pair.getValue();
+            if(pair.getFirst().equals(name)){
+                return pair.getSecond();
             }
         }
         return null;
