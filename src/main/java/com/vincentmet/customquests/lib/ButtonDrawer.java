@@ -2,39 +2,111 @@ package com.vincentmet.customquests.lib;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.AbstractGui;
-import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
 public class ButtonDrawer {
-    public static void draw(int x, int y, int width, int height, ButtonState state){
-        Minecraft.getInstance().getTextureManager().bindTexture(Ref.IMAGE_BUTTON_MODULAR);
-        //draw -> x, y, u, v, width, height, texSizeX, texSizeY
-        AbstractGui.blit(x, y, 0, 0, 2, 2, 512, 512); // Left Top corner
-        AbstractGui.blit(x, y + height - 2, 0, 5, 2, 2, 512, 512); // Left Bottom corner
-        AbstractGui.blit(x + height - 2, y, 5, 0, 2, 2, 512, 512); // Right Top corner
-        AbstractGui.blit(x + height - 2, y + height - 2, 5, 5, 2, 2, 512, 512); // Right Bottom corner
+    public static void draw(int x, int y, int width, int height, ButtonTexture tex) {
+        ResourceLocation texture = tex.get();
+        int texU = tex.getU();
+        int texV = tex.getV();
+        int texWidth = tex.getWidth();
+        int texHeight = tex.getHeight();
+        int texP = tex.getBorderSize(); // P for Padding
 
-        for(int x1=2;x1<width-2;x1++){
-            AbstractGui.blit(x + x1, y, 3, 0, 1, 2, 512, 512); // Top border
-        }
-        for(int x2=2;x2<width-2;x2++){
-            AbstractGui.blit(x + x2, y+height-2, 3, 5, 1, 2, 512, 512); // Top border
-        }
-        for(int y1=2;y1<width-2;y1++){
-            AbstractGui.blit(x, y + y1, 0, 3, 2, 1, 512, 512); // Top border
-        }
-        for(int y2=2;y2<width-2;y2++){
-            AbstractGui.blit(x+width-2, y + y2, 5, 3, 2, 1, 512, 512); // Top border
+        Minecraft.getInstance().getTextureManager().bindTexture(texture);
+
+        // blit -> x, y, u, v, width, height, texSizeX, texSizeY
+
+        // Left Top corner
+        AbstractGui.blit(x, y, texU, texV, texP, texP, texWidth, texHeight);
+
+        // Left Bottom corner
+        AbstractGui.blit(x, y + height - texP, texU, texHeight - texP, texP, texP, texWidth, texHeight);
+
+        // Right Top corner
+        AbstractGui.blit(x + width - texP, y, texWidth - texP, texV, texP, texP, texWidth, texHeight);
+
+        // Right Bottom corner
+        AbstractGui.blit(x + width - texP, y + height - texP, texWidth - texP, texHeight - texP, texP, texP, texWidth,
+                texHeight);
+
+        int innerWidth = texWidth - 2 * texP;
+        int innerHeight = texHeight - 2 * texP;
+        int right = x + width - texP;
+        int bottom = y + height - texP;
+
+        // Top and Bottom Edges
+        for (int left = x + texP; left < right; left += innerWidth) {
+            // Top
+            AbstractGui.blit(left, y, texP, 0, Math.min(innerWidth, right - left), texP, texWidth, texHeight);
+            // Bottom
+            AbstractGui.blit(left, y + height - texP, texP, texHeight - texP, Math.min(innerWidth, right - left), texP, texWidth, texHeight);
         }
 
-        AbstractGui.blit(x+2, y+2, 0, 256, width-4, height-4, 512, 512);
+        // Left and Right Edges
+        for (int top = y + texP; top < bottom; top += innerHeight) {
+            // Left
+            AbstractGui.blit(x, top, 0, texP, texP, Math.min(innerHeight, bottom - top), texWidth, texHeight);
+            // Right
+            AbstractGui.blit(x + width - texP, top, texWidth - texP, texP, texP, Math.min(innerHeight, bottom - top), texWidth, texHeight);
+        }
+
+        // Fill the Middle
+        for (int left = x + texP; left < right; left += innerWidth) {
+            for (int top = y + texP; top < bottom; top += innerHeight) {
+                AbstractGui.blit(left, top, texP, texP, Math.min(innerWidth, right - left), Math.min(innerHeight, bottom - top), texWidth, texHeight);
+            }
+        }
     }
 
-    public enum ButtonState{
-        UNPRESSED(),
-        PRESSED(),
-        DISABLED()
+    public enum ButtonState {
+        UNPRESSED(), PRESSED(), DISABLED()
+    }
+
+    public static class ButtonTexture {
+        public static final ButtonTexture DEFAULT = new ButtonTexture(
+                new ResourceLocation(Ref.MODID, "textures/gui/button_scalable.png"), 0, 0, 16, 16, 4);
+        private final ResourceLocation texture;
+        private final int u;
+        private final int v;
+        private final int width;
+        private final int height;
+        private final int borderSize;
+
+        public ButtonTexture(ResourceLocation texture, int u, int v, int width, int height, int borderSize) {
+            this.texture = texture;
+            this.u = u;
+            this.v = v;
+            this.width = width;
+            this.height = height;
+            this.borderSize = borderSize;
+        }
+
+        public ResourceLocation get() {
+            return this.texture;
+        }
+
+        public int getU() {
+            return this.u;
+        }
+
+        public int getV() {
+            return this.v;
+        }
+
+        public int getWidth() {
+            return this.width;
+        }
+
+        public int getHeight() {
+            return this.height;
+        }
+
+        public int getBorderSize() {
+            return this.borderSize;
+        }
     }
 }
