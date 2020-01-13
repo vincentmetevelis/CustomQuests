@@ -13,6 +13,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.io.File;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,6 +25,7 @@ public class Ref {
     public static final ResourceLocation IMAGE_BUTTON_HEXAGON_PRESSED = new ResourceLocation(MODID, "textures/gui/button_hexagon_pressed.png");
     public static final ResourceLocation IMAGE_BUTTON_HEXAGON_DISABLED = new ResourceLocation(MODID, "textures/gui/button_hexagon_disabled.png");
     public static final ResourceLocation IMAGE_BUTTON_HEXAGON_COMPLETED = new ResourceLocation(MODID, "textures/gui/button_hexagon_completed.png");
+    public static final ResourceLocation IMAGE_BUTTON_HEXAGON_UNCLAIMED = new ResourceLocation(MODID, "textures/gui/button_hexagon_unclaimed.png");
     public static final ResourceLocation IMAGE_BUTTON_QUESTLINE_UNPRESSED = new ResourceLocation(MODID, "textures/gui/button_rect_unpressed.png");
     public static final ResourceLocation IMAGE_BUTTON_QUESTLINE_PRESSED = new ResourceLocation(MODID, "textures/gui/button_rect_pressed.png");
     public static final ResourceLocation IMAGE_BUTTON_QUESTLINE_DISABLED = new ResourceLocation(MODID, "textures/gui/button_rect_disabled.png");
@@ -51,11 +53,11 @@ public class Ref {
     public static final int ERR_MSG_INT_INVALID_JSON = -1337;
     public static final boolean ERR_MSG_BOOL_INVALID_JSON = false;
     public static boolean shouldSaveNextTick = false;
-    public static String questBookLocation;
-    public static String questsLocation;
-    public static String questingProgressLocation;
-    public static String questingPartiesLocation;
-    public static String currWorldDir;
+    public static Path questBookLocation;
+    public static Path questsLocation;
+    public static Path questingProgressLocation;
+    public static Path questingPartiesLocation;
+    public static Path currWorldDir;
     public static QuestMenu ALL_QUESTBOOK;
     public static List<Quest> ALL_QUESTS = new ArrayList<>();
     public static List<QuestUserProgress> ALL_QUESTING_PROGRESS = new ArrayList<>();

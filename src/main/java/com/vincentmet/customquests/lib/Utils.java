@@ -14,6 +14,8 @@ import org.apache.commons.lang3.StringUtils;
 import javax.net.ssl.HttpsURLConnection;
 import java.io.*;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.UUID;
 
 public class Utils {
@@ -133,5 +135,13 @@ public class Utils {
 
     public static char getTextOverflowIcon(){
         return '\u2026';
+    }
+
+    public static void writeTo(Path location, Object text){
+        try{
+            Files.write(location, text.toString().getBytes());
+        }catch (IOException e){
+            e.printStackTrace();
+        }
     }
 }

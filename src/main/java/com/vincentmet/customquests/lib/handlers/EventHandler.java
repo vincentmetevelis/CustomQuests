@@ -7,7 +7,7 @@ import com.vincentmet.customquests.lib.Triple;
 import com.vincentmet.customquests.lib.Utils;
 import com.vincentmet.customquests.network.packets.*;
 import com.vincentmet.customquests.quests.*;
-import javafx.util.Pair;
+import com.mojang.datafixers.util.Pair;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -57,7 +57,7 @@ public class EventHandler {
             List<Triple<Integer, Integer, Integer>> activeEntityKillQuestIds = Quest.getActiveQuestsWithType(Utils.simplifyUUID(event.getSource().getTrueSource().getUniqueID()), QuestRequirementType.KILL_MOB);
             for (Triple<Integer, Integer, Integer> questAndReqAndSubReqId : activeEntityKillQuestIds) {
                 Pair<EntityType, Integer> mobAmount = Quest.getMobAmountForMobKill(questAndReqAndSubReqId.getLeft(), questAndReqAndSubReqId.getMiddle(), questAndReqAndSubReqId.getRight());
-                if (event.getEntity().getType() == mobAmount.getKey() && event.getSource().getTrueSource() instanceof PlayerEntity) {
+                if (event.getEntity().getType() == mobAmount.getFirst() && event.getSource().getTrueSource() instanceof PlayerEntity) {
                     QuestUserProgress.addPlayerProgress(Utils.simplifyUUID(event.getSource().getTrueSource().getUniqueID()), questAndReqAndSubReqId.getLeft(), questAndReqAndSubReqId.getMiddle(), questAndReqAndSubReqId.getRight(), 1);
                     Ref.shouldSaveNextTick = true;
                 }
@@ -148,13 +148,13 @@ public class EventHandler {
     @SubscribeEvent
     public static void onWorldStart(WorldEvent.Load event){
         if(event.getWorld() instanceof ServerWorld){
-            Ref.currWorldDir = ((ServerWorld)event.getWorld()).getSaveHandler().getWorldDirectory().getAbsolutePath().replace('\\', '/');
+            Ref.currWorldDir = ((ServerWorld)event.getWorld()).getSaveHandler().getWorldDirectory().toPath();
             if(!event.getWorld().isRemote()){
                 JsonHandler.loadJson(
-                        Ref.questsLocation = FMLPaths.CONFIGDIR.get().toString().replace('\\', '/') + "/Quests.json",
-                        Ref.questBookLocation = FMLPaths.CONFIGDIR.get().toString().replace('\\', '/') + "/QuestsBook.json",
-                        Ref.questingProgressLocation = Ref.currWorldDir + "/QuestingProgress.json",
-                        Ref.questingPartiesLocation = Ref.currWorldDir + "/QuestingParties.json"
+                        Ref.questsLocation = FMLPaths.CONFIGDIR.get().resolve("Quests.json"),
+                        Ref.questBookLocation = FMLPaths.CONFIGDIR.get().resolve("QuestsBook.json"),
+                        Ref.questingProgressLocation = Ref.currWorldDir.resolve("QuestingProgress.json"),
+                        Ref.questingPartiesLocation = Ref.currWorldDir.resolve("QuestingParties.json")
                 );
                 StructureHandler.initQuests(JsonHandler.getQuestsJson());
                 StructureHandler.initQuestbook(JsonHandler.getQuestbookJson());
