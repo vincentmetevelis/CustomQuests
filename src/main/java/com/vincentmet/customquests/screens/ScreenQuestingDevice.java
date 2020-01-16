@@ -1,12 +1,11 @@
 package com.vincentmet.customquests.screens;
 
-import com.vincentmet.customquests.lib.ButtonDrawer;
 import com.vincentmet.customquests.screens.elements.*;
 import com.vincentmet.customquests.screens.elements.buttons.ButtonQuestlines;
 import com.vincentmet.customquests.screens.questingdeveicesubscreens.*;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import java.util.*;
@@ -22,8 +21,8 @@ public class ScreenQuestingDevice extends Screen {
     private static Map<SubScreensQuestingDevice, IQuestingGuiElement> screens = new EnumMap<>(SubScreensQuestingDevice.class);
     private static SubScreensQuestingDevice activeScreen = SubScreensQuestingDevice.QUESTLINES;
 
-    public ScreenQuestingDevice(ITextComponent titleIn, PlayerEntity player) {
-        super(titleIn);
+    public ScreenQuestingDevice(PlayerEntity player) {
+        super(new TranslationTextComponent("I DONT CAREEEE"));
         this.player = player;
 
         //screens.put(SubScreensQuestingDevice.MAIN_MENU, new SubScreenMainMenu(this));
@@ -55,7 +54,7 @@ public class ScreenQuestingDevice extends Screen {
         //this.buttonSettings.update(player, mouseX, mouseY, 0, 0);
         //this.buttonSettings.render(player, mouseX, mouseY);
 
-        ButtonDrawer.draw(200, 200, 50, 50, ButtonDrawer.ButtonTexture.DEFAULT);
+        //ButtonDrawer.draw(200, 200, 50, 50, ButtonDrawer.ButtonTexture.DEFAULT);
 
         super.render(mouseX, mouseY, partialTicks);
     }

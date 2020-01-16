@@ -30,8 +30,7 @@ public class ButtonDrawer {
         AbstractGui.blit(x + width - texP, y, texWidth - texP, texV, texP, texP, texWidth, texHeight);
 
         // Right Bottom corner
-        AbstractGui.blit(x + width - texP, y + height - texP, texWidth - texP, texHeight - texP, texP, texP, texWidth,
-                texHeight);
+        AbstractGui.blit(x + width - texP, y + height - texP, texWidth - texP, texHeight - texP, texP, texP, texWidth, texHeight);
 
         int innerWidth = texWidth - 2 * texP;
         int innerHeight = texHeight - 2 * texP;
@@ -67,8 +66,7 @@ public class ButtonDrawer {
     }
 
     public static class ButtonTexture {
-        public static final ButtonTexture DEFAULT = new ButtonTexture(
-                new ResourceLocation(Ref.MODID, "textures/gui/button_scalable.png"), 0, 0, 16, 16, 4);
+        public static final ButtonTexture DEFAULT = new ButtonTexture(new ResourceLocation(Ref.MODID, "textures/gui/button_scalable.png"), 0, 0, 16, 16, 4);
         private final ResourceLocation texture;
         private final int u;
         private final int v;

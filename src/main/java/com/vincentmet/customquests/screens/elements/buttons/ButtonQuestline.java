@@ -21,7 +21,7 @@ public class ButtonQuestline implements IQuestingGuiElement {
     private int x;
     private int y;
     private QuestLine questLine;
-    private Label label;
+    private Label label = new Label(null, "", 0, 0, 0xFFFFFF, false, false);
 
     public ButtonQuestline(Screen root, int x, int y, QuestLine questline){
         this.root = root;
