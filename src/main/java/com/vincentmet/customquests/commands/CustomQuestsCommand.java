@@ -11,6 +11,7 @@ public class CustomQuestsCommand {
         dispatcher.register(
                 LiteralArgumentBuilder.<CommandSource>literal(Ref.MODID)
                         .then(PartyCommand.register())
+                        .then(GiveDeviceCommand.register())
                         .executes(context -> {
                             context.getSource().sendFeedback(new TranslationTextComponent("Please use a subcommand!"), false);
                             return 0;

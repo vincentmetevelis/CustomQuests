@@ -1,10 +1,12 @@
 package com.vincentmet.customquests.network.proxies;
 
+import com.vincentmet.customquests.Objects;
 import com.vincentmet.customquests.lib.Ref;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.Mod;
 
 @Mod.EventBusSubscriber(Dist.CLIENT)
@@ -12,6 +14,7 @@ public class ClientProxy implements IProxy {
     @Override
     public void init() {
         Ref.FONT_RENDERER = Minecraft.getInstance().fontRenderer;
+        ClientRegistry.registerKeyBinding(Objects.KeyBindings.OPEN_QUESTINGDEVICE);
     }
 
     @Override

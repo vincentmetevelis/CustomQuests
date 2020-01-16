@@ -5,7 +5,7 @@ import com.vincentmet.customquests.lib.Utils;
 import com.vincentmet.customquests.quests.Quest;
 import com.vincentmet.customquests.quests.QuestUserProgress;
 import com.vincentmet.customquests.screens.ScreenQuestingDevice;
-import com.vincentmet.customquests.screens.SubScreensQuestingDevice;
+import com.vincentmet.customquests.screens.questingdeveicesubscreens.SubScreensQuestingDevice;
 import com.vincentmet.customquests.screens.elements.IQuestingGuiElement;
 import com.vincentmet.customquests.screens.questingdeveicesubscreens.SubScreenQuestDetails;
 import net.minecraft.client.gui.screen.Screen;
@@ -14,8 +14,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.event.RenderHandEvent;
-import org.lwjgl.opengl.GL11;
 
 @OnlyIn(Dist.CLIENT)
 public class ButtonQuest implements IQuestingGuiElement {

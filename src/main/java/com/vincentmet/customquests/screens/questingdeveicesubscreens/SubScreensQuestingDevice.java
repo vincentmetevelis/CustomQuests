@@ -1,4 +1,4 @@
-package com.vincentmet.customquests.screens;
+package com.vincentmet.customquests.screens.questingdeveicesubscreens;
 
 public enum SubScreensQuestingDevice {
     MAIN_MENU("Hi,"),

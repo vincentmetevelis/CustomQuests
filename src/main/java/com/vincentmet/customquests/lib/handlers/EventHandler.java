@@ -1,6 +1,7 @@
 package com.vincentmet.customquests.lib.handlers;
 
 import com.google.gson.JsonObject;
+import com.vincentmet.customquests.BaseClass;
 import com.vincentmet.customquests.Objects;
 import com.vincentmet.customquests.lib.Ref;
 import com.vincentmet.customquests.lib.Triple;
@@ -8,6 +9,8 @@ import com.vincentmet.customquests.lib.Utils;
 import com.vincentmet.customquests.network.packets.*;
 import com.vincentmet.customquests.quests.*;
 import com.mojang.datafixers.util.Pair;
+import com.vincentmet.customquests.screens.ScreenQuestingDevice;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -17,6 +20,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
+import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
@@ -67,10 +71,11 @@ public class EventHandler {
 
     @SubscribeEvent
     public static void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event){
-        if(!event.getPlayer().inventory.hasItemStack(new ItemStack(Objects.Items.itemQuestingDevice))) {
-            event.getPlayer().inventory.addItemStackToInventory(new ItemStack(Objects.Items.itemQuestingDevice, 1));
+        if(ConfigHandler.giveDeviceOnLogin.get()){
+            if(!event.getPlayer().inventory.hasItemStack(new ItemStack(Objects.Items.itemQuestingDevice))) {
+                event.getPlayer().inventory.addItemStackToInventory(new ItemStack(Objects.Items.itemQuestingDevice, 1));
+            }
         }
-
         if(QuestUserProgress.getUserProgressForUuid(Utils.simplifyUUID(event.getPlayer().getUniqueID()))==null){
             Ref.ALL_QUESTING_PROGRESS.add(new QuestUserProgress(Utils.simplifyUUID(event.getPlayer().getUniqueID()), Ref.ERR_MSG_INT_INVALID_JSON, new ArrayList<>(), new ArrayList<>()));
             Ref.shouldSaveNextTick = true;
@@ -161,6 +166,13 @@ public class EventHandler {
                 StructureHandler.initQuestingProgress(JsonHandler.getQuestingProgressJson());
                 StructureHandler.initQuestingParties(JsonHandler.getQuestingPartiesJson());
             }
+        }
+    }
+
+    @SubscribeEvent
+    public static void onKeyPress(InputEvent.KeyInputEvent event){
+        if(Objects.KeyBindings.OPEN_QUESTINGDEVICE.isPressed()){
+            Minecraft.getInstance().displayGuiScreen(new ScreenQuestingDevice(BaseClass.proxy.getClientPlayer()));
         }
     }
 }

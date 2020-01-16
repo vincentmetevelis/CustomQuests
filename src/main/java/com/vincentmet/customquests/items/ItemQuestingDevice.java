@@ -1,5 +1,6 @@
 package com.vincentmet.customquests.items;
 
+import com.vincentmet.customquests.lib.Utils;
 import com.vincentmet.customquests.screens.ScreenQuestingDevice;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.util.ITooltipFlag;
@@ -28,14 +29,14 @@ public class ItemQuestingDevice extends Item{
     @OnlyIn(Dist.CLIENT)
     @Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-        tooltip.add(new TranslationTextComponent("This is your questing device, take good care of it"));
-        tooltip.add(new TranslationTextComponent("Rightclick to open your Questing GUI"));
+        tooltip.add(new TranslationTextComponent(Utils.colorify("~BLUE~This is your questing device, take good care of it")));
+        tooltip.add(new TranslationTextComponent(Utils.colorify("~BLUE~Right-click to open your Questing GUI")));
     }
 
     @OnlyIn(Dist.CLIENT)
     @Override
     public ActionResult<ItemStack> onItemRightClick(World world, PlayerEntity player, Hand hand){
-        Minecraft.getInstance().displayGuiScreen(new ScreenQuestingDevice(new TranslationTextComponent("title"), player));
+        Minecraft.getInstance().displayGuiScreen(new ScreenQuestingDevice(player));
         return super.onItemRightClick(world, player, hand);
     }
 }
