@@ -1,9 +1,11 @@
 package com.vincentmet.customquests.screens;
 
+import com.vincentmet.customquests.BaseClass;
 import com.vincentmet.customquests.screens.elements.*;
 import com.vincentmet.customquests.screens.elements.buttons.ButtonQuestlines;
 import com.vincentmet.customquests.screens.questingdeveicesubscreens.*;
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.renderer.model.BakedQuad;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
@@ -12,7 +14,7 @@ import java.util.*;
 
 @OnlyIn(Dist.CLIENT)
 public class ScreenQuestingDevice extends Screen {
-    private PlayerEntity player;
+    private PlayerEntity player = BaseClass.proxy.getClientPlayer();
     //private ButtonHome buttonHome = new ButtonHome(this);
     private ButtonQuestlines buttonQuestlines = new ButtonQuestlines(this);
     //private ButtonParties buttonParties = new ButtonParties(this);
@@ -21,9 +23,8 @@ public class ScreenQuestingDevice extends Screen {
     private static Map<SubScreensQuestingDevice, IQuestingGuiElement> screens = new EnumMap<>(SubScreensQuestingDevice.class);
     private static SubScreensQuestingDevice activeScreen = SubScreensQuestingDevice.QUESTLINES;
 
-    public ScreenQuestingDevice(PlayerEntity player) {
+    public ScreenQuestingDevice() {
         super(new TranslationTextComponent("I DONT CAREEEE"));
-        this.player = player;
 
         //screens.put(SubScreensQuestingDevice.MAIN_MENU, new SubScreenMainMenu(this));
         //screens.put(SubScreensQuestingDevice.PARTY_SCREEN, new SubScreenParties(this));
@@ -91,6 +92,4 @@ public class ScreenQuestingDevice extends Screen {
     public static void setActiveScreen(SubScreensQuestingDevice activeScreen) {
         ScreenQuestingDevice.activeScreen = activeScreen;
     }
-
-
 }

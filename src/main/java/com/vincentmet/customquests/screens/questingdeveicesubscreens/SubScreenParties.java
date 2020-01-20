@@ -58,6 +58,11 @@ public class SubScreenParties implements IQuestingGuiElement {//todo
     }
 
     @Override
+    public void onKeyPress(int key, int mod) {
+
+    }
+
+    @Override
     public int getWidth() {
         return width;
     }

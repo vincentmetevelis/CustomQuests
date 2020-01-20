@@ -40,7 +40,7 @@ public class SubScreenQuestlines implements IQuestingGuiElement {
 
     @Override
     public boolean isVisible() {
-        return false;
+        return true;
     }
 
     @Override
@@ -65,6 +65,11 @@ public class SubScreenQuestlines implements IQuestingGuiElement {
         this.questlineButtons.forEach(buttonQuestline -> buttonQuestline.onClick(player, mouseX, mouseY));
         this.title.onClick(player, mouseX, mouseY);
         this.questingWeb.onClick(player, mouseX, mouseY);
+    }
+
+    @Override
+    public void onKeyPress(int key, int mod) {
+
     }
 
     public void reloadQuestlines(){

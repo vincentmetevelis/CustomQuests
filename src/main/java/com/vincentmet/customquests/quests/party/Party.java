@@ -8,10 +8,7 @@ import com.vincentmet.customquests.quests.QuestStatus;
 import com.vincentmet.customquests.quests.QuestUserProgress;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.OptionalInt;
+import java.util.*;
 
 @Nullable
 public class Party implements IJsonProvider {
@@ -65,9 +62,9 @@ public class Party implements IJsonProvider {
 
     public List<String> getPartyMembers() {
         List<String> uuids = new ArrayList<>();
-        for(QuestUserProgress questUserProgress : Ref.ALL_QUESTING_PROGRESS){
-            if(questUserProgress.getPartyId() == id){
-                uuids.add(questUserProgress.getUuid());
+        for(Map.Entry<String, QuestUserProgress> questUserProgress : Ref.ALL_QUESTING_PROGRESS.entrySet()){
+            if(questUserProgress.getValue().getPartyId() == id){
+                uuids.add(questUserProgress.getValue().getUuid());
             }
         }
         return uuids;

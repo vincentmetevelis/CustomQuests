@@ -2,6 +2,7 @@ package com.vincentmet.customquests.screens.elements.labels;
 
 import com.vincentmet.customquests.lib.Ref;
 import com.vincentmet.customquests.screens.elements.IQuestingGuiElement;
+import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraftforge.api.distmarker.Dist;
@@ -37,11 +38,16 @@ public class Label implements IQuestingGuiElement {
 
     @Override
     public void render(PlayerEntity player, double mouseX, double mouseY) {
-        root.drawString(Ref.FONT_RENDERER, this.text, this.x, this.y, this.color);
+        Ref.FONT_RENDERER.drawStringWithShadow(this.text, this.x, this.y, this.color);
     }
 
     @Override
     public void onClick(PlayerEntity player, double mouseX, double mouseY) {
+
+    }
+
+    @Override
+    public void onKeyPress(int key, int mod) {
 
     }
 

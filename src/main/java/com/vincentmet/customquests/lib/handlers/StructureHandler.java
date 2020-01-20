@@ -12,7 +12,9 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class StructureHandler {
     public static void initQuestingParties(JsonObject json){
@@ -224,21 +226,23 @@ public class StructureHandler {
     }
 
     public static void initQuestingProgress(JsonObject jsonProgress){
-        List<QuestUserProgress> questUserProgressList = new ArrayList<>();
+        Map<String, QuestUserProgress> questUserProgressList = new HashMap<>();
 
         for(JsonElement jsonUserProgressElement : ConverterHelper.QuestProgress.getPlayers(jsonProgress)){
             JsonObject jsonUserProgress = jsonUserProgressElement.getAsJsonObject();
-            questUserProgressList.add(initSingleQuestingUserProgress(jsonUserProgress));
+            QuestUserProgress questUserProgress = initSingleQuestingUserProgress(jsonUserProgress);
+            questUserProgressList.put(questUserProgress.getUuid(), questUserProgress);
         }
 
         Ref.ALL_QUESTING_PROGRESS = questUserProgressList;
     }
 
     public static QuestUserProgress initSingleQuestingUserProgress(JsonObject jsonUserProgress){
-        List<QuestStatus> questStatusList = new ArrayList<>();
+        Map<Integer, QuestStatus> questStatusList = new HashMap<>();
         for(JsonElement jsonQuestStatusElement : ConverterHelper.QuestProgress.Players.getQuestStatus(jsonUserProgress)){
             JsonObject jsonQuestStatus = jsonQuestStatusElement.getAsJsonObject();
-            questStatusList.add(initSingleQuestProgressForUser(jsonQuestStatus));
+            QuestStatus newQs = initSingleQuestProgressForUser(jsonQuestStatus);
+            questStatusList.put(newQs.getQuestId(), newQs);
         }
         return new QuestUserProgress(
                 ConverterHelper.QuestProgress.Players.getUUID(jsonUserProgress),

@@ -15,7 +15,9 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import java.io.File;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Ref {
     public static final String MODID = "customquests";
@@ -53,6 +55,7 @@ public class Ref {
     public static final int ERR_MSG_INT_INVALID_JSON = -1337;
     public static final boolean ERR_MSG_BOOL_INVALID_JSON = false;
     public static boolean shouldSaveNextTick = false;
+    public static int currentFocussedTextfield = -1;
     public static Path questBookLocation;
     public static Path questsLocation;
     public static Path questingProgressLocation;
@@ -60,7 +63,7 @@ public class Ref {
     public static Path currWorldDir;
     public static QuestMenu ALL_QUESTBOOK;
     public static List<Quest> ALL_QUESTS = new ArrayList<>();
-    public static List<QuestUserProgress> ALL_QUESTING_PROGRESS = new ArrayList<>();
+    public static Map<String, QuestUserProgress> ALL_QUESTING_PROGRESS = new HashMap<>();
     public static List<Party> ALL_QUESTING_PARTIES = new ArrayList<>();
 
     @OnlyIn(Dist.CLIENT)
