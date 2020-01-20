@@ -44,4 +44,9 @@ public class SubScreenSettings implements IQuestingGuiElement {
     public void onClick(PlayerEntity player, double mouseX, double mouseY) {
 
     }
+
+    @Override
+    public void onKeyPress(int key, int mod) {
+
+    }
 }

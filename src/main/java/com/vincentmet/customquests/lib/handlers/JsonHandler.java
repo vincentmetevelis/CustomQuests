@@ -12,6 +12,7 @@ import com.vincentmet.customquests.quests.party.Party;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Map;
 
 public class JsonHandler {
     private static JsonObject jsonContainerQuests;
@@ -95,8 +96,8 @@ public class JsonHandler {
     public static void writeQuestingProgress(Path questingProgressLocation) {
         JsonObject json = new JsonObject();
         JsonArray playerArray = new JsonArray();
-        for (QuestUserProgress users : Ref.ALL_QUESTING_PROGRESS) {
-            playerArray.add(users.getJson());
+        for (Map.Entry<String, QuestUserProgress> users : Ref.ALL_QUESTING_PROGRESS.entrySet()) {
+            playerArray.add(users.getValue().getJson());
         }
         json.add("players", playerArray);
         Utils.writeTo(questingProgressLocation, json.toString());

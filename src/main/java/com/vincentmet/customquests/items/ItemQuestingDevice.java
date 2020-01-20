@@ -36,7 +36,7 @@ public class ItemQuestingDevice extends Item{
     @OnlyIn(Dist.CLIENT)
     @Override
     public ActionResult<ItemStack> onItemRightClick(World world, PlayerEntity player, Hand hand){
-        Minecraft.getInstance().displayGuiScreen(new ScreenQuestingDevice(player));
+        Minecraft.getInstance().displayGuiScreen(new ScreenQuestingDevice());
         return super.onItemRightClick(world, player, hand);
     }
 }

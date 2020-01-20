@@ -81,6 +81,11 @@ public class Line implements IQuestingGuiElement {
     }
 
     @Override
+    public void onKeyPress(int key, int mod) {
+
+    }
+
+    @Override
     public int getWidth() {
         return 0;
     }

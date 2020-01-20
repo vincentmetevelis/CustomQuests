@@ -18,18 +18,15 @@ import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import org.codehaus.plexus.util.CollectionUtils;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 public class QuestUserProgress implements IJsonProvider{
     private String uuid;
     private int partyId;
     private List<Integer> completedQuestsIds;
-    private List<QuestStatus> questStatuses;
+    private Map<Integer, QuestStatus> questStatuses;
 
-    public QuestUserProgress(String uuid, int partyId, List<Integer> completedQuestsIds, List<QuestStatus> questStatuses){
+    public QuestUserProgress(String uuid, int partyId, List<Integer> completedQuestsIds, Map<Integer, QuestStatus> questStatuses){
         this.uuid = uuid;
         this.partyId = partyId;
         this.completedQuestsIds = completedQuestsIds;
@@ -39,27 +36,27 @@ public class QuestUserProgress implements IJsonProvider{
             allQuestIds.add(quest.getId());
         }
         List<Integer> allQuestStatusIds = new ArrayList<>();
-        for(QuestStatus quest : questStatuses){
-            allQuestStatusIds.add(quest.getQuestId());
+        for(Map.Entry<Integer, QuestStatus> quest : questStatuses.entrySet()){
+            allQuestStatusIds.add(quest.getValue().getQuestId());
         }
 
         List<Integer> nonPresentQuestList = new ArrayList<>(allQuestIds);
         nonPresentQuestList.removeAll(allQuestStatusIds);
 
         for(int questId : nonPresentQuestList){
-            this.questStatuses.add(new QuestStatus(questId, false, new ArrayList<>()));
+            this.questStatuses.put(questId, new QuestStatus(questId, false, new ArrayList<>()));
         }
         Ref.shouldSaveNextTick = true;
     }
 
     public static boolean areAllRequirementsCompleted(String uuid, int questId){
         boolean isCompleted = true;
-        for(QuestUserProgress userprogress : Ref.ALL_QUESTING_PROGRESS) {
-            if (userprogress.uuid.equals(uuid)) {
-                for (QuestStatus playerStatus : userprogress.questStatuses) {
-                    if(playerStatus.getQuestId() == questId){
+        for(Map.Entry<String, QuestUserProgress> userprogress : Ref.ALL_QUESTING_PROGRESS.entrySet()) {
+            if (userprogress.getValue().getUuid().equals(uuid)) {
+                for (Map.Entry<Integer, QuestStatus> playerStatus : userprogress.getValue().getQuestStatuses().entrySet()) {
+                    if(playerStatus.getValue().getQuestId() == questId){
                         int countQrs = 0;
-                        for(QuestRequirementStatus qrs : playerStatus.getQuestRequirementStatuses()){
+                        for(QuestRequirementStatus qrs : playerStatus.getValue().getQuestRequirementStatuses()){
                             if(!isRequirementCompleted(uuid, questId, countQrs)){
                                 isCompleted = false;
                             }
@@ -73,9 +70,9 @@ public class QuestUserProgress implements IJsonProvider{
     }
 
     public static QuestUserProgress getUserProgressForUuid(String uuid){
-        for(QuestUserProgress userProgress : Ref.ALL_QUESTING_PROGRESS){
-            if(userProgress.getUuid().equals(uuid)){
-                return userProgress;
+        for(Map.Entry<String, QuestUserProgress> userProgress : Ref.ALL_QUESTING_PROGRESS.entrySet()){
+            if(userProgress.getValue().getUuid().equals(uuid)){
+                return userProgress.getValue();
             }
         }
         return null;
@@ -83,11 +80,11 @@ public class QuestUserProgress implements IJsonProvider{
 
     public static boolean isRequirementCompleted(String uuid, int questId, int reqId){
         boolean isCompleted = true;
-        for(QuestUserProgress userprogress : Ref.ALL_QUESTING_PROGRESS){
-            if(userprogress.uuid.equals(uuid)){ // get player
-                for(QuestStatus playerStatus : userprogress.getQuestStatuses()){
-                    if(playerStatus.getQuestId() == questId){ //then for the quest id
-                        for(QuestRequirementStatus reqStatus : playerStatus.getQuestRequirementStatuses()){
+        for(Map.Entry<String, QuestUserProgress> userprogress : Ref.ALL_QUESTING_PROGRESS.entrySet()){
+            if(userprogress.getKey().equals(uuid)){ // get player
+                for(Map.Entry<Integer, QuestStatus> playerStatus : userprogress.getValue().getQuestStatuses().entrySet()){
+                    if(playerStatus.getKey() == questId){ //then for the quest id
+                        for(QuestRequirementStatus reqStatus : playerStatus.getValue().getQuestRequirementStatuses()){
                             if(reqStatus.getRequirementId() == reqId){ // with the requirement id
                                 int countSubReqProgress = 0;
                                 for(int subReqProgress : reqStatus.getProgress()){ //get sub requirements
@@ -112,9 +109,9 @@ public class QuestUserProgress implements IJsonProvider{
     }
 
     public static int getItemCountLeftToHandIn(String uuid, int questId, int reqId, int subReqId){
-        for(QuestUserProgress progress : Ref.ALL_QUESTING_PROGRESS){
-            if(progress.getUuid().equals(uuid)){
-                int currentCount = progress.getQuestStatuses().get(questId).getQuestRequirementStatuses().get(reqId).getProgress(subReqId);
+        for(Map.Entry<String, QuestUserProgress> progress : Ref.ALL_QUESTING_PROGRESS.entrySet()){
+            if(progress.getValue().getUuid().equals(uuid)){
+                int currentCount = progress.getValue().getQuestStatuses().get(questId).getQuestRequirementStatuses().get(reqId).getProgress(subReqId);
                 int questCompletionCount = Quest.getQuestFromId(questId).getRequirements().get(reqId).getSubRequirements().get(subReqId).getCompletionNumber();
                 return questCompletionCount - currentCount;
             }
@@ -123,11 +120,11 @@ public class QuestUserProgress implements IJsonProvider{
     }
 
     public static boolean isRewardClaimed(String uuid, int questId){
-        for(QuestUserProgress progress : Ref.ALL_QUESTING_PROGRESS){
-            if(progress.getUuid().equals(uuid)){
-                for(QuestStatus reqStatus : progress.questStatuses){
-                    if(reqStatus.getQuestId() == questId){
-                        return reqStatus.isClaimed();
+        for(Map.Entry<String, QuestUserProgress> progress : Ref.ALL_QUESTING_PROGRESS.entrySet()){
+            if(progress.getValue().getUuid().equals(uuid)){
+                for(Map.Entry<Integer, QuestStatus> reqStatus : progress.getValue().getQuestStatuses().entrySet()){
+                    if(reqStatus.getValue().getQuestId() == questId){
+                        return reqStatus.getValue().isClaimed();
                     }
                 }
             }
@@ -136,11 +133,11 @@ public class QuestUserProgress implements IJsonProvider{
     }
 
     public static void setRewardsClaimed(String uuid, int questId){
-        for(QuestUserProgress progress : Ref.ALL_QUESTING_PROGRESS){
-            if(progress.getUuid().equals(uuid)){
-                for(QuestStatus reqStatus : progress.questStatuses){
-                    if(reqStatus.getQuestId() == questId){
-                        reqStatus.setClaimed(true);
+        for(Map.Entry<String, QuestUserProgress> progress : Ref.ALL_QUESTING_PROGRESS.entrySet()){
+            if(progress.getValue().getUuid().equals(uuid)){
+                for(Map.Entry<Integer, QuestStatus> reqStatus : progress.getValue().getQuestStatuses().entrySet()){
+                    if(reqStatus.getValue().getQuestId() == questId){
+                        reqStatus.getValue().setClaimed(true);
                     }
                 }
             }
@@ -148,12 +145,12 @@ public class QuestUserProgress implements IJsonProvider{
     }
 
     public static void setPlayerProgressToCompleted(String uuid, int questId, int reqId, int subReqId){
-        for(QuestUserProgress userprogress : Ref.ALL_QUESTING_PROGRESS) {
-            if(userprogress.getUuid().equals(uuid)) {
-                for(QuestStatus status : userprogress.getQuestStatuses()) {
-                    if(status.getQuestId() == questId){
+        for(Map.Entry<String, QuestUserProgress> userprogress : Ref.ALL_QUESTING_PROGRESS.entrySet()) {
+            if(userprogress.getValue().getUuid().equals(uuid)) {
+                for(Map.Entry<Integer, QuestStatus> status : userprogress.getValue().getQuestStatuses().entrySet()) {
+                    if(status.getValue().getQuestId() == questId){
                         int reqCount = 0;
-                        for(QuestRequirementStatus reqStatus : status.getQuestRequirementStatuses()){
+                        for(QuestRequirementStatus reqStatus : status.getValue().getQuestRequirementStatuses()){
                             if(reqCount == reqId){
                                 reqStatus.setProgress(subReqId, Quest.getQuestFromId(questId).getRequirements().get(reqId).getSubRequirements().get(subReqId).getCompletionNumber());
                             }
@@ -166,12 +163,12 @@ public class QuestUserProgress implements IJsonProvider{
     }
 
     public static void addPlayerProgress(String uuid, int questId, int reqId, int subReqId, int amount){
-        for(QuestUserProgress userprogress : Ref.ALL_QUESTING_PROGRESS) {
-            if(userprogress.getUuid().equals(uuid)) {
-                for(QuestStatus status : userprogress.getQuestStatuses()) {
-                    if(status.getQuestId() == questId){
+        for(Map.Entry<String, QuestUserProgress> userprogress : Ref.ALL_QUESTING_PROGRESS.entrySet()) {
+            if(userprogress.getValue().getUuid().equals(uuid)) {
+                for(Map.Entry<Integer, QuestStatus> status : userprogress.getValue().getQuestStatuses().entrySet()) {
+                    if(status.getValue().getQuestId() == questId){
                         int reqCount = 0;
-                        for(QuestRequirementStatus reqStatus : status.getQuestRequirementStatuses()){
+                        for(QuestRequirementStatus reqStatus : status.getValue().getQuestRequirementStatuses()){
                             if(reqCount == reqId){
                                 reqStatus.setProgress(subReqId, reqStatus.getProgress(subReqId) + amount);
                             }
@@ -212,7 +209,7 @@ public class QuestUserProgress implements IJsonProvider{
         return completedQuestsIds;
     }
 
-    public List<QuestStatus> getQuestStatuses() {
+    public Map<Integer, QuestStatus> getQuestStatuses() {
         return questStatuses;
     }
 
@@ -229,19 +226,27 @@ public class QuestUserProgress implements IJsonProvider{
             }
         }
     }
+    public void addCompletedQuest(int questId){
+        if(!this.completedQuestsIds.contains(questId)){
+            this.completedQuestsIds.add(questId);
+            Ref.shouldSaveNextTick = true;
+        }
+    }
+
+
     
     public void deleteCompletedQuest(int questId){
         this.completedQuestsIds.remove(questId);
         Ref.shouldSaveNextTick = true;
     }
 
-    public void setQuestStatuses(List<QuestStatus> questStatuses) {
+    public void setQuestStatuses(Map<Integer, QuestStatus> questStatuses) {
         this.questStatuses = questStatuses;
         Ref.shouldSaveNextTick = true;
     }
 
     public void addQuestStatus(QuestStatus questStatus){
-        this.questStatuses.add(questStatus);
+        this.questStatuses.put(questStatus.getQuestId(), questStatus);
         Ref.shouldSaveNextTick = true;
     }
 
@@ -259,10 +264,23 @@ public class QuestUserProgress implements IJsonProvider{
         }
         json.add("completed_quests", completedQuestArray);
         JsonArray questStatusArray = new JsonArray();
-        for(QuestStatus questStatusId : questStatuses){
-            questStatusArray.add(questStatusId.getJson());
+        for(Map.Entry<Integer, QuestStatus> questStatusId : questStatuses.entrySet()){
+            questStatusArray.add(questStatusId.getValue().getJson());
         }
         json.add("quest_status", questStatusArray);
         return json;
+    }
+
+    @Override
+    public String toString() {
+        return getJson().toString();
+    }
+
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
+    }
+
+    public void setCompletedQuestsIds(List<Integer> completedQuestsIds) {
+        this.completedQuestsIds = completedQuestsIds;
     }
 }

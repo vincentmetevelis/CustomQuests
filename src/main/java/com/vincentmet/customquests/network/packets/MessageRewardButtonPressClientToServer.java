@@ -24,10 +24,10 @@ public class MessageRewardButtonPressClientToServer {
 
     public static void handle(final MessageRewardButtonPressClientToServer message, Supplier<NetworkEvent.Context> ctx) {
         ctx.get().enqueueWork(() -> {
-            QuestUserProgress.getUserProgressForUuid(Utils.simplifyUUID(ctx.get().getSender().getUniqueID())).getQuestStatuses().stream().filter(questStatus -> questStatus.getQuestId() == message.questId).forEach(questStatus -> {
-                if(!questStatus.isClaimed()){
+            QuestUserProgress.getUserProgressForUuid(Utils.simplifyUUID(ctx.get().getSender().getUniqueID())).getQuestStatuses().entrySet().stream().filter(questStatus -> questStatus.getValue().getQuestId() == message.questId).forEach(questStatus -> {
+                if(!questStatus.getValue().isClaimed()){
                     Quest.getQuestFromId(message.questId).getRewards().forEach(reward -> reward.getReward().executeReward(ctx.get().getSender()));
-                    questStatus.setClaimed(true);
+                    questStatus.getValue().setClaimed(true);
                 }
             });
         });

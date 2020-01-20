@@ -1,6 +1,7 @@
 package com.vincentmet.customquests.screens.elements.labels;
 
 import com.vincentmet.customquests.lib.Ref;
+import com.vincentmet.customquests.lib.Utils;
 import com.vincentmet.customquests.screens.elements.IQuestingGuiElement;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.entity.player.PlayerEntity;
@@ -24,8 +25,9 @@ public class MultilineLabel implements IQuestingGuiElement {
         this.root = root;
         this.x = posX;
         this.y = posY;
-        this.text = text;
-        this.color = color;this.maxWidth = maxWidth;
+        this.text = Utils.colorify(text);//fixme formatting resets every new line, make it so that it gets the active formatting elements from the last string after splitting it.
+        this.color = color;
+        this.maxWidth = maxWidth;
     }
 
     @Override
@@ -35,28 +37,8 @@ public class MultilineLabel implements IQuestingGuiElement {
 
     @Override
     public void render(PlayerEntity player, double mouseX, double mouseY) {
-        List<String> lines = new ArrayList<>();
-        List<String> spaceSplitText = Arrays.asList(text.split(" "));
-
-        String lastLine = "";
-        boolean isFirstWord = true;
-        for(String word : spaceSplitText){
-            if(Ref.FONT_RENDERER.getStringWidth(lastLine + " " + word) <= maxWidth){
-                if(isFirstWord){
-                    lastLine += word;
-                    isFirstWord = false;
-                }else{
-                    lastLine += (" " + word);
-                }
-            }else{
-                lines.add(lastLine);
-                lastLine = word;
-            }
-        }
-        lines.add(lastLine);
-
         int currentHeight = y;
-        for(String line : lines){
+        for(String line : Ref.FONT_RENDERER.listFormattedStringToWidth(text, maxWidth)){
             root.drawString(Ref.FONT_RENDERER, line, x, currentHeight, color);
             currentHeight += Ref.FONT_RENDERER.FONT_HEIGHT;
         }
@@ -64,6 +46,11 @@ public class MultilineLabel implements IQuestingGuiElement {
 
     @Override
     public void onClick(PlayerEntity player, double mouseX, double mouseY) {
+
+    }
+
+    @Override
+    public void onKeyPress(int key, int mod) {
 
     }
 

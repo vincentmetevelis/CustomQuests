@@ -21,7 +21,7 @@ public class ButtonQuestline implements IQuestingGuiElement {
     private int x;
     private int y;
     private QuestLine questLine;
-    private Label label = new Label(null, "", 0, 0, 0xFFFFFF, false, false);
+    private Label label;
 
     public ButtonQuestline(Screen root, int x, int y, QuestLine questline){
         this.root = root;
@@ -58,6 +58,11 @@ public class ButtonQuestline implements IQuestingGuiElement {
             SubScreenQuestDetails.setActiveQuest(-1);
         }
         label.onClick(player, mouseX, mouseY);
+    }
+
+    @Override
+    public void onKeyPress(int key, int mod) {
+
     }
 
     @Override

@@ -8,6 +8,8 @@ import com.vincentmet.customquests.lib.handlers.StructureHandler;
 import com.vincentmet.customquests.quests.QuestUserProgress;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.network.NetworkEvent;
+
+import java.util.Map;
 import java.util.function.Supplier;
 
 public class MessageUpdateQuestProgressServerToClient {
@@ -22,13 +24,13 @@ public class MessageUpdateQuestProgressServerToClient {
     }
 
     public static void encode(MessageUpdateQuestProgressServerToClient packet, PacketBuffer buffer){
-        JsonObject json = new JsonObject();
+        /*JsonObject json = new JsonObject();
         JsonArray playerArray = new JsonArray();
-        for(QuestUserProgress user : Ref.ALL_QUESTING_PROGRESS){
-            playerArray.add(user.getJson());
+        for(Map.Entry<String, QuestUserProgress> user : Ref.ALL_QUESTING_PROGRESS.entrySet()){
+            playerArray.add(user.getValue().getJson());
         }
         json.add("players", playerArray);
-        buffer.writeString(json.toString());
+        buffer.writeString(json.toString());*/
     }
 
     public static MessageUpdateQuestProgressServerToClient decode(PacketBuffer buffer) {
@@ -38,10 +40,10 @@ public class MessageUpdateQuestProgressServerToClient {
     }
 
     public static void handle(final MessageUpdateQuestProgressServerToClient message, Supplier<NetworkEvent.Context> ctx) {
-        ctx.get().enqueueWork(() -> {
+        /*ctx.get().enqueueWork(() -> {
             StructureHandler.initQuestingProgress(message.json);
             Ref.shouldSaveNextTick = false;
-        });
+        });*/
         ctx.get().setPacketHandled(true);
     }
 }

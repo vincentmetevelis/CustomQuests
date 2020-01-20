@@ -14,6 +14,8 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class Quest implements IJsonProvider{
     private int id;
@@ -71,9 +73,9 @@ public class Quest implements IJsonProvider{
     }
 
     public static boolean isQuestCompletedForPlayer(String playerUuid, int questId){
-        for(QuestUserProgress userprogress : Ref.ALL_QUESTING_PROGRESS){
-            if(userprogress.getUuid().equals(playerUuid)){
-                for(int id : userprogress.getCompletedQuestsIds()){
+        for(Map.Entry<String, QuestUserProgress> userprogress : Ref.ALL_QUESTING_PROGRESS.entrySet()){
+            if(userprogress.getKey().equals(playerUuid)){
+                for(int id : userprogress.getValue().getCompletedQuestsIds()){
                     if(questId == id){
                         return true;
                     }
@@ -114,8 +116,8 @@ public class Quest implements IJsonProvider{
     }
 
     public static boolean isQuestLocked(String uuid, int questId){
-        for (QuestUserProgress userProgress : Ref.ALL_QUESTING_PROGRESS) {
-            if(userProgress.getUuid().equals(uuid)){
+        for (Map.Entry<String, QuestUserProgress> userProgress : Ref.ALL_QUESTING_PROGRESS.entrySet()) {
+            if(userProgress.getValue().getUuid().equals(uuid)){
                 if (Quest.isQuestCompletedForPlayer(uuid, questId) || Quest.hasQuestUncompletedDependenciesForPlayer(uuid, questId)){
                     return true;
                 }
@@ -135,8 +137,8 @@ public class Quest implements IJsonProvider{
     }
 
     public static boolean isQuestActive(String uuid, int questId){
-        for (QuestUserProgress userProgress : Ref.ALL_QUESTING_PROGRESS) {
-            if(userProgress.getUuid().equals(uuid)){
+        for (Map.Entry<String, QuestUserProgress> userProgress : Ref.ALL_QUESTING_PROGRESS.entrySet()) {
+            if(userProgress.getValue().getUuid().equals(uuid)){
                 if (!Quest.isQuestCompletedForPlayer(uuid, questId) && !Quest.isQuestLocked(uuid, questId)){
                     return true;
                 }

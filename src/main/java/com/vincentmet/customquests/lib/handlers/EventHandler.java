@@ -1,7 +1,5 @@
 package com.vincentmet.customquests.lib.handlers;
 
-import com.google.gson.JsonObject;
-import com.vincentmet.customquests.BaseClass;
 import com.vincentmet.customquests.Objects;
 import com.vincentmet.customquests.lib.Ref;
 import com.vincentmet.customquests.lib.Triple;
@@ -10,6 +8,8 @@ import com.vincentmet.customquests.network.packets.*;
 import com.vincentmet.customquests.quests.*;
 import com.mojang.datafixers.util.Pair;
 import com.vincentmet.customquests.screens.ScreenQuestingDevice;
+import com.vincentmet.customquests.screens.questingdeveicesubscreens.SubScreenQuestDetails;
+import com.vincentmet.customquests.screens.questingdeveicesubscreens.SubScreensQuestingDevice;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.player.PlayerEntity;
@@ -33,7 +33,9 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.loading.FMLPaths;
 import net.minecraftforge.fml.network.PacketDistributor;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Mod.EventBusSubscriber(modid = Ref.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class EventHandler {
@@ -79,14 +81,25 @@ public class EventHandler {
             }
         }
         if(QuestUserProgress.getUserProgressForUuid(Utils.simplifyUUID(event.getPlayer().getUniqueID()))==null){
-            Ref.ALL_QUESTING_PROGRESS.add(new QuestUserProgress(Utils.simplifyUUID(event.getPlayer().getUniqueID()), Ref.ERR_MSG_INT_INVALID_JSON, new ArrayList<>(), new ArrayList<>()));
+            QuestUserProgress newQup = new QuestUserProgress(Utils.simplifyUUID(event.getPlayer().getUniqueID()), Ref.ERR_MSG_INT_INVALID_JSON, new ArrayList<>(), new HashMap<>());
+            Ref.ALL_QUESTING_PROGRESS.put(newQup.getUuid(), newQup);
             Ref.shouldSaveNextTick = true;
         }
 
+        PacketHelper.sendAllProgressUpdatePackets((ServerPlayerEntity)event.getPlayer());
         PacketHandler.CHANNEL.send(PacketDistributor.PLAYER.with(()->(ServerPlayerEntity)event.getPlayer()), new MessageUpdateQuestsServerToClient());
         PacketHandler.CHANNEL.send(PacketDistributor.PLAYER.with(()->(ServerPlayerEntity)event.getPlayer()), new MessageUpdateQuestbookServerToClient());
-        PacketHandler.CHANNEL.send(PacketDistributor.PLAYER.with(()->(ServerPlayerEntity)event.getPlayer()), new MessageUpdateQuestProgressServerToClient());
+        //PacketHandler.CHANNEL.send(PacketDistributor.PLAYER.with(()->(ServerPlayerEntity)event.getPlayer()), new MessageUpdateQuestProgressServerToClient());
         PacketHandler.CHANNEL.send(PacketDistributor.PLAYER.with(()->(ServerPlayerEntity)event.getPlayer()), new MessageUpdateQuestPartiesServerToClient());
+    }
+
+    @SubscribeEvent
+    public static void onPlayerLoggingOff(PlayerEvent.PlayerLoggedOutEvent event){
+        if(event.getPlayer().world.isRemote){
+            Ref.ALL_QUESTING_PROGRESS = new HashMap<>();
+            ScreenQuestingDevice.setActiveScreen(SubScreensQuestingDevice.QUESTLINES);
+            SubScreenQuestDetails.setActiveQuest(-1);
+        }
     }
 
     @SubscribeEvent
@@ -95,7 +108,8 @@ public class EventHandler {
             if(Ref.shouldSaveNextTick){
                 JsonHandler.writeAll(Ref.questsLocation, Ref.questBookLocation, Ref.questingProgressLocation, Ref.questingPartiesLocation);
                 for(PlayerEntity player : event.world.getPlayers()){
-                    PacketHandler.CHANNEL.send(PacketDistributor.PLAYER.with(()->(ServerPlayerEntity)player), new MessageUpdateQuestProgressServerToClient(new JsonObject()));
+                    PacketHelper.sendAllProgressUpdatePackets((ServerPlayerEntity)player);
+                    //PacketHandler.CHANNEL.send(PacketDistributor.PLAYER.with(()->(ServerPlayerEntity)player), new MessageUpdateQuestProgressServerToClient(new JsonObject()));
                 }
                 Ref.shouldSaveNextTick = false;
             }
@@ -142,9 +156,9 @@ public class EventHandler {
 
             for(Quest quest : Ref.ALL_QUESTS){
                 if(QuestUserProgress.areAllRequirementsCompleted(Utils.simplifyUUID(playerEntity.getUniqueID()), quest.getId())){
-                    for(QuestUserProgress userprogress : Ref.ALL_QUESTING_PROGRESS){
-                        if(userprogress.getUuid().equals(Utils.simplifyUUID(playerEntity.getUniqueID()))){
-                            userprogress.addCompletedQuest(quest.getId(), world, playerEntity);
+                    for(Map.Entry<String, QuestUserProgress> userprogress : Ref.ALL_QUESTING_PROGRESS.entrySet()){
+                        if(userprogress.getKey().equals(Utils.simplifyUUID(playerEntity.getUniqueID()))){
+                            userprogress.getValue().addCompletedQuest(quest.getId(), world, playerEntity);
                         }
                     }
                 }
@@ -175,7 +189,7 @@ public class EventHandler {
     @SubscribeEvent
     public static void onKeyPress(InputEvent.KeyInputEvent event){
         if(Objects.KeyBindings.OPEN_QUESTINGDEVICE.isPressed()){
-            Minecraft.getInstance().displayGuiScreen(new ScreenQuestingDevice(BaseClass.proxy.getClientPlayer()));
+            Minecraft.getInstance().displayGuiScreen(new ScreenQuestingDevice());
         }
     }
 }

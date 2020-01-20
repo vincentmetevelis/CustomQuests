@@ -72,4 +72,9 @@ public class QuestStatus implements IJsonProvider{
         json.add("requirement_completion", questRequirementStatusArray);
         return json;
     }
+
+    @Override
+    public String toString() {
+        return getJson().toString();
+    }
 }
