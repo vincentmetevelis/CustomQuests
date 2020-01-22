@@ -100,6 +100,9 @@ public class TextField {
                 }
             }
         }
+        if(key == GLFW.GLFW_KEY_B){
+            insertCharAtPos('b');
+        }
     }
 
     public static String getFirstNCharsOfString(String text, int n){
@@ -107,5 +110,11 @@ public class TextField {
         StringBuilder newString = new StringBuilder();
         for(int j=0;j<n;j++) newString.append(chars[j]);
         return newString.toString();
+    }
+
+    private void insertCharAtPos(char c){
+        Vec2i cursorPos = this.cursorPos;
+        this.text.set(cursorPos.getY(), this.text.get(cursorPos.getY()).substring(0, cursorPos.getX()) + c + text.get(cursorPos.getY()).substring(cursorPos.getX()));
+        this.cursorPos.add(1, 0);
     }
 }

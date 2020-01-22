@@ -40,7 +40,6 @@ public class MessageUpdateSingleQuestProgressServerToClient {
                 json.add("content", questStatus.getValue().getJson());
             }
         }
-        System.out.println(json);
         buffer.writeString(json.toString());
     }
 
@@ -59,7 +58,6 @@ public class MessageUpdateSingleQuestProgressServerToClient {
                 return new QuestUserProgress(uuidLambda, Ref.ERR_MSG_INT_INVALID_JSON, new ArrayList<>(), new HashMap<>());
             }).getQuestStatuses().put(questId, StructureHandler.initSingleQuestProgressForUser(json));//todo
             Ref.shouldSaveNextTick = false;
-            System.out.println(json);
         });
         ctx.get().setPacketHandled(true);
     }

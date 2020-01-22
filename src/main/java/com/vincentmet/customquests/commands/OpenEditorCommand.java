@@ -1,21 +1,20 @@
 package com.vincentmet.customquests.commands;
 
 import com.mojang.brigadier.builder.ArgumentBuilder;
-import com.vincentmet.customquests.Objects;
-import com.vincentmet.customquests.screens.ScreenQuestingEditor;
-import net.minecraft.client.Minecraft;
+import com.vincentmet.customquests.lib.handlers.PacketHandler;
+import com.vincentmet.customquests.network.packets.MessageOpenEditorGuiServerToClient;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
-import net.minecraft.command.arguments.EntityArgument;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.common.MinecraftForge;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraftforge.fml.network.PacketDistributor;
 
 public class OpenEditorCommand {
     public static ArgumentBuilder<CommandSource, ?> register() {
         return Commands.literal("editor")
                 .requires(cs -> cs.hasPermissionLevel(2))
                 .executes(context -> {
-                    //Minecraft.getInstance().displayGuiScreen(new ScreenQuestingEditor());//TODO packetify this
+                    ServerPlayerEntity spe = context.getSource().asPlayer();
+                    PacketHandler.CHANNEL.send(PacketDistributor.PLAYER.with(() -> spe), new MessageOpenEditorGuiServerToClient());
                     return 0;
                 })
         ;

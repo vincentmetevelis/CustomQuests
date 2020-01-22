@@ -22,7 +22,6 @@ public class PacketHandler {
     }
 
     public static void init() {
-        CHANNEL.registerMessage(nextID(), MessageUpdateQuestProgressServerToClient.class, MessageUpdateQuestProgressServerToClient::encode, MessageUpdateQuestProgressServerToClient::decode, MessageUpdateQuestProgressServerToClient::handle);
         CHANNEL.registerMessage(nextID(), MessageUpdateSingleQuestProgressServerToClient.class, MessageUpdateSingleQuestProgressServerToClient::encode, MessageUpdateSingleQuestProgressServerToClient::decode, MessageUpdateSingleQuestProgressServerToClient::handle);
         CHANNEL.registerMessage(nextID(), MessageUpdateQuestUserProgressServerToClient.class, MessageUpdateQuestUserProgressServerToClient::encode, MessageUpdateQuestUserProgressServerToClient::decode, MessageUpdateQuestUserProgressServerToClient::handle);
         CHANNEL.registerMessage(nextID(), MessageUpdateQuestbookServerToClient.class, MessageUpdateQuestbookServerToClient::encode, MessageUpdateQuestbookServerToClient::decode, MessageUpdateQuestbookServerToClient::handle);
@@ -30,5 +29,6 @@ public class PacketHandler {
         CHANNEL.registerMessage(nextID(), MessageRewardButtonPressClientToServer.class, MessageRewardButtonPressClientToServer::encode, MessageRewardButtonPressClientToServer::decode, MessageRewardButtonPressClientToServer::handle);
         CHANNEL.registerMessage(nextID(), MessageHandInButtonPressClientToServer.class, MessageHandInButtonPressClientToServer::encode, MessageHandInButtonPressClientToServer::decode, MessageHandInButtonPressClientToServer::handle);
         CHANNEL.registerMessage(nextID(), MessageUpdateQuestPartiesServerToClient.class, MessageUpdateQuestPartiesServerToClient::encode, MessageUpdateQuestPartiesServerToClient::decode, MessageUpdateQuestPartiesServerToClient::handle);
+        CHANNEL.registerMessage(nextID(), MessageOpenEditorGuiServerToClient.class, MessageOpenEditorGuiServerToClient::encode, MessageOpenEditorGuiServerToClient::decode, MessageOpenEditorGuiServerToClient::handle);
     }
 }

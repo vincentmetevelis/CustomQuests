@@ -89,7 +89,6 @@ public class EventHandler {
         PacketHelper.sendAllProgressUpdatePackets((ServerPlayerEntity)event.getPlayer());
         PacketHandler.CHANNEL.send(PacketDistributor.PLAYER.with(()->(ServerPlayerEntity)event.getPlayer()), new MessageUpdateQuestsServerToClient());
         PacketHandler.CHANNEL.send(PacketDistributor.PLAYER.with(()->(ServerPlayerEntity)event.getPlayer()), new MessageUpdateQuestbookServerToClient());
-        //PacketHandler.CHANNEL.send(PacketDistributor.PLAYER.with(()->(ServerPlayerEntity)event.getPlayer()), new MessageUpdateQuestProgressServerToClient());
         PacketHandler.CHANNEL.send(PacketDistributor.PLAYER.with(()->(ServerPlayerEntity)event.getPlayer()), new MessageUpdateQuestPartiesServerToClient());
     }
 
@@ -97,6 +96,7 @@ public class EventHandler {
     public static void onPlayerLoggingOff(PlayerEvent.PlayerLoggedOutEvent event){
         if(event.getPlayer().world.isRemote){
             Ref.ALL_QUESTING_PROGRESS = new HashMap<>();
+            Ref.ALL_QUESTING_PARTIES = new ArrayList<>();
             ScreenQuestingDevice.setActiveScreen(SubScreensQuestingDevice.QUESTLINES);
             SubScreenQuestDetails.setActiveQuest(-1);
         }
@@ -109,7 +109,6 @@ public class EventHandler {
                 JsonHandler.writeAll(Ref.questsLocation, Ref.questBookLocation, Ref.questingProgressLocation, Ref.questingPartiesLocation);
                 for(PlayerEntity player : event.world.getPlayers()){
                     PacketHelper.sendAllProgressUpdatePackets((ServerPlayerEntity)player);
-                    //PacketHandler.CHANNEL.send(PacketDistributor.PLAYER.with(()->(ServerPlayerEntity)player), new MessageUpdateQuestProgressServerToClient(new JsonObject()));
                 }
                 Ref.shouldSaveNextTick = false;
             }
