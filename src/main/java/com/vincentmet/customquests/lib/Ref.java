@@ -1,18 +1,15 @@
 package com.vincentmet.customquests.lib;
 
+import com.mojang.datafixers.util.Pair;
 import com.vincentmet.customquests.quests.Quest;
 import com.vincentmet.customquests.quests.QuestMenu;
 import com.vincentmet.customquests.quests.QuestUserProgress;
 import com.vincentmet.customquests.quests.party.Party;
-import com.vincentmet.customquests.screens.elements.IQuestingGuiElement;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.fonts.FontResourceManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-
-import java.io.File;
+import org.lwjgl.glfw.GLFW;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -68,4 +65,70 @@ public class Ref {
 
     @OnlyIn(Dist.CLIENT)
     public static FontRenderer FONT_RENDERER;
+
+    public static final Map<Integer, Pair<Character, Character>> KEY_MAPPINGS = new HashMap<>();
+    static {
+        KEY_MAPPINGS.put(GLFW.GLFW_KEY_A, new Pair<>('a', 'A'));
+        KEY_MAPPINGS.put(GLFW.GLFW_KEY_B, new Pair<>('b', 'B'));
+        KEY_MAPPINGS.put(GLFW.GLFW_KEY_C, new Pair<>('c', 'C'));
+        KEY_MAPPINGS.put(GLFW.GLFW_KEY_D, new Pair<>('d', 'D'));
+        KEY_MAPPINGS.put(GLFW.GLFW_KEY_E, new Pair<>('e', 'E'));
+        KEY_MAPPINGS.put(GLFW.GLFW_KEY_F, new Pair<>('f', 'F'));
+        KEY_MAPPINGS.put(GLFW.GLFW_KEY_G, new Pair<>('g', 'G'));
+        KEY_MAPPINGS.put(GLFW.GLFW_KEY_H, new Pair<>('h', 'H'));
+        KEY_MAPPINGS.put(GLFW.GLFW_KEY_I, new Pair<>('i', 'I'));
+        KEY_MAPPINGS.put(GLFW.GLFW_KEY_J, new Pair<>('j', 'J'));
+        KEY_MAPPINGS.put(GLFW.GLFW_KEY_K, new Pair<>('k', 'K'));
+        KEY_MAPPINGS.put(GLFW.GLFW_KEY_L, new Pair<>('l', 'L'));
+        KEY_MAPPINGS.put(GLFW.GLFW_KEY_M, new Pair<>('m', 'M'));
+        KEY_MAPPINGS.put(GLFW.GLFW_KEY_N, new Pair<>('n', 'N'));
+        KEY_MAPPINGS.put(GLFW.GLFW_KEY_O, new Pair<>('o', 'O'));
+        KEY_MAPPINGS.put(GLFW.GLFW_KEY_P, new Pair<>('p', 'P'));
+        KEY_MAPPINGS.put(GLFW.GLFW_KEY_Q, new Pair<>('q', 'Q'));
+        KEY_MAPPINGS.put(GLFW.GLFW_KEY_R, new Pair<>('r', 'R'));
+        KEY_MAPPINGS.put(GLFW.GLFW_KEY_S, new Pair<>('s', 'S'));
+        KEY_MAPPINGS.put(GLFW.GLFW_KEY_T, new Pair<>('t', 'T'));
+        KEY_MAPPINGS.put(GLFW.GLFW_KEY_U, new Pair<>('u', 'U'));
+        KEY_MAPPINGS.put(GLFW.GLFW_KEY_V, new Pair<>('v', 'V'));
+        KEY_MAPPINGS.put(GLFW.GLFW_KEY_W, new Pair<>('w', 'W'));
+        KEY_MAPPINGS.put(GLFW.GLFW_KEY_X, new Pair<>('x', 'X'));
+        KEY_MAPPINGS.put(GLFW.GLFW_KEY_Y, new Pair<>('y', 'Y'));
+        KEY_MAPPINGS.put(GLFW.GLFW_KEY_Z, new Pair<>('z', 'Z'));
+        KEY_MAPPINGS.put(GLFW.GLFW_KEY_0, new Pair<>('0', ')'));
+        KEY_MAPPINGS.put(GLFW.GLFW_KEY_1, new Pair<>('1', '!'));
+        KEY_MAPPINGS.put(GLFW.GLFW_KEY_2, new Pair<>('2', '@'));
+        KEY_MAPPINGS.put(GLFW.GLFW_KEY_3, new Pair<>('3', '#'));
+        KEY_MAPPINGS.put(GLFW.GLFW_KEY_4, new Pair<>('4', '$'));
+        KEY_MAPPINGS.put(GLFW.GLFW_KEY_5, new Pair<>('5', '%'));
+        KEY_MAPPINGS.put(GLFW.GLFW_KEY_6, new Pair<>('6', '^'));
+        KEY_MAPPINGS.put(GLFW.GLFW_KEY_7, new Pair<>('7', '&'));
+        KEY_MAPPINGS.put(GLFW.GLFW_KEY_8, new Pair<>('8', '*'));
+        KEY_MAPPINGS.put(GLFW.GLFW_KEY_9, new Pair<>('9', '('));
+        KEY_MAPPINGS.put(GLFW.GLFW_KEY_KP_0, new Pair<>('0', '0'));
+        KEY_MAPPINGS.put(GLFW.GLFW_KEY_KP_1, new Pair<>('1', '1'));
+        KEY_MAPPINGS.put(GLFW.GLFW_KEY_KP_2, new Pair<>('2', '2'));
+        KEY_MAPPINGS.put(GLFW.GLFW_KEY_KP_3, new Pair<>('3', '3'));
+        KEY_MAPPINGS.put(GLFW.GLFW_KEY_KP_4, new Pair<>('4', '4'));
+        KEY_MAPPINGS.put(GLFW.GLFW_KEY_KP_5, new Pair<>('5', '5'));
+        KEY_MAPPINGS.put(GLFW.GLFW_KEY_KP_6, new Pair<>('6', '6'));
+        KEY_MAPPINGS.put(GLFW.GLFW_KEY_KP_7, new Pair<>('7', '7'));
+        KEY_MAPPINGS.put(GLFW.GLFW_KEY_KP_8, new Pair<>('8', '8'));
+        KEY_MAPPINGS.put(GLFW.GLFW_KEY_KP_9, new Pair<>('9', '9'));
+        KEY_MAPPINGS.put(GLFW.GLFW_KEY_KP_ADD, new Pair<>('+', '+'));
+        KEY_MAPPINGS.put(GLFW.GLFW_KEY_KP_SUBTRACT, new Pair<>('-', '-'));
+        KEY_MAPPINGS.put(GLFW.GLFW_KEY_KP_DIVIDE, new Pair<>('/', '/'));
+        KEY_MAPPINGS.put(GLFW.GLFW_KEY_KP_MULTIPLY, new Pair<>('*', '*'));
+        KEY_MAPPINGS.put(GLFW.GLFW_KEY_KP_EQUAL, new Pair<>('=', '='));
+        KEY_MAPPINGS.put(GLFW.GLFW_KEY_KP_DECIMAL, new Pair<>('.', '.'));
+        KEY_MAPPINGS.put(GLFW.GLFW_KEY_BACKSLASH, new Pair<>('\\', '|'));
+        KEY_MAPPINGS.put(GLFW.GLFW_KEY_GRAVE_ACCENT, new Pair<>('`', '~'));
+        KEY_MAPPINGS.put(GLFW.GLFW_KEY_APOSTROPHE, new Pair<>('\'', '\"'));
+        KEY_MAPPINGS.put(GLFW.GLFW_KEY_COMMA, new Pair<>(',', '<'));
+        KEY_MAPPINGS.put(GLFW.GLFW_KEY_PERIOD, new Pair<>('.', '>'));
+        KEY_MAPPINGS.put(GLFW.GLFW_KEY_SLASH, new Pair<>('/', '?'));
+        KEY_MAPPINGS.put(GLFW.GLFW_KEY_EQUAL, new Pair<>('=', '+'));
+        KEY_MAPPINGS.put(GLFW.GLFW_KEY_MINUS, new Pair<>('-', '_'));
+        KEY_MAPPINGS.put(GLFW.GLFW_KEY_SEMICOLON, new Pair<>(';', ':'));
+        KEY_MAPPINGS.put(GLFW.GLFW_KEY_SPACE, new Pair<>(' ', ' '));
+    }
 }

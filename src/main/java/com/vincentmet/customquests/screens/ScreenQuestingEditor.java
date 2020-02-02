@@ -1,6 +1,7 @@
 package com.vincentmet.customquests.screens;
 
 import com.vincentmet.customquests.BaseClass;
+import com.vincentmet.customquests.lib.MouseDirection;
 import com.vincentmet.customquests.screens.elements.IQuestingGuiElement;
 import com.vincentmet.customquests.screens.questingdeveicesubscreens.SubScreensQuestingDevice;
 import com.vincentmet.customquests.screens.questingeditorsubscreens.SubScreenAllQuestlines;
@@ -67,6 +68,25 @@ public class ScreenQuestingEditor extends Screen {
                 )
         ;
         return super.keyPressed(glfwKey, scanCode, modifierKey);
+    }
+
+    @Override
+    public boolean mouseScrolled(double mouseX, double mouseY, double direction) { // direction: down = -1; up = +1;
+        screens.entrySet()
+                .stream()
+                .filter(subScreensQuestingDeviceIQuestingGuiElementEntry ->
+                        subScreensQuestingDeviceIQuestingGuiElementEntry.getKey().equals(activeScreen)
+                )
+                .forEach(subScreensQuestingDeviceIQuestingGuiElementEntry ->
+                        subScreensQuestingDeviceIQuestingGuiElementEntry.getValue().onMouseScroll(mouseX, mouseY, direction>0? MouseDirection.UP:MouseDirection.DOWN)
+                )
+        ;
+        return super.mouseScrolled(mouseX, mouseY, direction);
+    }
+
+    @Override
+    public boolean keyReleased(int glfwKey, int scanCode, int modifier) {
+        return false;
     }
 
     @Override

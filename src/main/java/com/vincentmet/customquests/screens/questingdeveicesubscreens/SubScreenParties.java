@@ -1,5 +1,6 @@
 package com.vincentmet.customquests.screens.questingdeveicesubscreens;
 
+import com.vincentmet.customquests.lib.MouseDirection;
 import com.vincentmet.customquests.lib.Ref;
 import com.vincentmet.customquests.quests.party.Party;
 import com.vincentmet.customquests.screens.elements.ButtonParty;
@@ -59,6 +60,11 @@ public class SubScreenParties implements IQuestingGuiElement {//todo
 
     @Override
     public void onKeyPress(int key, int mod) {
+
+    }
+
+    @Override
+    public void onMouseScroll(double mouseX, double mouseY, MouseDirection direction) {
 
     }
 

@@ -84,4 +84,22 @@ public class Vec2i{
     public int getYModX(){
         return y % x;
     }
+
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    public void setY(int y) {
+        this.y = y;
+    }
+
+    public void set(int xy){
+        this.x = xy;
+        this.y = xy;
+    }
+
+    public void set(int x, int y){
+        this.x = x;
+        this.y = y;
+    }
 }

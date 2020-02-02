@@ -6,6 +6,7 @@ public enum QuestRequirementType {
     CRAFTING_DETECT("Item(s) to craft"),
     KILL_MOB("Mob(s) to kill"),
     TRAVEL_TO("Travel to location(s)"),
+    CHECK_BOX("Tick the box"),
     RF_DELIVER("RF to hand in"),
     RF_GENERATE("RF to generate"),
     BLOCK_MINE("Block(s) to mine");

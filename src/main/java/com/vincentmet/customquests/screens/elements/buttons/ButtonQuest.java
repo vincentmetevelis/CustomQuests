@@ -1,5 +1,6 @@
 package com.vincentmet.customquests.screens.elements.buttons;
 
+import com.vincentmet.customquests.lib.MouseDirection;
 import com.vincentmet.customquests.lib.Ref;
 import com.vincentmet.customquests.lib.Utils;
 import com.vincentmet.customquests.quests.Quest;
@@ -71,6 +72,11 @@ public class ButtonQuest implements IQuestingGuiElement {
 
     @Override
     public void onKeyPress(int key, int mod) {
+
+    }
+
+    @Override
+    public void onMouseScroll(double mouseX, double mouseY, MouseDirection direction) {
 
     }
 
