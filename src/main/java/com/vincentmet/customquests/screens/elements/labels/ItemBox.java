@@ -36,7 +36,7 @@ public class ItemBox implements IQuestingGuiElement {
     public void render(PlayerEntity player, double mouseX, double mouseY) {
         root.getMinecraft().getTextureManager().bindTexture(Ref.IMAGE_ITEMBOX_BACKGROUND);
         root.blit(x, y, 0, 0, WIDTH, HEIGHT);
-        RenderHelper.enableGUIStandardItemLighting();
+        RenderHelper.setupGui3DDiffuseLighting();//todo test
         Minecraft.getInstance().getItemRenderer().renderItemIntoGUI(itemstack, x+1, y+1);
     }
 

@@ -4,14 +4,9 @@ import com.mojang.datafixers.util.Pair;
 import com.vincentmet.customquests.lib.*;
 import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.text.TextFormatting;
 import org.lwjgl.glfw.GLFW;
-import sun.management.counter.AbstractCounter;
-
-import java.nio.CharBuffer;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.CountedCompleter;
 import java.util.function.Supplier;
 
 public class TextField implements IQuestingGuiElement{

@@ -55,7 +55,7 @@ public class ButtonQuest implements IQuestingGuiElement {
             }
         }
         root.blit(x, y, 0, 0, WIDTH, HEIGHT);
-        RenderHelper.enableGUIStandardItemLighting();
+        RenderHelper.setupGui3DDiffuseLighting();//todo test me
         root.getMinecraft().getItemRenderer().renderItemIntoGUI(new ItemStack(quest.getIcon()), x + 8, y + 7);
 
     }

@@ -12,15 +12,18 @@ apply plugin: 'net.minecraftforge.gradle'
 // Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
-
-version = '1.14.4-1.0.6'
+repositories {
+    maven { url = 'https://dvs1.progwml6.com/files/maven/' }
+    maven { url = 'https://modmaven.k-4u.nl' }
+}
+version = '1.15.2-1.0.0'
 group = 'com.vincentmet.customquests'
 archivesBaseName = 'customquests'
 
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8'
 
 minecraft {
-	mappings channel: 'snapshot', version: '20200119-1.14.4' //Leave it at '20200119-1.14.4' for 1.14, this is the final mapping
+	mappings channel: 'snapshot', version: '20200208-1.15.1'
     runs {
         client {
             workingDirectory project.file('run')
@@ -51,8 +54,9 @@ minecraft {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.14.4-28.1.115'
-	//put JEI here as soft dependency
+    minecraft 'net.minecraftforge:forge:1.15.2-31.1.1'
+    compileOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}:api")
+    runtimeOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}")
 }
 
 jar {
