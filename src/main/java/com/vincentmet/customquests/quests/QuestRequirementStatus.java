@@ -15,7 +15,7 @@ public class QuestRequirementStatus implements IJsonArrayProvider{
         this.questId = questId;
         this.requirementId = requirementId;
         this.progress = progress;
-        int howManyToGenerate = Quest.getQuestFromId(questId).getRequirements().get(requirementId).getSubRequirements().size() - progress.size();
+        int howManyToGenerate = (Quest.getQuestFromId(questId)==null || Quest.getQuestFromId(questId).getRequirements()==null)?0:Quest.getQuestFromId(questId).getRequirements().get(requirementId).getSubRequirements().size() - progress.size();
         int progressSize = progress.size();
         for(int i=progressSize;i<progressSize+howManyToGenerate;i++){
             this.progress.add(0);

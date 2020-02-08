@@ -17,7 +17,7 @@ public class QuestStatus implements IJsonProvider{
         this.claimed = claimed;
         this.questRequirementStatuses = questRequirementStatuses;
         int questReqStat = this.questRequirementStatuses.size();
-        int howManyToGenerate = Quest.getQuestFromId(questId).getRequirements().size() - questReqStat;
+        int howManyToGenerate = (Quest.getQuestFromId(questId)==null || Quest.getQuestFromId(questId).getRequirements()==null)?0:Quest.getQuestFromId(questId).getRequirements().size() - questReqStat;
         for(int i=questReqStat;i<questReqStat+howManyToGenerate;i++){
             this.questRequirementStatuses.add(new QuestRequirementStatus(questId, i, new ArrayList<>()));
         }

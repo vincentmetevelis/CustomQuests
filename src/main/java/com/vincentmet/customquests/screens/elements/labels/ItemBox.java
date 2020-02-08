@@ -1,9 +1,11 @@
 package com.vincentmet.customquests.screens.elements.labels;
 
+import com.vincentmet.customquests.lib.MouseDirection;
 import com.vincentmet.customquests.lib.Ref;
 import com.vincentmet.customquests.screens.elements.IQuestingGuiElement;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
@@ -34,6 +36,7 @@ public class ItemBox implements IQuestingGuiElement {
     public void render(PlayerEntity player, double mouseX, double mouseY) {
         root.getMinecraft().getTextureManager().bindTexture(Ref.IMAGE_ITEMBOX_BACKGROUND);
         root.blit(x, y, 0, 0, WIDTH, HEIGHT);
+        RenderHelper.enableGUIStandardItemLighting();
         Minecraft.getInstance().getItemRenderer().renderItemIntoGUI(itemstack, x+1, y+1);
     }
 
@@ -44,6 +47,11 @@ public class ItemBox implements IQuestingGuiElement {
 
     @Override
     public void onKeyPress(int key, int mod) {
+
+    }
+
+    @Override
+    public void onMouseScroll(double mouseX, double mouseY, MouseDirection direction) {
 
     }
 

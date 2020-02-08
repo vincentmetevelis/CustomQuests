@@ -1,5 +1,6 @@
 package com.vincentmet.customquests.screens.elements;
 
+import com.vincentmet.customquests.lib.MouseDirection;
 import com.vincentmet.customquests.lib.Ref;
 import com.vincentmet.customquests.lib.Utils;
 import com.vincentmet.customquests.screens.elements.labels.Label;
@@ -59,6 +60,11 @@ public class ButtonPartySetting implements IQuestingGuiElement {
 
     @Override
     public void onKeyPress(int key, int mod) {
+
+    }
+
+    @Override
+    public void onMouseScroll(double mouseX, double mouseY, MouseDirection direction) {
 
     }
 

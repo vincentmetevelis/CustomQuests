@@ -38,6 +38,9 @@ public class QuestRequirement implements IJsonProvider{
             case KILL_MOB:
                 json.addProperty("type", "KILL_MOB");
                 break;
+            case CHECK_BOX:
+                json.addProperty("type", "CHECK_BOX");
+                break;
             case BLOCK_MINE:
                 json.addProperty("type", "ITEM_DELIVER");
                 break;
@@ -301,6 +304,34 @@ public class QuestRequirement implements IJsonProvider{
         public void setRadius(int radius) {
             this.radius = radius;
             Ref.shouldSaveNextTick = true;
+        }
+    }
+
+    public static class Checkbox implements IQuestRequirement{
+
+        @Override
+        public JsonObject getJson() {
+            return new JsonObject();
+        }
+
+        @Override
+        public String toString() {
+            return "Tick the Checkbox";
+        }
+
+        @Override
+        public String getLabelText() {
+            return "<- Tick it";
+        }
+
+        @Override
+        public ItemStack getItemStack() {
+            return new ItemStack(Items.BARRIER);
+        }
+
+        @Override
+        public int getCompletionNumber() {
+            return 1;
         }
     }
 

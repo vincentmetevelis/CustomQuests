@@ -87,6 +87,16 @@ public class StructureHandler {
             JsonObject jsonQuestRequirement = jsonQuestRequirementElement.getAsJsonObject();
 
             switch(ConverterHelper.Quests.Requirements.getType(jsonQuestRequirement)){
+                case CHECK_BOX://todo test
+                    List<IQuestRequirement> subQuestRequirementsCheckbox = new ArrayList<>();
+                    for(JsonElement jsonQuestSubRequirementElement : ConverterHelper.Quests.Requirements.getSubRequirements(jsonQuestRequirement)){
+                        subQuestRequirementsCheckbox.add(new QuestRequirement.Checkbox());
+                    }
+                    questRequirementList.add(new QuestRequirement(
+                            QuestRequirementType.CHECK_BOX,
+                            subQuestRequirementsCheckbox
+                    ));
+                    break;
                 case ITEM_DETECT:
                     List<IQuestRequirement> subQuestRequirementsItemDetect = new ArrayList<>();
                     for(JsonElement jsonQuestSubRequirementElement : ConverterHelper.Quests.Requirements.getSubRequirements(jsonQuestRequirement)){

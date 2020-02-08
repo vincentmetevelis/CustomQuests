@@ -5,11 +5,15 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.vincentmet.customquests.screens.ScreenQuestingEditor;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.JsonToNBT;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import org.apache.commons.lang3.StringUtils;
 import javax.net.ssl.HttpsURLConnection;
 import java.io.*;
@@ -144,5 +148,10 @@ public class Utils {
         }catch (IOException e){
             e.printStackTrace();
         }
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    public static void displayEditorGui(){
+        Minecraft.getInstance().displayGuiScreen(new ScreenQuestingEditor());
     }
 }

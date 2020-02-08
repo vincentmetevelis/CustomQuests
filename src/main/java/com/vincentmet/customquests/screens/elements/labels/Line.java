@@ -1,6 +1,7 @@
 package com.vincentmet.customquests.screens.elements.labels;
 
 import com.vincentmet.customquests.lib.LineColor;
+import com.vincentmet.customquests.lib.MouseDirection;
 import com.vincentmet.customquests.lib.Ref;
 import com.vincentmet.customquests.quests.QuestPosition;
 import com.vincentmet.customquests.screens.elements.IQuestingGuiElement;
@@ -82,6 +83,11 @@ public class Line implements IQuestingGuiElement {
 
     @Override
     public void onKeyPress(int key, int mod) {
+
+    }
+
+    @Override
+    public void onMouseScroll(double mouseX, double mouseY, MouseDirection direction) {
 
     }
 

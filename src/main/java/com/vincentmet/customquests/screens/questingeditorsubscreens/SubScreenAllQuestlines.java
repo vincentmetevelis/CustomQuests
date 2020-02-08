@@ -1,6 +1,10 @@
 package com.vincentmet.customquests.screens.questingeditorsubscreens;
 
-import com.vincentmet.customquests.lib.TextField;
+import com.mojang.datafixers.util.Pair;
+import com.vincentmet.customquests.lib.MouseDirection;
+import com.vincentmet.customquests.screens.elements.ScrollableList;
+import com.vincentmet.customquests.screens.elements.TextField;
+import com.vincentmet.customquests.lib.Utils;
 import com.vincentmet.customquests.screens.elements.IQuestingGuiElement;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.entity.player.PlayerEntity;
@@ -14,39 +18,51 @@ public class SubScreenAllQuestlines implements IQuestingGuiElement {
     private int width = 0;
     private int height = 0;
     private TextField txt;
+    private ScrollableList scrollableList = new ScrollableList(0, 0);
 
     public SubScreenAllQuestlines(Screen root){
         this.root = root;
-        List<String> lines = new ArrayList<>();
-        lines.add("Some very long text");
-        lines.add("Short Line");
-        lines.add("Lorum ipsum dolor si amet bla bla bla----------");
-        lines.add("And another short line");
-        lines.add("And another short line");
-        lines.add("And another short line");
-        lines.add("And another short line");//todo fix overflow
-        this.txt = new TextField(root.width>>1, root.height>>1, 300, 7, lines, 0);
+        List<List<Pair<Character, Integer>>> lines = new ArrayList<>();
+        lines.add(TextField.stringToCharIntList(Utils.colorify("Some very long text")));
+        lines.add(TextField.stringToCharIntList(Utils.colorify("Short Line")));
+        lines.add(TextField.stringToCharIntList(Utils.colorify("~GREEN~Lorum ipsum dolor si amet bla bla bla")));
+        lines.add(TextField.stringToCharIntList(Utils.colorify("And another short line")));
+        lines.add(TextField.stringToCharIntList(Utils.colorify("And another short line")));
+        lines.add(TextField.stringToCharIntList(Utils.colorify("And another short line")));
+        lines.add(TextField.stringToCharIntList(Utils.colorify("And another short line")));
+        this.txt = new TextField(root.width>>2, root.height>>2, 300, 7, lines, 0);
     }
 
     @Override
     public void update(PlayerEntity player, double mouseX, double mouseY, int width, int height) {
         this.width = width;
         this.height = height;
+        this.txt.update(player, mouseX, mouseY, root.width>>2, root.height>>2);
+        this.scrollableList.update(player, mouseX, mouseY, root.width>>2, root.height>>2);
     }
 
     @Override
     public void render(PlayerEntity player, double mouseX, double mouseY) {
-        this.txt.render();
+        this.txt.render(player, mouseX, mouseY);
+        this.scrollableList.render(player, mouseX, mouseY);
     }
 
     @Override
     public void onClick(PlayerEntity player, double mouseX, double mouseY) {
-        this.txt.onClick(mouseX, mouseY);
+        this.txt.onClick(player, mouseX, mouseY);
+        this.scrollableList.onClick(player, mouseX, mouseY);
     }
 
     @Override
     public void onKeyPress(int key, int mod) {
         this.txt.onKeyPress(key, mod);
+        this.scrollableList.onKeyPress(key, mod);
+    }
+
+    @Override
+    public void onMouseScroll(double mouseX, double mouseY, MouseDirection direction) {
+        this.txt.onMouseScroll(mouseX, mouseY, direction);
+        this.scrollableList.onMouseScroll(mouseX, mouseY, direction);
     }
 
     @Override
@@ -61,10 +77,6 @@ public class SubScreenAllQuestlines implements IQuestingGuiElement {
 
     @Override
     public boolean isVisible() {
-        return true;
-    }
-
-    private boolean isFocussed(){
         return true;
     }
 }

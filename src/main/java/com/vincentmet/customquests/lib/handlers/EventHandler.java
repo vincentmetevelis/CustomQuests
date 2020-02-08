@@ -32,15 +32,13 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.loading.FMLPaths;
 import net.minecraftforge.fml.network.PacketDistributor;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+
+import java.util.*;
 
 @Mod.EventBusSubscriber(modid = Ref.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class EventHandler {
-    private EventHandler(){}
     private static long lastMillis = System.currentTimeMillis();
+    private static Pair<Integer, Long> lastKey;
     @SubscribeEvent
     public static void registerItems(RegistryEvent.Register<Item> event){
         event.getRegistry().registerAll(
@@ -89,7 +87,6 @@ public class EventHandler {
         PacketHelper.sendAllProgressUpdatePackets((ServerPlayerEntity)event.getPlayer());
         PacketHandler.CHANNEL.send(PacketDistributor.PLAYER.with(()->(ServerPlayerEntity)event.getPlayer()), new MessageUpdateQuestsServerToClient());
         PacketHandler.CHANNEL.send(PacketDistributor.PLAYER.with(()->(ServerPlayerEntity)event.getPlayer()), new MessageUpdateQuestbookServerToClient());
-        //PacketHandler.CHANNEL.send(PacketDistributor.PLAYER.with(()->(ServerPlayerEntity)event.getPlayer()), new MessageUpdateQuestProgressServerToClient());
         PacketHandler.CHANNEL.send(PacketDistributor.PLAYER.with(()->(ServerPlayerEntity)event.getPlayer()), new MessageUpdateQuestPartiesServerToClient());
     }
 
@@ -97,6 +94,7 @@ public class EventHandler {
     public static void onPlayerLoggingOff(PlayerEvent.PlayerLoggedOutEvent event){
         if(event.getPlayer().world.isRemote){
             Ref.ALL_QUESTING_PROGRESS = new HashMap<>();
+            Ref.ALL_QUESTING_PARTIES = new ArrayList<>();
             ScreenQuestingDevice.setActiveScreen(SubScreensQuestingDevice.QUESTLINES);
             SubScreenQuestDetails.setActiveQuest(-1);
         }
@@ -109,7 +107,6 @@ public class EventHandler {
                 JsonHandler.writeAll(Ref.questsLocation, Ref.questBookLocation, Ref.questingProgressLocation, Ref.questingPartiesLocation);
                 for(PlayerEntity player : event.world.getPlayers()){
                     PacketHelper.sendAllProgressUpdatePackets((ServerPlayerEntity)player);
-                    //PacketHandler.CHANNEL.send(PacketDistributor.PLAYER.with(()->(ServerPlayerEntity)player), new MessageUpdateQuestProgressServerToClient(new JsonObject()));
                 }
                 Ref.shouldSaveNextTick = false;
             }
@@ -190,6 +187,16 @@ public class EventHandler {
     public static void onKeyPress(InputEvent.KeyInputEvent event){
         if(Objects.KeyBindings.OPEN_QUESTINGDEVICE.isPressed()){
             Minecraft.getInstance().displayGuiScreen(new ScreenQuestingDevice());
+        }
+    }
+
+    @SubscribeEvent
+    public static void onKeyHold(InputEvent.KeyInputEvent event){
+        if(lastKey == null){
+            lastKey = new Pair<>(event.getKey(), new Date().getTime());
+        }
+        if(new Date().getTime() == lastKey.getSecond() - 1000){
+            //todo
         }
     }
 }
