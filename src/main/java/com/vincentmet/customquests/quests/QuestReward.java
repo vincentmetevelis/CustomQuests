@@ -117,7 +117,7 @@ public class QuestReward implements IJsonProvider{
         public void executeReward(PlayerEntity player) {
             final CommandDispatcher<CommandSource> dispatcher = player.getServer().getCommandManager().getDispatcher();
             try {
-                dispatcher.execute(command, player.getServer().getCommandSource().withFeedbackDisabled());
+                dispatcher.execute("execute at " + player.getDisplayName().getString() + " run " + command, player.getServer().getCommandSource().withFeedbackDisabled());
             } catch (CommandSyntaxException e) {
                 e.printStackTrace();
             }

@@ -3,7 +3,7 @@ loaderVersion="[28,)"
 credits="vincentmet"
 [[mods]]
 modId="customquests"
-version="1.14.4-1.0.6"
+version="1.14.4-1.0.7"
 displayName="Custom Quests"
 description='''
 Quests!!!

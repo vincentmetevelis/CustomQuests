@@ -1,5 +1,6 @@
 package com.vincentmet.customquests.lib.handlers;
 
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -78,7 +79,7 @@ public class JsonHandler {
             questArray.add(quest.getJson());
         }
         json.add("quests", questArray);
-        Utils.writeTo(questsLocation, json.toString());
+        Utils.writeTo(questsLocation, new GsonBuilder().setPrettyPrinting().create().toJson(json));
     }
 
     public static void writeQuestbook(Path questBookLocation) {
@@ -90,7 +91,7 @@ public class JsonHandler {
             questlineArray.add(questLine.getJson());
         }
         json.add("questlines", questlineArray);
-        Utils.writeTo(questBookLocation, json.toString());
+        Utils.writeTo(questBookLocation, new GsonBuilder().setPrettyPrinting().create().toJson(json));
     }
 
     public static void writeQuestingProgress(Path questingProgressLocation) {
@@ -100,7 +101,7 @@ public class JsonHandler {
             playerArray.add(users.getValue().getJson());
         }
         json.add("players", playerArray);
-        Utils.writeTo(questingProgressLocation, json.toString());
+        Utils.writeTo(questingProgressLocation, new GsonBuilder().setPrettyPrinting().create().toJson(json));
     }
 
     public static void writeQuestingParties(Path questingPartiesLocation) {
@@ -110,7 +111,7 @@ public class JsonHandler {
             partyArray.add(party.getJson());
         }
         json.add("parties", partyArray);
-        Utils.writeTo(questingPartiesLocation, json.toString());
+        Utils.writeTo(questingPartiesLocation, new GsonBuilder().setPrettyPrinting().create().toJson(json));
     }
 
     public static JsonObject getQuestbookJson() {
