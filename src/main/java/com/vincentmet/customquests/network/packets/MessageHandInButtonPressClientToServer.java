@@ -1,7 +1,9 @@
 package com.vincentmet.customquests.network.packets;
 
 import com.vincentmet.customquests.lib.Utils;
-import com.vincentmet.customquests.quests.*;
+import com.vincentmet.customquests.quests.IQuestRequirement;
+import com.vincentmet.customquests.quests.Quest;
+import com.vincentmet.customquests.quests.QuestUserProgress;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.network.NetworkEvent;

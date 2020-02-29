@@ -3,7 +3,6 @@ package com.vincentmet.customquests.quests;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.vincentmet.customquests.lib.Ref;
-import net.minecraft.util.text.TranslationTextComponent;
 
 import java.util.List;
 

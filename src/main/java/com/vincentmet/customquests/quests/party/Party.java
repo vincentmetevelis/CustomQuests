@@ -3,12 +3,12 @@ package com.vincentmet.customquests.quests.party;
 import com.google.gson.JsonObject;
 import com.vincentmet.customquests.lib.Ref;
 import com.vincentmet.customquests.quests.IJsonProvider;
-import com.vincentmet.customquests.quests.Quest;
-import com.vincentmet.customquests.quests.QuestStatus;
 import com.vincentmet.customquests.quests.QuestUserProgress;
 
 import javax.annotation.Nullable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 @Nullable
 public class Party implements IJsonProvider {

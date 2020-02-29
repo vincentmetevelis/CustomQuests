@@ -3,6 +3,7 @@ package com.vincentmet.customquests.network.packets;
 import com.vincentmet.customquests.lib.Utils;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.network.NetworkEvent;
+
 import java.util.function.Supplier;
 
 public class MessageOpenEditorGuiServerToClient {

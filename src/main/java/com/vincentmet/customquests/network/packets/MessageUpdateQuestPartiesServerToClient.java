@@ -5,7 +5,6 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.vincentmet.customquests.lib.Ref;
 import com.vincentmet.customquests.lib.handlers.StructureHandler;
-import com.vincentmet.customquests.quests.QuestUserProgress;
 import com.vincentmet.customquests.quests.party.Party;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.network.NetworkEvent;

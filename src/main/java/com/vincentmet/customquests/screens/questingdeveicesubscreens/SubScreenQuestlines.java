@@ -9,6 +9,7 @@ import com.vincentmet.customquests.screens.elements.labels.Label;
 import com.vincentmet.customquests.screens.questingdeveicesubscreens.questlines.QuestingWeb;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.entity.player.PlayerEntity;
+
 import java.util.ArrayList;
 import java.util.List;
 
