@@ -1,6 +1,7 @@
 package com.vincentmet.customquests;
 
 import com.vincentmet.customquests.items.ItemQuestingDevice;
+import com.vincentmet.customquests.lib.Utils;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.client.util.InputMappings;
 import net.minecraft.item.Item;
@@ -26,7 +27,7 @@ public class Objects {
 
     public static class KeyBindings{
         public static final KeyBinding OPEN_QUESTINGDEVICE = new KeyBinding(
-                "Open Questing Device",
+                Utils.getFormattedText(".open_device_key"),
                 KeyConflictContext.GUI,
                 InputMappings.Type.KEYSYM,
                 GLFW.GLFW_KEY_GRAVE_ACCENT,

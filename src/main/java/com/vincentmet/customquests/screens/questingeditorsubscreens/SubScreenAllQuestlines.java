@@ -2,12 +2,14 @@ package com.vincentmet.customquests.screens.questingeditorsubscreens;
 
 import com.mojang.datafixers.util.Pair;
 import com.vincentmet.customquests.lib.MouseDirection;
+import com.vincentmet.customquests.lib.Ref;
 import com.vincentmet.customquests.screens.elements.ScrollableList;
 import com.vincentmet.customquests.screens.elements.TextField;
 import com.vincentmet.customquests.lib.Utils;
 import com.vincentmet.customquests.screens.elements.IQuestingGuiElement;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.text.TranslationTextComponent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,13 +25,13 @@ public class SubScreenAllQuestlines implements IQuestingGuiElement {
     public SubScreenAllQuestlines(Screen root){
         this.root = root;
         List<List<Pair<Character, Integer>>> lines = new ArrayList<>();
-        lines.add(TextField.stringToCharIntList(Utils.colorify("Some very long text")));
-        lines.add(TextField.stringToCharIntList(Utils.colorify("Short Line")));
-        lines.add(TextField.stringToCharIntList(Utils.colorify("~GREEN~Lorum ipsum dolor si amet bla bla bla")));
-        lines.add(TextField.stringToCharIntList(Utils.colorify("And another short line")));
-        lines.add(TextField.stringToCharIntList(Utils.colorify("And another short line")));
-        lines.add(TextField.stringToCharIntList(Utils.colorify("And another short line")));
-        lines.add(TextField.stringToCharIntList(Utils.colorify("And another short line")));
+        lines.add(TextField.stringToCharIntList(Utils.getFormattedText(".editor.example_text0")));
+        lines.add(TextField.stringToCharIntList(Utils.getFormattedText(".editor.example_text1")));
+        lines.add(TextField.stringToCharIntList(Utils.getFormattedText(".editor.example_text2")));
+        lines.add(TextField.stringToCharIntList(Utils.getFormattedText(".editor.example_text3")));
+        lines.add(TextField.stringToCharIntList(Utils.getFormattedText(".editor.example_text3")));
+        lines.add(TextField.stringToCharIntList(Utils.getFormattedText(".editor.example_text3")));
+        lines.add(TextField.stringToCharIntList(Utils.getFormattedText(".editor.example_text3")));
         this.txt = new TextField(root.width>>2, root.height>>2, 300, 7, lines, 0);
     }
 
