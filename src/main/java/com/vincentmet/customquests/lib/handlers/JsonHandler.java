@@ -9,6 +9,7 @@ import com.vincentmet.customquests.quests.Quest;
 import com.vincentmet.customquests.quests.QuestLine;
 import com.vincentmet.customquests.quests.QuestUserProgress;
 import com.vincentmet.customquests.quests.party.Party;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;

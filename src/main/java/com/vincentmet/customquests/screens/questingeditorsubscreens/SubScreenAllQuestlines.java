@@ -2,10 +2,10 @@ package com.vincentmet.customquests.screens.questingeditorsubscreens;
 
 import com.mojang.datafixers.util.Pair;
 import com.vincentmet.customquests.lib.MouseDirection;
-import com.vincentmet.customquests.screens.elements.ScrollableList;
-import com.vincentmet.customquests.screens.elements.TextField;
 import com.vincentmet.customquests.lib.Utils;
 import com.vincentmet.customquests.screens.elements.IQuestingGuiElement;
+import com.vincentmet.customquests.screens.elements.ScrollableList;
+import com.vincentmet.customquests.screens.elements.TextField;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.entity.player.PlayerEntity;
 

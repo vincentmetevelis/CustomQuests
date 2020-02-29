@@ -1,16 +1,19 @@
 package com.vincentmet.customquests.screens;
 
 import com.vincentmet.customquests.BaseClass;
-import com.vincentmet.customquests.screens.elements.*;
+import com.vincentmet.customquests.screens.elements.IQuestingGuiElement;
 import com.vincentmet.customquests.screens.elements.buttons.ButtonQuestlines;
-import com.vincentmet.customquests.screens.questingdeveicesubscreens.*;
+import com.vincentmet.customquests.screens.questingdeveicesubscreens.SubScreenQuestDetails;
+import com.vincentmet.customquests.screens.questingdeveicesubscreens.SubScreenQuestlines;
+import com.vincentmet.customquests.screens.questingdeveicesubscreens.SubScreensQuestingDevice;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.renderer.model.BakedQuad;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import java.util.*;
+
+import java.util.EnumMap;
+import java.util.Map;
 
 @OnlyIn(Dist.CLIENT)
 public class ScreenQuestingDevice extends Screen {

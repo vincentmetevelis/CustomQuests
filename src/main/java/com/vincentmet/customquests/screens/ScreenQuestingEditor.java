@@ -3,7 +3,6 @@ package com.vincentmet.customquests.screens;
 import com.vincentmet.customquests.BaseClass;
 import com.vincentmet.customquests.lib.MouseDirection;
 import com.vincentmet.customquests.screens.elements.IQuestingGuiElement;
-import com.vincentmet.customquests.screens.questingdeveicesubscreens.SubScreensQuestingDevice;
 import com.vincentmet.customquests.screens.questingeditorsubscreens.SubScreenAllQuestlines;
 import com.vincentmet.customquests.screens.questingeditorsubscreens.SubScreensQuestingEditor;
 import net.minecraft.client.gui.screen.Screen;
@@ -12,8 +11,6 @@ import net.minecraft.util.text.TranslationTextComponent;
 
 import java.util.EnumMap;
 import java.util.Map;
-
-import static org.lwjgl.glfw.GLFW.GLFW_KEY_LEFT;
 
 public class ScreenQuestingEditor extends Screen {
     private static PlayerEntity player = BaseClass.proxy.getClientPlayer();

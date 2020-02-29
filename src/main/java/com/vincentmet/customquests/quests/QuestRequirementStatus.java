@@ -3,7 +3,6 @@ package com.vincentmet.customquests.quests;
 import com.google.gson.JsonArray;
 import com.vincentmet.customquests.lib.Ref;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class QuestRequirementStatus implements IJsonArrayProvider{
