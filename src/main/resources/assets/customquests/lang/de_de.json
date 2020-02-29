@@ -1,0 +1,30 @@
+{
+  "item.customquests.item_questing_device": "Quest-Gerät",
+  "customquests.item_questing_device.tooltip0": "Das hier ist dein Quest-Gerät, pass gut darauf auf",
+  "customquests.item_questing_device.tooltip1": "Rechtsklicke, um das Quest-GUI zu öffnen",
+
+  "customquests.open_device_key": "Quest-Gerät öffnen",
+  "customquests.command_warning": "Bitte benutze einen Unter-Befehl!",
+
+  "customquests.quest_completed": "QUEST ERLEDIGT!",
+  "customquests.label.unclaimed": "Anfordern",
+  "customquests.label.claimed": "Angefordert!",
+  "customquests.label.hand_in": "Überreichen",
+  "customquests.label.handed_in": "Überreicht!",
+  "customquests.label.rewards": "Belohnungen:",
+  "customquests.label.requirements": "Voraussetzungen:",
+
+  "customquests.editor.example_text0": "Ein sehr langer Text",
+  "customquests.editor.example_text1": "Kurze Zeile",
+  "customquests.editor.example_text3": "Eine andere kurze Zeile",
+
+  "customquests.requirement_type.item_detect": "Item(s) zu erkennen",
+  "customquests.requirement_type.item_deliver": "Item(s) zu überreichen",
+  "customquests.requirement_type.crafting_detect": "Item(s) herzustellen",
+  "customquests.requirement_type.kill_mob": "Mob(s) zu töten",
+  "customquests.requirement_type.travel_to": "Zu Ort(en) reisen",
+  "customquests.requirement_type.check_box": "Box anzukreuzen",
+  "customquests.requirement_type.rf_deliver": "RF zu überreichen",
+  "customquests.requirement_type.rf_generate": "RF zu generieren",
+  "customquests.requirement_type.block_mine": "Block/Blöcke abzubauen"
+}

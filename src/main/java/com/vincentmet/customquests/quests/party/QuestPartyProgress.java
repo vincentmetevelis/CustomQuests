@@ -9,6 +9,7 @@ import com.vincentmet.customquests.lib.Utils;
 import com.vincentmet.customquests.quests.*;
 import net.minecraft.command.CommandSource;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
 import java.util.ArrayList;
@@ -175,7 +176,8 @@ public class QuestPartyProgress implements IJsonProvider{
             Ref.shouldSaveNextTick = true;
             final CommandDispatcher<CommandSource> dispatcher = world.getServer().getCommandManager().getDispatcher();
             try {
-                dispatcher.execute("title " + player.getDisplayName().getString() + " title \"QUEST COMPLETED!\"", world.getServer().getCommandSource().withFeedbackDisabled());
+                String title = Utils.getFormattedText(".quest_completed");
+                dispatcher.execute("title " + player.getDisplayName().getString() + " title \"" + title + "\"", world.getServer().getCommandSource().withFeedbackDisabled());
                 dispatcher.execute("title " + player.getDisplayName().getString() + " subtitle \"" + Quest.getQuestFromId(questId).getTitle() + "\"", world.getServer().getCommandSource().withFeedbackDisabled());
             } catch (CommandSyntaxException e) {
                 e.printStackTrace();

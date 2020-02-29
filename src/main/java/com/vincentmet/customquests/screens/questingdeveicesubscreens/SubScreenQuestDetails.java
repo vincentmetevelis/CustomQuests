@@ -3,6 +3,7 @@ package com.vincentmet.customquests.screens.questingdeveicesubscreens;
 import com.vincentmet.customquests.lib.LineColor;
 import com.vincentmet.customquests.lib.MouseDirection;
 import com.vincentmet.customquests.lib.Ref;
+import com.vincentmet.customquests.lib.Utils;
 import com.vincentmet.customquests.quests.*;
 import com.vincentmet.customquests.screens.elements.IQuestingGuiElement;
 import com.vincentmet.customquests.screens.elements.buttons.ButtonClaimReward;
@@ -73,7 +74,7 @@ public class SubScreenQuestDetails implements IQuestingGuiElement {
             //right side of the line
             new Label(
                     root,
-                    "Requirements:",
+                    Utils.getFormattedText(".label.requirements"),
                     (width>>1) + MARGIN_CLAIM_BUTTON_LEFT,
                     MARGIN_CONTENT_TOP + MARGIN_CLAIM_BUTTON_TOP,
                     0xFFFFFF,
@@ -121,7 +122,7 @@ public class SubScreenQuestDetails implements IQuestingGuiElement {
 
             new Label(
                     root,
-                    "Rewards:",
+                    Utils.getFormattedText(".label.rewards"),
                     (width>>1) + MARGIN_CLAIM_BUTTON_LEFT,
                     ((this.height-MARGIN_CONTENT_TOP)>>1) + 7,
                     0xFFFFFF,

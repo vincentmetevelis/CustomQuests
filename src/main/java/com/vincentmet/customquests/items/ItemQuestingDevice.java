@@ -12,6 +12,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.Style;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
@@ -29,8 +31,9 @@ public class ItemQuestingDevice extends Item{
     @OnlyIn(Dist.CLIENT)
     @Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-        tooltip.add(new TranslationTextComponent(Utils.colorify("~BLUE~This is your questing device, take good care of it")));
-        tooltip.add(new TranslationTextComponent(Utils.colorify("~BLUE~Right-click to open your Questing GUI")));
+        Style blue = new Style().setColor(TextFormatting.BLUE);
+        tooltip.add(Utils.createTextComponent(".item_questing_device.tooltip0").setStyle(blue));
+        tooltip.add(Utils.createTextComponent(".item_questing_device.tooltip1").setStyle(blue));
     }
 
     @OnlyIn(Dist.CLIENT)
