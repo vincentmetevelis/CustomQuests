@@ -214,7 +214,8 @@ public class QuestUserProgress implements IJsonProvider{
             Ref.shouldSaveNextTick = true;
             final CommandDispatcher<CommandSource> dispatcher = world.getServer().getCommandManager().getDispatcher();
             try {
-                dispatcher.execute("title " + player.getDisplayName().getString() + " title \"QUEST COMPLETED!\"", world.getServer().getCommandSource().withFeedbackDisabled());
+                String title = Utils.getFormattedText(".quest_completed");
+                dispatcher.execute("title " + player.getDisplayName().getString() + " title \"" + title + "\"", world.getServer().getCommandSource().withFeedbackDisabled());
                 dispatcher.execute("title " + player.getDisplayName().getString() + " subtitle \"" + Quest.getQuestFromId(questId).getTitle() + "\"", world.getServer().getCommandSource().withFeedbackDisabled());
             } catch (CommandSyntaxException e) {
                 e.printStackTrace();

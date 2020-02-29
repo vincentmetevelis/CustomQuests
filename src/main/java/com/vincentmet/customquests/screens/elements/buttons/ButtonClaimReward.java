@@ -21,8 +21,8 @@ public class ButtonClaimReward implements IQuestingGuiElement {
     private int x;
     private int y;
     private int quest;
-    private String textUnclaimed = "Claim";
-    private String textClaimed = "Claimed!";
+    private String textUnclaimed = Utils.getFormattedText(".label.claimed");
+    private String textClaimed = Utils.getFormattedText(".label.claimed");
 
     public ButtonClaimReward(Screen root, int posX, int posY, int quest){
         this.root = root;

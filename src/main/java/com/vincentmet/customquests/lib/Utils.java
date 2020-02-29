@@ -11,6 +11,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.JsonToNBT;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -30,6 +31,15 @@ public class Utils {
             string = string.replaceAll(String.format("~%s~", textFormatting.getFriendlyName().toUpperCase()), textFormatting.toString());
         }
         return string;
+    }
+
+    public static String getFormattedText(String text) {
+        TranslationTextComponent textComponent = createTextComponent(text);
+        return textComponent.getFormattedText();
+    }
+
+    public static TranslationTextComponent createTextComponent(String text) {
+        return new TranslationTextComponent(Ref.MODID + text);
     }
 
     public static String getDefaultQuestsJson(){

@@ -25,8 +25,8 @@ public class ButtonHandInRequirement implements IQuestingGuiElement {
     private int questId;
     private int questReqId;
     private QuestRequirement questRequirement;
-    private String textNotHandedIn = "Hand in";
-    private String textHandedIn = "Handed in!";
+    private String textNotHandedIn = Utils.getFormattedText(".label.hand_in");
+    private String textHandedIn = Utils.getFormattedText(".label.handed_in");
 
     public ButtonHandInRequirement(Screen root, int posX, int posY, int questId, int questReqId, QuestRequirement questRequirements){
         this.root = root;
