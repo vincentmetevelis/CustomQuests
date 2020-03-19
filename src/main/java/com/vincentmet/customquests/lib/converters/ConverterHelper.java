@@ -6,7 +6,9 @@ import com.google.gson.JsonObject;
 import com.mojang.datafixers.util.Pair;
 import com.vincentmet.customquests.lib.Ref;
 import com.vincentmet.customquests.lib.Utils;
-import com.vincentmet.customquests.quests.*;
+import com.vincentmet.customquests.quests.QuestPosition;
+import com.vincentmet.customquests.quests.QuestRequirementType;
+import com.vincentmet.customquests.quests.QuestRewardType;
 import net.minecraft.entity.EntityType;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
@@ -14,6 +16,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.registries.ForgeRegistries;
+
 import java.util.ArrayList;
 import java.util.List;
 

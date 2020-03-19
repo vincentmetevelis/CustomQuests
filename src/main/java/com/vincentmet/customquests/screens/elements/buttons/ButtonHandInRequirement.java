@@ -5,7 +5,9 @@ import com.vincentmet.customquests.lib.Ref;
 import com.vincentmet.customquests.lib.Utils;
 import com.vincentmet.customquests.lib.handlers.PacketHandler;
 import com.vincentmet.customquests.network.packets.MessageHandInButtonPressClientToServer;
-import com.vincentmet.customquests.quests.*;
+import com.vincentmet.customquests.quests.QuestRequirement;
+import com.vincentmet.customquests.quests.QuestRequirementType;
+import com.vincentmet.customquests.quests.QuestUserProgress;
 import com.vincentmet.customquests.screens.elements.IQuestingGuiElement;
 import com.vincentmet.customquests.screens.elements.labels.Label;
 import net.minecraft.client.gui.screen.Screen;
@@ -23,8 +25,8 @@ public class ButtonHandInRequirement implements IQuestingGuiElement {
     private int questId;
     private int questReqId;
     private QuestRequirement questRequirement;
-    private String textNotHandedIn = "Hand in";
-    private String textHandedIn = "Handed in!";
+    private String textNotHandedIn = Utils.getFormattedText(".label.hand_in");
+    private String textHandedIn = Utils.getFormattedText(".label.handed_in");
 
     public ButtonHandInRequirement(Screen root, int posX, int posY, int questId, int questReqId, QuestRequirement questRequirements){
         this.root = root;

@@ -8,8 +8,8 @@ import com.vincentmet.customquests.lib.handlers.StructureHandler;
 import com.vincentmet.customquests.quests.Quest;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.network.NetworkEvent;
+
 import java.util.function.Supplier;
-import java.util.logging.Logger;
 
 public class MessageUpdateQuestsServerToClient {
     public JsonObject json;

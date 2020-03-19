@@ -3,6 +3,7 @@ package com.vincentmet.customquests.commands;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.vincentmet.customquests.lib.Ref;
+import com.vincentmet.customquests.lib.Utils;
 import net.minecraft.command.CommandSource;
 import net.minecraft.util.text.TranslationTextComponent;
 
@@ -15,7 +16,7 @@ public class CustomQuestsCommand {
                         .then(OpenEditorCommand.register())
                         .then(ProgressCommand.register())
                         .executes(context -> {
-                            context.getSource().sendFeedback(new TranslationTextComponent("Please use a subcommand!"), false);
+                            context.getSource().sendFeedback(Utils.createTextComponent(".command_warning"), false);
                             return 0;
                         })
         );

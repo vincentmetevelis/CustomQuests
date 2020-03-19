@@ -5,6 +5,7 @@ import com.vincentmet.customquests.quests.Quest;
 import com.vincentmet.customquests.quests.QuestUserProgress;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.network.NetworkEvent;
+
 import java.util.function.Supplier;
 
 public class MessageRewardButtonPressClientToServer {

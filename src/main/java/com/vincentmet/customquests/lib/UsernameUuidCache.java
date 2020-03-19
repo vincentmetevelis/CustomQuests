@@ -1,6 +1,7 @@
 package com.vincentmet.customquests.lib;
 
 import com.mojang.datafixers.util.Pair;
+
 import java.util.ArrayList;
 import java.util.List;
 

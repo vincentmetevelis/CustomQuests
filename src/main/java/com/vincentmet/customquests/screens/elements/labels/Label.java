@@ -2,13 +2,12 @@ package com.vincentmet.customquests.screens.elements.labels;
 
 import com.vincentmet.customquests.lib.MouseDirection;
 import com.vincentmet.customquests.lib.Ref;
+import com.vincentmet.customquests.lib.Utils;
 import com.vincentmet.customquests.screens.elements.IQuestingGuiElement;
-import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import com.vincentmet.customquests.lib.Utils;
 
 @OnlyIn(Dist.CLIENT)
 public class Label implements IQuestingGuiElement {

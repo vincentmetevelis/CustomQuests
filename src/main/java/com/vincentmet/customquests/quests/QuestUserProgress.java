@@ -7,18 +7,13 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.vincentmet.customquests.lib.Ref;
 import com.vincentmet.customquests.lib.Utils;
 import com.vincentmet.customquests.quests.party.Party;
-import net.minecraft.client.Minecraft;
 import net.minecraft.command.CommandSource;
-import net.minecraft.command.ICommandSource;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
-import org.codehaus.plexus.util.CollectionUtils;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 public class QuestUserProgress implements IJsonProvider{
     private String uuid;
@@ -219,7 +214,8 @@ public class QuestUserProgress implements IJsonProvider{
             Ref.shouldSaveNextTick = true;
             final CommandDispatcher<CommandSource> dispatcher = world.getServer().getCommandManager().getDispatcher();
             try {
-                dispatcher.execute("title " + player.getDisplayName().getString() + " title \"QUEST COMPLETED!\"", world.getServer().getCommandSource().withFeedbackDisabled());
+                String title = Utils.getFormattedText(".quest_completed");
+                dispatcher.execute("title " + player.getDisplayName().getString() + " title \"" + title + "\"", world.getServer().getCommandSource().withFeedbackDisabled());
                 dispatcher.execute("title " + player.getDisplayName().getString() + " subtitle \"" + Quest.getQuestFromId(questId).getTitle() + "\"", world.getServer().getCommandSource().withFeedbackDisabled());
             } catch (CommandSyntaxException e) {
                 e.printStackTrace();

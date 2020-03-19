@@ -2,6 +2,7 @@ package com.vincentmet.customquests.screens.elements;
 
 import com.vincentmet.customquests.lib.MouseDirection;
 import net.minecraft.entity.player.PlayerEntity;
+
 import java.util.ArrayList;
 import java.util.List;
 

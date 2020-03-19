@@ -11,18 +11,18 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.JsonToNBT;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import org.apache.commons.lang3.StringUtils;
+
 import javax.net.ssl.HttpsURLConnection;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.URL;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.StandardOpenOption;
-import java.util.Map;
 import java.util.UUID;
 
 public class Utils {
@@ -31,6 +31,15 @@ public class Utils {
             string = string.replaceAll(String.format("~%s~", textFormatting.getFriendlyName().toUpperCase()), textFormatting.toString());
         }
         return string;
+    }
+
+    public static String getFormattedText(String text) {
+        TranslationTextComponent textComponent = createTextComponent(text);
+        return textComponent.getFormattedText();
+    }
+
+    public static TranslationTextComponent createTextComponent(String text) {
+        return new TranslationTextComponent(Ref.MODID + text);
     }
 
     public static String getDefaultQuestsJson(){

@@ -9,10 +9,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 @OnlyIn(Dist.CLIENT)
 public class MultilineLabel implements IQuestingGuiElement {
     private Screen root;

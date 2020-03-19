@@ -3,7 +3,6 @@ package com.vincentmet.customquests.network.packets;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.vincentmet.customquests.lib.Ref;
-import com.vincentmet.customquests.lib.Utils;
 import com.vincentmet.customquests.lib.handlers.StructureHandler;
 import com.vincentmet.customquests.quests.QuestStatus;
 import com.vincentmet.customquests.quests.QuestUserProgress;
@@ -12,7 +11,6 @@ import net.minecraftforge.fml.network.NetworkEvent;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.function.Supplier;
 
