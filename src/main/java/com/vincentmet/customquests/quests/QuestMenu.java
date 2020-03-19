@@ -6,13 +6,14 @@ import com.vincentmet.customquests.lib.Ref;
 import net.minecraft.util.text.TranslationTextComponent;
 
 import java.util.List;
+import java.util.Map;
 
 public class QuestMenu implements IJsonProvider{
     private String title;
     private String description;
-    private List<QuestLine> questlines;
+    private Map<Integer, QuestLine> questlines;
 
-    public QuestMenu(String title, String description , List<QuestLine> questlines){
+    public QuestMenu(String title, String description , Map<Integer, QuestLine> questlines){
         this.title =  title;
         this.description = description;
         this.questlines = questlines;
@@ -23,14 +24,14 @@ public class QuestMenu implements IJsonProvider{
         json.addProperty("title", title);
         json.addProperty("text", description);
         JsonArray jsonQuestlineArray = new JsonArray();
-        for(QuestLine questline : questlines){
-            jsonQuestlineArray.add(questline.getJson());
+        for(Map.Entry<Integer, QuestLine> questline : questlines.entrySet()){
+            jsonQuestlineArray.add(questline.getValue().getJson());
         }
         json.add("questlines", jsonQuestlineArray);
         return json;
     }
 
-    public List<QuestLine> getQuestlines() {
+    public Map<Integer, QuestLine> getQuestlines() {
         return questlines;
     }
 
@@ -42,18 +43,13 @@ public class QuestMenu implements IJsonProvider{
         return title;
     }
 
-    public void setQuestlines(List<QuestLine> questlines) {
+    public void setQuestlines(Map<Integer, QuestLine> questlines) {
         this.questlines = questlines;
         Ref.shouldSaveNextTick = true;
     }
 
     public void addQuestline(QuestLine questline){
-        this.questlines.add(questline);
-        Ref.shouldSaveNextTick = true;
-    }
-
-    public void deleteQuestline(QuestLine questline){
-        this.questlines.remove(questline);
+        this.questlines.put(questline.getId(), questline);
         Ref.shouldSaveNextTick = true;
     }
 

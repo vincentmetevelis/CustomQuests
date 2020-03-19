@@ -377,6 +377,16 @@ public class ConverterHelper {
 				}
 			}
 
+			public static class GiveXP{
+				public static int getAmount(JsonObject json){
+					if(json.has("content") && json.get("content").getAsJsonObject().has("amount") && json.get("content").getAsJsonObject().get("amount").isJsonPrimitive()){
+						return json.get("content").getAsJsonObject().get("amount").getAsInt();
+					}else{
+						return Ref.ERR_MSG_INT_INVALID_JSON;
+					}
+				}
+			}
+
 			public static class TeleportTo{
 				public static Pair<String, BlockPos> getLocation(JsonObject json){
 					if(json.has("content") && json.get("content").getAsJsonObject().has("entity") && json.get("content").getAsJsonObject().get("entity").isJsonPrimitive()){

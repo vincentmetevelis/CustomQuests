@@ -11,6 +11,7 @@ import com.vincentmet.customquests.quests.QuestLine;
 import com.vincentmet.customquests.quests.QuestUserProgress;
 import com.vincentmet.customquests.quests.party.Party;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Map;
@@ -31,7 +32,9 @@ public class JsonHandler {
 
     public static void loadQuests(Path questsLocation) {
         try {
-            jsonContainerQuests = PARSER.parse(Files.newBufferedReader(questsLocation)).getAsJsonObject();
+            StringBuilder res = new StringBuilder();
+            Files.readAllLines(questsLocation, StandardCharsets.UTF_8).forEach(res::append);
+            jsonContainerQuests = PARSER.parse(res.toString()).getAsJsonObject();
         } catch (IOException e) {
             Utils.writeTo(questsLocation, Utils.getDefaultQuestsJson());
             loadQuests(questsLocation);
@@ -40,7 +43,9 @@ public class JsonHandler {
 
     public static void loadQuestbook(Path questBookLocation) {
         try {
-            jsonContainerQuestbook = PARSER.parse(Files.newBufferedReader(questBookLocation)).getAsJsonObject();
+            StringBuilder res = new StringBuilder();
+            Files.readAllLines(questBookLocation, StandardCharsets.UTF_8).forEach(res::append);
+            jsonContainerQuestbook = PARSER.parse(res.toString()).getAsJsonObject();
         } catch (IOException e) {
             Utils.writeTo(questBookLocation, Utils.getDefaultQuestBookJson());
             loadQuestbook(questBookLocation);
@@ -49,8 +54,11 @@ public class JsonHandler {
 
     public static void loadQuestingProgress(Path questingProgressLocation) {
         try {
-            jsonContainerQuestingProgress = PARSER.parse(Files.newBufferedReader(questingProgressLocation)).getAsJsonObject();
+            StringBuilder res = new StringBuilder();
+            Files.readAllLines(questingProgressLocation, StandardCharsets.UTF_8).forEach(res::append);
+            jsonContainerQuestingProgress = PARSER.parse(res.toString()).getAsJsonObject();
         } catch (IOException e) {
+            e.printStackTrace();
             Utils.writeTo(questingProgressLocation, Utils.getDefaultQuestingProgressJson());
             loadQuestingProgress(questingProgressLocation);
         }
@@ -58,7 +66,9 @@ public class JsonHandler {
 
     public static void loadQuestingParties(Path questingPartiesLocation) {
         try {
-            jsonContainerQuestingParties = PARSER.parse(Files.newBufferedReader(questingPartiesLocation)).getAsJsonObject();
+            StringBuilder res = new StringBuilder();
+            Files.readAllLines(questingPartiesLocation, StandardCharsets.UTF_8).forEach(res::append);
+            jsonContainerQuestingParties = PARSER.parse(res.toString()).getAsJsonObject();
         } catch (IOException e) {
             Utils.writeTo(questingPartiesLocation, Utils.getDefaultQuestingPartiesJson());
             loadQuestingParties(questingPartiesLocation);
@@ -87,8 +97,8 @@ public class JsonHandler {
         json.addProperty("title", Ref.ALL_QUESTBOOK.getTitle());
         json.addProperty("text", Ref.ALL_QUESTBOOK.getDescription());
         JsonArray questlineArray = new JsonArray();
-        for (QuestLine questLine : Ref.ALL_QUESTBOOK.getQuestlines()) {
-            questlineArray.add(questLine.getJson());
+        for (Map.Entry<Integer, QuestLine> questLine : Ref.ALL_QUESTBOOK.getQuestlines().entrySet()) {
+            questlineArray.add(questLine.getValue().getJson());
         }
         json.add("questlines", questlineArray);
         Utils.writeTo(questBookLocation, new GsonBuilder().setPrettyPrinting().create().toJson(json));

@@ -2,10 +2,15 @@ package com.vincentmet.customquests.quests;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.mojang.datafixers.util.Pair;
+import com.vincentmet.customquests.lib.IntCounter;
+import com.vincentmet.customquests.lib.Quadruple;
 import com.vincentmet.customquests.lib.Ref;
+import com.vincentmet.customquests.lib.Triple;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.IntStream;
 
 public class QuestStatus implements IJsonProvider{
     private int questId;
@@ -22,6 +27,20 @@ public class QuestStatus implements IJsonProvider{
             this.questRequirementStatuses.add(new QuestRequirementStatus(questId, i, new ArrayList<>()));
         }
         Ref.shouldSaveNextTick = true;
+    }
+
+    public void completeAllRequirements(){
+        Quest.getQuestFromId(questId).getRequirements()
+                .forEach(questRequirement -> {
+                    questRequirement.getSubRequirements()
+                            .forEach(questRequirement1 -> {
+                                IntCounter index = new IntCounter();
+                                getQuestRequirementStatuses()
+                                        .forEach((questRequirementStatus) -> {
+                                            questRequirementStatus.setProgress(index.count().getValue(), questRequirement1.getCompletionNumber());
+                                        });
+                            });
+                });
     }
 
     public int getQuestId() {

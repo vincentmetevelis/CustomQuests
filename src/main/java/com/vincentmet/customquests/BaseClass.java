@@ -38,3 +38,4 @@ public class BaseClass {
         new CustomQuestsCommand(event.getCommandDispatcher());
     }
 }
+//todo make the scrollable list gui element scroll per item, not by bitmap

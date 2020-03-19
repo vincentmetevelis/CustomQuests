@@ -287,10 +287,10 @@ public class Quest implements IJsonProvider{
     }
 
     public int getQuestline(){
-        for(QuestLine questline : Ref.ALL_QUESTBOOK.getQuestlines()){
-            for(int questId : questline.getQuests()){
+        for(Map.Entry<Integer, QuestLine> questline : Ref.ALL_QUESTBOOK.getQuestlines().entrySet()){
+            for(int questId : questline.getValue().getQuests()){
                 if(Quest.getQuestFromId(questId).getId() == this.getId()){
-                    return questline.getId();
+                    return questline.getValue().getId();
                 }
             }
         }

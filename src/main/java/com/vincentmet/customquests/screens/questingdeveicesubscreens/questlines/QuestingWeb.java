@@ -18,7 +18,7 @@ public class QuestingWeb implements IQuestingGuiElement {
     private Screen root;
     private int width = 0;
     private int height = 0;
-    private static int activeQuestline = 0;
+    private static int activeQuestline = 0;//todo set to -1, currently mod crashed when loading 0 questlines
     private List<Line> lines = new ArrayList<>();
     private List<ButtonQuest> questButtonList = new ArrayList<>();
 
@@ -81,26 +81,28 @@ public class QuestingWeb implements IQuestingGuiElement {
 
     public void reloadLines(PlayerEntity player){
         this.lines.clear();
-        for (int questId : Ref.ALL_QUESTBOOK.getQuestlines().get(activeQuestline).getQuests()) {
-            Quest quest = Quest.getQuestFromId(questId);
-            LineColor lineColor = LineColor.BLACK;
-            for (int dependencyId : quest.getDependencies()) {
-                Quest qd = Quest.getQuestFromId(dependencyId);
-                if (Quest.hasQuestUncompletedDependenciesForPlayer(Utils.simplifyUUID(player.getUniqueID()), quest.getId())) {
-                    lineColor = LineColor.RED;
-                } else if (Quest.isQuestCompletedForPlayer(Utils.simplifyUUID(player.getUniqueID()), qd.getId()) && Quest.isQuestCompletedForPlayer(Utils.simplifyUUID(player.getUniqueID()), quest.getId())) {
-                    lineColor = LineColor.GREEN;
-                } else if (Quest.isQuestCompletedForPlayer(Utils.simplifyUUID(player.getUniqueID()), qd.getId())) {
-                    lineColor = LineColor.YELLOW;
-                }
-                if (Quest.areQuestsInSameQuestline(questId, dependencyId)) {
-                    this.lines.add(new Line(
-                            root,
-                            quest.getPosition(),
-                            qd.getPosition(),
-                            lineColor,
-                            Ref.GUI_QUESTING_LINE_THICKNESS
-                    ));
+        if(Ref.ALL_QUESTBOOK.getQuestlines().get(activeQuestline) != null){
+            for (int questId : Ref.ALL_QUESTBOOK.getQuestlines().get(activeQuestline).getQuests()) {
+                Quest quest = Quest.getQuestFromId(questId);
+                LineColor lineColor = LineColor.BLACK;
+                for (int dependencyId : quest.getDependencies()) {
+                    Quest qd = Quest.getQuestFromId(dependencyId);
+                    if (Quest.hasQuestUncompletedDependenciesForPlayer(Utils.simplifyUUID(player.getUniqueID()), quest.getId())) {
+                        lineColor = LineColor.RED;
+                    } else if (Quest.isQuestCompletedForPlayer(Utils.simplifyUUID(player.getUniqueID()), qd.getId()) && Quest.isQuestCompletedForPlayer(Utils.simplifyUUID(player.getUniqueID()), quest.getId())) {
+                        lineColor = LineColor.GREEN;
+                    } else if (Quest.isQuestCompletedForPlayer(Utils.simplifyUUID(player.getUniqueID()), qd.getId())) {
+                        lineColor = LineColor.YELLOW;
+                    }
+                    if (Quest.areQuestsInSameQuestline(questId, dependencyId)) {
+                        this.lines.add(new Line(
+                                root,
+                                quest.getPosition(),
+                                qd.getPosition(),
+                                lineColor,
+                                Ref.GUI_QUESTING_LINE_THICKNESS
+                        ));
+                    }
                 }
             }
         }
@@ -109,15 +111,17 @@ public class QuestingWeb implements IQuestingGuiElement {
     public void reloadQuestButtons(PlayerEntity player){
         this.questButtonList.clear();
 
-        for (int questId : Ref.ALL_QUESTBOOK.getQuestlines().get(activeQuestline).getQuests()) {
-            Quest quest = Quest.getQuestFromId(questId);
-            this.questButtonList.add(new ButtonQuest(
-                    root,
-                    Ref.GUI_QUESTING_MARGIN_LEFT + quest.getPosition().getX(),
-                    Ref.GUI_QUESTING_MARGIN_TOP + quest.getPosition().getY(),
-                    quest,
-                    Utils.simplifyUUID(player.getUniqueID())
-            ));
+        if(Ref.ALL_QUESTBOOK.getQuestlines().get(activeQuestline) != null){
+            for (int questId : Ref.ALL_QUESTBOOK.getQuestlines().get(activeQuestline).getQuests()) {
+                Quest quest = Quest.getQuestFromId(questId);
+                this.questButtonList.add(new ButtonQuest(
+                        root,
+                        Ref.GUI_QUESTING_MARGIN_LEFT + quest.getPosition().getX(),
+                        Ref.GUI_QUESTING_MARGIN_TOP + quest.getPosition().getY(),
+                        quest,
+                        Utils.simplifyUUID(player.getUniqueID())
+                ));
+            }
         }
     }
 }

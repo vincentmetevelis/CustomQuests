@@ -51,10 +51,10 @@ public class StructureHandler {
     }
 
     public static void initQuestbook(JsonObject json){
-        List<QuestLine> questLineList = new ArrayList<>();
+        Map<Integer, QuestLine> questLineList = new HashMap<>();
         for(JsonElement jsonQuestlineElement : ConverterHelper.QuestBook.getQuestLines(json)){
             JsonObject jsonQuestline = jsonQuestlineElement.getAsJsonObject();
-            questLineList.add(new QuestLine(
+            questLineList.put(ConverterHelper.QuestBook.Questlines.getId(jsonQuestline), new QuestLine(
                     ConverterHelper.QuestBook.Questlines.getId(jsonQuestline),
                     ConverterHelper.QuestBook.Questlines.getTitle(jsonQuestline),
                     ConverterHelper.QuestBook.Questlines.getText(jsonQuestline),
@@ -218,6 +218,14 @@ public class StructureHandler {
                             new QuestReward.SpawnEntity(
                                     ConverterHelper.Quests.Rewards.SpawnEntity.getEntity(jsonQuestReward),
                                     ConverterHelper.Quests.Rewards.SpawnEntity.getAmount(jsonQuestReward)
+                            )
+                    ));
+                    break;
+                case XP:
+                    questRewardList.add(new QuestReward(
+                            QuestRewardType.XP,
+                            new QuestReward.GiveXP(
+                                    ConverterHelper.Quests.Rewards.GiveXP.getAmount(jsonQuestReward)
                             )
                     ));
                     break;

@@ -18,8 +18,10 @@ import org.apache.commons.lang3.StringUtils;
 import javax.net.ssl.HttpsURLConnection;
 import java.io.*;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
 import java.util.Map;
 import java.util.UUID;
 
@@ -144,6 +146,7 @@ public class Utils {
 
     public static void writeTo(Path location, Object text){
         try{
+            //Files.newBufferedWriter(location, StandardCharsets.UTF_8).write(text.toString());
             Files.write(location, text.toString().getBytes());
         }catch (IOException e){
             e.printStackTrace();
@@ -152,6 +155,11 @@ public class Utils {
 
     @OnlyIn(Dist.CLIENT)
     public static void displayEditorGui(){
+        Minecraft.getInstance().displayGuiScreen(new ScreenQuestingEditor());
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    public static void displayQuestingGui(){
         Minecraft.getInstance().displayGuiScreen(new ScreenQuestingEditor());
     }
 }

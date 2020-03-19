@@ -13,6 +13,7 @@ public class CustomQuestsCommand {
                         .then(PartyCommand.register())
                         .then(GiveDeviceCommand.register())
                         .then(OpenEditorCommand.register())
+                        .then(ProgressCommand.register())
                         .executes(context -> {
                             context.getSource().sendFeedback(new TranslationTextComponent("Please use a subcommand!"), false);
                             return 0;

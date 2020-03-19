@@ -180,4 +180,41 @@ public class QuestReward implements IJsonProvider{
             Ref.shouldSaveNextTick = true;
         }
     }
+
+    public static class GiveXP implements IQuestReward{
+        private int amount;
+        public GiveXP(int amount){
+            this.amount = amount;
+        }
+
+        @Override
+        public void executeReward(PlayerEntity player) {
+            player.giveExperiencePoints(amount);
+        }
+
+        @Override
+        public ItemStack getItemStack() {
+            return new ItemStack(Items.EXPERIENCE_BOTTLE);
+        }
+
+        @Override
+        public JsonObject getJson() {
+            JsonObject json = new JsonObject();
+            json.addProperty("amount", amount);
+            return json;
+        }
+
+        @Override
+        public String toString() {
+            return "Receive " + amount + " Experience points";
+        }
+
+        public int getAmount() {
+            return amount;
+        }
+
+        public void setAmount(int amount) {
+            this.amount = amount;
+        }
+    }
 }

@@ -11,7 +11,7 @@ public class GiveDeviceCommand {
     public static ArgumentBuilder<CommandSource, ?> register() {
         return Commands.literal("give")
                 .requires(cs -> cs.hasPermissionLevel(0))
-                .then(Commands.argument("player", EntityArgument.players())
+                .then(Commands.argument("player", EntityArgument.player())
                         .requires(cs -> cs.hasPermissionLevel(2))
                         .executes(context -> {
                             EntityArgument.getEntity(context, "player").getCommandSource().asPlayer().inventory.addItemStackToInventory(new ItemStack(Objects.Items.itemQuestingDevice, 1));
