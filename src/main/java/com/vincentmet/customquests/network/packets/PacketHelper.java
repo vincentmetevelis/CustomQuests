@@ -2,8 +2,8 @@ package com.vincentmet.customquests.network.packets;
 
 import com.vincentmet.customquests.lib.Ref;
 import com.vincentmet.customquests.lib.handlers.PacketHandler;
-import com.vincentmet.customquests.quests.QuestStatus;
-import com.vincentmet.customquests.quests.QuestUserProgress;
+import com.vincentmet.customquests.quests.progress.QuestStatus;
+import com.vincentmet.customquests.quests.progress.QuestUserProgress;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraftforge.fml.network.PacketDistributor;
 

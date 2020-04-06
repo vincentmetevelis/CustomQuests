@@ -1,4 +1,4 @@
-package com.vincentmet.customquests.quests;
+package com.vincentmet.customquests.quests.quest;
 
 import com.vincentmet.customquests.lib.Utils;
 

@@ -3,8 +3,9 @@ package com.vincentmet.customquests.screens.elements.buttons;
 import com.vincentmet.customquests.lib.MouseDirection;
 import com.vincentmet.customquests.lib.Ref;
 import com.vincentmet.customquests.lib.Utils;
-import com.vincentmet.customquests.quests.Quest;
-import com.vincentmet.customquests.quests.QuestUserProgress;
+import com.vincentmet.customquests.quests.progress.ProgressHelper;
+import com.vincentmet.customquests.quests.quest.Quest;
+import com.vincentmet.customquests.quests.progress.QuestUserProgress;
 import com.vincentmet.customquests.screens.ScreenQuestingDevice;
 import com.vincentmet.customquests.screens.elements.IQuestingGuiElement;
 import com.vincentmet.customquests.screens.questingdeveicesubscreens.SubScreenQuestDetails;
@@ -41,7 +42,7 @@ public class ButtonQuest implements IQuestingGuiElement {
 
     @Override
     public void render(PlayerEntity player, double mouseX, double mouseY) {
-        if(Quest.isQuestCompletedForPlayer(uuid, quest.getId()) && !QuestUserProgress.isRewardClaimed(uuid, quest.getId())){
+        if(Quest.isQuestCompletedForPlayer(uuid, quest.getId()) && !ProgressHelper.isRewardClaimed(uuid, quest.getId())){
             root.getMinecraft().getTextureManager().bindTexture(Ref.IMAGE_BUTTON_HEXAGON_UNCLAIMED);
         }else if(Quest.isQuestCompletedForPlayer(uuid, quest.getId())){
             root.getMinecraft().getTextureManager().bindTexture(Ref.IMAGE_BUTTON_HEXAGON_COMPLETED);

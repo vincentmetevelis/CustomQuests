@@ -1,16 +1,14 @@
 package com.vincentmet.customquests.commands;
 
 import com.mojang.brigadier.arguments.IntegerArgumentType;
-import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.vincentmet.customquests.lib.Utils;
-import com.vincentmet.customquests.quests.Quest;
-import com.vincentmet.customquests.quests.QuestUserProgress;
+import com.vincentmet.customquests.quests.progress.ProgressHelper;
+import com.vincentmet.customquests.quests.progress.QuestUserProgress;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
 import net.minecraft.command.arguments.EntityArgument;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.text.StringTextComponent;
 
 public class ProgressCommand {
@@ -29,9 +27,15 @@ public class ProgressCommand {
                                 .then(Commands.argument("questid", IntegerArgumentType.integer())
                                         .executes(context -> {
                                             int inputQuestId = IntegerArgumentType.getInteger(context, "questid");
-                                            String uuid = Utils.simplifyUUID(context.getSource().asPlayer().getUniqueID());
-                                            QuestUserProgress qup = QuestUserProgress.getUserProgressForUuid(uuid);
-                                            qup.getQuestStatuses().entrySet().stream().filter(questStatus-> questStatus.getKey() == inputQuestId).forEach(questStatus -> questStatus.getValue().completeAllRequirements());
+                                            String uuid = Utils.simplifyUUID(EntityArgument.getPlayer(context, "player").getUniqueID());
+                                            QuestUserProgress qup = ProgressHelper.getUserProgressForUuid(uuid);
+                                            qup.getQuestStatuses().entrySet()
+                                                    .stream()
+                                                    .filter(questStatus-> questStatus.getKey() == inputQuestId)
+                                                    .forEach(questStatus -> {
+                                                        System.out.println("Completed");
+                                                        questStatus.getValue().completeAllRequirements();
+                                                    });
                                             return 0;
                                         })
                                 )

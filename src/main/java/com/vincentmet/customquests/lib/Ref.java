@@ -1,9 +1,9 @@
 package com.vincentmet.customquests.lib;
 
 import com.mojang.datafixers.util.Pair;
-import com.vincentmet.customquests.quests.Quest;
-import com.vincentmet.customquests.quests.QuestMenu;
-import com.vincentmet.customquests.quests.QuestUserProgress;
+import com.vincentmet.customquests.quests.quest.Quest;
+import com.vincentmet.customquests.quests.book.QuestMenu;
+import com.vincentmet.customquests.quests.progress.QuestUserProgress;
 import com.vincentmet.customquests.quests.party.Party;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.util.ResourceLocation;

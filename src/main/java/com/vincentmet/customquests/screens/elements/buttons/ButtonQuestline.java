@@ -1,13 +1,10 @@
 package com.vincentmet.customquests.screens.elements.buttons;
 
-import com.mojang.blaze3d.platform.GlStateManager;
-import com.vincentmet.customquests.Objects;
 import com.vincentmet.customquests.lib.MouseDirection;
 import com.vincentmet.customquests.lib.Ref;
 import com.vincentmet.customquests.lib.Utils;
-import com.vincentmet.customquests.quests.Quest;
-import com.vincentmet.customquests.quests.QuestLine;
-import com.vincentmet.customquests.quests.QuestUserProgress;
+import com.vincentmet.customquests.quests.quest.Quest;
+import com.vincentmet.customquests.quests.book.QuestLine;
 import com.vincentmet.customquests.screens.elements.IQuestingGuiElement;
 import com.vincentmet.customquests.screens.elements.labels.Label;
 import com.vincentmet.customquests.screens.questingdeveicesubscreens.SubScreenQuestDetails;
@@ -16,11 +13,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.fml.client.config.GuiUtils;
-import org.apache.commons.lang3.ArrayUtils;
 import org.lwjgl.opengl.GL11;
 
 import java.util.ArrayList;

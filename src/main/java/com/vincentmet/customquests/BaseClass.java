@@ -26,7 +26,6 @@ public class BaseClass {
         MinecraftForge.EVENT_BUS.register(EventHandler.class);
         MinecraftForge.EVENT_BUS.addListener(this::onServerStart);
         ConfigHandler.loadConfig(ConfigHandler.COMMON_CONFIG, FMLPaths.CONFIGDIR.get().resolve("customquests-common.toml"));
-
     }
 
     private void setup(final FMLCommonSetupEvent event){

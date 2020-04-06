@@ -9,24 +9,19 @@ import com.vincentmet.customquests.network.packets.MessageUpdateQuestPartiesServ
 import com.vincentmet.customquests.network.packets.MessageUpdateQuestbookServerToClient;
 import com.vincentmet.customquests.network.packets.MessageUpdateQuestsServerToClient;
 import com.vincentmet.customquests.network.packets.PacketHelper;
-import com.vincentmet.customquests.quests.Quest;
-import com.vincentmet.customquests.quests.QuestRequirementType;
-import com.vincentmet.customquests.quests.QuestUserProgress;
+import com.vincentmet.customquests.quests.progress.ProgressHelper;
+import com.vincentmet.customquests.quests.quest.Quest;
+import com.vincentmet.customquests.quests.quest.QuestRequirementType;
+import com.vincentmet.customquests.quests.progress.QuestUserProgress;
 import com.vincentmet.customquests.screens.ScreenQuestingDevice;
 import com.vincentmet.customquests.screens.questingdeveicesubscreens.SubScreenQuestDetails;
-import com.vincentmet.customquests.screens.questingdeveicesubscreens.SubScreenQuestlines;
 import com.vincentmet.customquests.screens.questingdeveicesubscreens.SubScreensQuestingDevice;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.IPacket;
-import net.minecraft.util.Util;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
@@ -38,7 +33,6 @@ import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -64,7 +58,7 @@ public class EventHandler {
         for(Triple<Integer, Integer, Integer> questAndReqAndSubReqId : activeItemCraftQuestIds){
             ItemStack itemStack = Quest.getItemstackForCraftingDetect(questAndReqAndSubReqId.getLeft(), questAndReqAndSubReqId.getMiddle(), questAndReqAndSubReqId.getRight());
             if(event.getCrafting().getItem() == itemStack.getItem() && event.getCrafting().getTag() == itemStack.getTag()){
-                QuestUserProgress.addPlayerProgress(Utils.simplifyUUID(event.getPlayer().getUniqueID()), questAndReqAndSubReqId.getLeft(), questAndReqAndSubReqId.getMiddle(), questAndReqAndSubReqId.getRight(), event.getCrafting().getCount());
+                ProgressHelper.addPlayerProgress(Utils.simplifyUUID(event.getPlayer().getUniqueID()), questAndReqAndSubReqId.getLeft(), questAndReqAndSubReqId.getMiddle(), questAndReqAndSubReqId.getRight(), event.getCrafting().getCount());
             }
         }
     }
@@ -76,7 +70,7 @@ public class EventHandler {
             for (Triple<Integer, Integer, Integer> questAndReqAndSubReqId : activeEntityKillQuestIds) {
                 Pair<EntityType, Integer> mobAmount = Quest.getMobAmountForMobKill(questAndReqAndSubReqId.getLeft(), questAndReqAndSubReqId.getMiddle(), questAndReqAndSubReqId.getRight());
                 if (event.getEntity().getType() == mobAmount.getFirst() && event.getSource().getTrueSource() instanceof PlayerEntity) {
-                    QuestUserProgress.addPlayerProgress(Utils.simplifyUUID(event.getSource().getTrueSource().getUniqueID()), questAndReqAndSubReqId.getLeft(), questAndReqAndSubReqId.getMiddle(), questAndReqAndSubReqId.getRight(), 1);
+                    ProgressHelper.addPlayerProgress(Utils.simplifyUUID(event.getSource().getTrueSource().getUniqueID()), questAndReqAndSubReqId.getLeft(), questAndReqAndSubReqId.getMiddle(), questAndReqAndSubReqId.getRight(), 1);
                     Ref.shouldSaveNextTick = true;
                 }
             }
@@ -90,13 +84,13 @@ public class EventHandler {
                 event.getPlayer().inventory.addItemStackToInventory(new ItemStack(Objects.Items.itemQuestingDevice, 1));
             }
         }else if(ConfigHandler.giveDeviceOnFirstLogin.get()){
-            if(QuestUserProgress.getUserProgressForUuid(Utils.simplifyUUID(event.getPlayer().getUniqueID()))==null){
+            if(ProgressHelper.getUserProgressForUuid(Utils.simplifyUUID(event.getPlayer().getUniqueID()))==null){
                 if(!event.getPlayer().inventory.hasItemStack(new ItemStack(Objects.Items.itemQuestingDevice))){
                     event.getPlayer().inventory.addItemStackToInventory(new ItemStack(Objects.Items.itemQuestingDevice, 1));
                 }
             }
         }
-        if(QuestUserProgress.getUserProgressForUuid(Utils.simplifyUUID(event.getPlayer().getUniqueID()))==null){
+        if(ProgressHelper.getUserProgressForUuid(Utils.simplifyUUID(event.getPlayer().getUniqueID()))==null){
             QuestUserProgress newQup = new QuestUserProgress(Utils.simplifyUUID(event.getPlayer().getUniqueID()), Ref.ERR_MSG_INT_INVALID_JSON, new ArrayList<>(), new HashMap<>());
             Ref.ALL_QUESTING_PROGRESS.put(newQup.getUuid(), newQup);
             Ref.shouldSaveNextTick = true;
@@ -149,7 +143,7 @@ public class EventHandler {
             for(Triple<Integer, Integer, Integer> questAndReqAndSubReqId : activeLocationTrackingQuestIds){
                 Triple<String, BlockPos, Integer> dimPosRadius = Quest.getDimPosRadius(questAndReqAndSubReqId.getLeft(), questAndReqAndSubReqId.getMiddle(), questAndReqAndSubReqId.getRight());
                 if(Quest.isPlayerInRadius(playerEntity, dimPosRadius)){
-                    QuestUserProgress.setPlayerProgressToCompleted(Utils.simplifyUUID(playerEntity.getUniqueID()), questAndReqAndSubReqId.getLeft(), questAndReqAndSubReqId.getMiddle(), questAndReqAndSubReqId.getRight());
+                    ProgressHelper.setPlayerProgressToCompleted(Utils.simplifyUUID(playerEntity.getUniqueID()), questAndReqAndSubReqId.getLeft(), questAndReqAndSubReqId.getMiddle(), questAndReqAndSubReqId.getRight());
                     Ref.shouldSaveNextTick = true;
                 }
             }
@@ -164,13 +158,13 @@ public class EventHandler {
                     }
                 }
                 if(itemStack.getCount() <= correctItemInInvCount){
-                    QuestUserProgress.setPlayerProgressToCompleted(Utils.simplifyUUID(playerEntity.getUniqueID()), questAndReqAndSubReqId.getLeft(), questAndReqAndSubReqId.getMiddle(), questAndReqAndSubReqId.getRight());
+                    ProgressHelper.setPlayerProgressToCompleted(Utils.simplifyUUID(playerEntity.getUniqueID()), questAndReqAndSubReqId.getLeft(), questAndReqAndSubReqId.getMiddle(), questAndReqAndSubReqId.getRight());
                     Ref.shouldSaveNextTick = true;
                 }
             }
 
             for(Quest quest : Ref.ALL_QUESTS){
-                if(QuestUserProgress.areAllRequirementsCompleted(Utils.simplifyUUID(playerEntity.getUniqueID()), quest.getId())){
+                if(ProgressHelper.areAllRequirementsCompleted(Utils.simplifyUUID(playerEntity.getUniqueID()), quest.getId())){
                     for(Map.Entry<String, QuestUserProgress> userprogress : Ref.ALL_QUESTING_PROGRESS.entrySet()){
                         if(userprogress.getKey().equals(Utils.simplifyUUID(playerEntity.getUniqueID()))){
                             userprogress.getValue().addCompletedQuest(quest.getId(), world, playerEntity);

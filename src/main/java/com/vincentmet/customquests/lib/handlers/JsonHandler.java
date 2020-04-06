@@ -6,9 +6,9 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.vincentmet.customquests.lib.Ref;
 import com.vincentmet.customquests.lib.Utils;
-import com.vincentmet.customquests.quests.Quest;
-import com.vincentmet.customquests.quests.QuestLine;
-import com.vincentmet.customquests.quests.QuestUserProgress;
+import com.vincentmet.customquests.quests.quest.Quest;
+import com.vincentmet.customquests.quests.book.QuestLine;
+import com.vincentmet.customquests.quests.progress.QuestUserProgress;
 import com.vincentmet.customquests.quests.party.Party;
 
 import java.io.IOException;

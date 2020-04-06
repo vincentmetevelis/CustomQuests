@@ -5,7 +5,8 @@ import com.vincentmet.customquests.lib.Ref;
 import com.vincentmet.customquests.lib.Utils;
 import com.vincentmet.customquests.lib.handlers.PacketHandler;
 import com.vincentmet.customquests.network.packets.MessageRewardButtonPressClientToServer;
-import com.vincentmet.customquests.quests.QuestUserProgress;
+import com.vincentmet.customquests.quests.progress.ProgressHelper;
+import com.vincentmet.customquests.quests.progress.QuestUserProgress;
 import com.vincentmet.customquests.screens.elements.IQuestingGuiElement;
 import com.vincentmet.customquests.screens.elements.labels.Label;
 import net.minecraft.client.gui.screen.Screen;
@@ -21,7 +22,7 @@ public class ButtonClaimReward implements IQuestingGuiElement {
     private int x;
     private int y;
     private int quest;
-    private String textUnclaimed = Utils.getFormattedText(".label.claimed");
+    private String textUnclaimed = Utils.getFormattedText(".label.unclaimed");
     private String textClaimed = Utils.getFormattedText(".label.claimed");
 
     public ButtonClaimReward(Screen root, int posX, int posY, int quest){
@@ -38,8 +39,8 @@ public class ButtonClaimReward implements IQuestingGuiElement {
 
     @Override
     public void render(PlayerEntity player, double mouseX, double mouseY) {
-        String text = QuestUserProgress.isRewardClaimed(Utils.simplifyUUID(player.getUniqueID()), quest) ? textClaimed : textUnclaimed;
-        if(!QuestUserProgress.isRewardClaimed(Utils.simplifyUUID(player.getUniqueID()), quest) && QuestUserProgress.areAllRequirementsCompleted(Utils.simplifyUUID(player.getUniqueID()), quest)){
+        String text = ProgressHelper.isRewardClaimed(Utils.simplifyUUID(player.getUniqueID()), quest) ? textClaimed : textUnclaimed;
+        if(!ProgressHelper.isRewardClaimed(Utils.simplifyUUID(player.getUniqueID()), quest) && ProgressHelper.areAllRequirementsCompleted(Utils.simplifyUUID(player.getUniqueID()), quest)){
             if(Utils.isMouseInBounds(mouseX, mouseY, x, y, x + WIDTH, y + HEIGHT)){
                 root.getMinecraft().getTextureManager().bindTexture(Ref.IMAGE_BUTTON_CLAIM_REWARD_PRESSED);
             }else{
@@ -64,9 +65,9 @@ public class ButtonClaimReward implements IQuestingGuiElement {
 
     @Override
     public void onClick(PlayerEntity player, double mouseX, double mouseY) {
-        if(!QuestUserProgress.isRewardClaimed(Utils.simplifyUUID(player.getUniqueID()), quest) && QuestUserProgress.areAllRequirementsCompleted(Utils.simplifyUUID(player.getUniqueID()), quest)){
+        if(!ProgressHelper.isRewardClaimed(Utils.simplifyUUID(player.getUniqueID()), quest) && ProgressHelper.areAllRequirementsCompleted(Utils.simplifyUUID(player.getUniqueID()), quest)){
             if(Utils.isMouseInBounds(mouseX, mouseY, x, y, x+WIDTH, y+HEIGHT)){
-                if(!QuestUserProgress.isRewardClaimed(Utils.simplifyUUID(player.getUniqueID()), quest) && QuestUserProgress.areAllRequirementsCompleted(Utils.simplifyUUID(player.getUniqueID()), quest)){
+                if(!ProgressHelper.isRewardClaimed(Utils.simplifyUUID(player.getUniqueID()), quest) && ProgressHelper.areAllRequirementsCompleted(Utils.simplifyUUID(player.getUniqueID()), quest)){
                     PacketHandler.CHANNEL.sendToServer(new MessageRewardButtonPressClientToServer(quest));
                 }
             }

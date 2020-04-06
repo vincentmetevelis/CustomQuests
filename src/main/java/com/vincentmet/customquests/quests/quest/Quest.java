@@ -1,10 +1,14 @@
-package com.vincentmet.customquests.quests;
+package com.vincentmet.customquests.quests.quest;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.mojang.datafixers.util.Pair;
 import com.vincentmet.customquests.lib.Ref;
 import com.vincentmet.customquests.lib.Triple;
+import com.vincentmet.customquests.quests.IJsonProvider;
+import com.vincentmet.customquests.quests.IQuestRequirement;
+import com.vincentmet.customquests.quests.book.QuestLine;
+import com.vincentmet.customquests.quests.progress.QuestUserProgress;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
@@ -16,7 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class Quest implements IJsonProvider{
+public class Quest implements IJsonProvider {
     private int id;
     private String title;
     private String description;

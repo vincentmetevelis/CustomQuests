@@ -15,6 +15,7 @@ public class CustomQuestsCommand {
                         .then(GiveDeviceCommand.register())
                         .then(OpenEditorCommand.register())
                         .then(ProgressCommand.register())
+                        .then(ReloadCommand.register())
                         .executes(context -> {
                             context.getSource().sendFeedback(Utils.createTextComponent(".command_warning"), false);
                             return 0;
