@@ -3,6 +3,8 @@ package com.vincentmet.customquests.lib.handlers;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.vincentmet.customquests.lib.Ref;
 import com.vincentmet.customquests.lib.Utils;
 import com.vincentmet.customquests.quests.Quest;
@@ -19,6 +21,7 @@ public class JsonHandler {
     private static JsonObject jsonContainerQuestbook;
     private static JsonObject jsonContainerQuestingProgress;
     private static JsonObject jsonContainerQuestingParties;
+    private static final Gson GSON = (new GsonBuilder()).setPrettyPrinting().create();
     private static final JsonParser PARSER = new JsonParser();
 
     public static void loadJson(Path questsLocation, Path questBookLocation, Path questingProgressLocation, Path questingPartiesLocation) {
@@ -78,7 +81,7 @@ public class JsonHandler {
             questArray.add(quest.getJson());
         }
         json.add("quests", questArray);
-        Utils.writeTo(questsLocation, json.toString());
+        Utils.writeTo(questsLocation, GSON.toJson(json));
     }
 
     public static void writeQuestbook(Path questBookLocation) {
@@ -90,7 +93,7 @@ public class JsonHandler {
             questlineArray.add(questLine.getJson());
         }
         json.add("questlines", questlineArray);
-        Utils.writeTo(questBookLocation, json.toString());
+        Utils.writeTo(questBookLocation, GSON.toJson(json));
     }
 
     public static void writeQuestingProgress(Path questingProgressLocation) {
@@ -100,7 +103,7 @@ public class JsonHandler {
             playerArray.add(users.getValue().getJson());
         }
         json.add("players", playerArray);
-        Utils.writeTo(questingProgressLocation, json.toString());
+        Utils.writeTo(questingProgressLocation, GSON.toJson(json));
     }
 
     public static void writeQuestingParties(Path questingPartiesLocation) {
@@ -110,7 +113,7 @@ public class JsonHandler {
             partyArray.add(party.getJson());
         }
         json.add("parties", partyArray);
-        Utils.writeTo(questingPartiesLocation, json.toString());
+        Utils.writeTo(questingPartiesLocation, GSON.toJson(json));
     }
 
     public static JsonObject getQuestbookJson() {
