@@ -1,18 +1,14 @@
 package com.vincentmet.customquests.quests.party;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
+import com.google.gson.*;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import com.vincentmet.customquests.lib.Ref;
-import com.vincentmet.customquests.lib.Utils;
+import com.vincentmet.customquests.lib.*;
 import com.vincentmet.customquests.quests.*;
+import java.util.*;
 import net.minecraft.command.CommandSource;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.world.World;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class QuestPartyProgress implements IJsonProvider{
     private List<Integer> completedQuestsIds;
@@ -22,7 +18,7 @@ public class QuestPartyProgress implements IJsonProvider{
         this.completedQuestsIds = completedQuestsIds;
         this.questStatuses = questStatuses;
         List<Integer> allQuestIds = new ArrayList<>();
-        for(Quest quest : Ref.ALL_QUESTS){
+        for(Quest quest : Ref.ALL_QUESTS.values()){
             allQuestIds.add(quest.getId());
         }
         List<Integer> allQuestStatusIds = new ArrayList<>();

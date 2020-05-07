@@ -1,20 +1,12 @@
 package com.vincentmet.customquests.lib.handlers;
 
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import com.vincentmet.customquests.lib.Ref;
-import com.vincentmet.customquests.lib.Utils;
-import com.vincentmet.customquests.quests.Quest;
-import com.vincentmet.customquests.quests.QuestLine;
-import com.vincentmet.customquests.quests.QuestUserProgress;
+import com.google.gson.*;
+import com.vincentmet.customquests.lib.*;
+import com.vincentmet.customquests.quests.*;
 import com.vincentmet.customquests.quests.party.Party;
-
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
+import java.nio.file.*;
 import java.util.Map;
 
 public class JsonHandler {
@@ -86,7 +78,7 @@ public class JsonHandler {
     public static void writeQuests(Path questsLocation) {
         JsonObject json = new JsonObject();
         JsonArray questArray = new JsonArray();
-        for (Quest quest : Ref.ALL_QUESTS) {
+        for (Quest quest : Ref.ALL_QUESTS.values()) {
             questArray.add(quest.getJson());
         }
         json.add("quests", questArray);

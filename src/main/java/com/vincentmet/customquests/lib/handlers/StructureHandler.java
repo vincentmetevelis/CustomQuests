@@ -1,20 +1,14 @@
 package com.vincentmet.customquests.lib.handlers;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
+import com.google.gson.*;
 import com.vincentmet.customquests.lib.Ref;
 import com.vincentmet.customquests.lib.converters.ConverterHelper;
 import com.vincentmet.customquests.quests.*;
-import com.vincentmet.customquests.quests.party.Party;
-import com.vincentmet.customquests.quests.party.QuestPartyProgress;
+import com.vincentmet.customquests.quests.party.*;
+import java.util.*;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.registries.ForgeRegistries;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 public class StructureHandler {
     public static void initQuestingParties(JsonObject json){
@@ -71,10 +65,11 @@ public class StructureHandler {
     }
 
     public static void initQuests(JsonObject json) {
-        List<Quest> questsList = new ArrayList<>();
+        Map<Integer, Quest> questsList = new HashMap<>();
         for (JsonElement jsonQuestElement : json.get("quests").getAsJsonArray()) {
             JsonObject jsonQuest = jsonQuestElement.getAsJsonObject();
-            questsList.add(initSingleQuest(jsonQuest));
+            Quest q = initSingleQuest(jsonQuest);
+            questsList.put(q.getId(), q);
         }
         Ref.ALL_QUESTS = questsList;
     }

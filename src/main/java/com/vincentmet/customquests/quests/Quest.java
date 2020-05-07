@@ -1,20 +1,14 @@
 package com.vincentmet.customquests.quests;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
+import com.google.gson.*;
 import com.mojang.datafixers.util.Pair;
-import com.vincentmet.customquests.lib.Ref;
-import com.vincentmet.customquests.lib.Triple;
+import com.vincentmet.customquests.lib.*;
+import java.util.*;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
+import net.minecraft.item.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.registries.ForgeRegistries;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 public class Quest implements IJsonProvider{
     private int id;
@@ -86,7 +80,7 @@ public class Quest implements IJsonProvider{
 
     public static List<Integer> getUncompletedQuests(String uuid){ // Both active and locked quests
         List<Integer> list = new ArrayList<>();
-        for(Quest quest : Ref.ALL_QUESTS){
+        for(Quest quest : Ref.ALL_QUESTS.values()){
             if(!Quest.isQuestCompletedForPlayer(uuid, quest.getId())){
                 list.add(quest.getId());
             }
@@ -96,7 +90,7 @@ public class Quest implements IJsonProvider{
 
     public static List<Integer> getCompletedQuests(String uuid){
         List<Integer> list = new ArrayList<>();
-        for(Quest quest : Ref.ALL_QUESTS){
+        for(Quest quest : Ref.ALL_QUESTS.values()){
             if(Quest.isQuestCompletedForPlayer(uuid, quest.getId())){
                 list.add(quest.getId());
             }
@@ -106,7 +100,7 @@ public class Quest implements IJsonProvider{
 
     public static List<Integer> getLockedQuests(String uuid){ // no completed nor active quests, only those the player doesn't have access to yes
         List<Integer> list = new ArrayList<>();
-        for (Quest quest : Ref.ALL_QUESTS) {
+        for (Quest quest : Ref.ALL_QUESTS.values()) {
             if(Quest.isQuestLocked(uuid, quest.getId())){
                 list.add(quest.getId());
             }
@@ -127,7 +121,7 @@ public class Quest implements IJsonProvider{
 
     public static List<Integer> getActiveQuests(String uuid){
         List<Integer> list = new ArrayList<>();
-        for (Quest quest : Ref.ALL_QUESTS) {
+        for (Quest quest : Ref.ALL_QUESTS.values()) {
             if(Quest.isQuestActive(uuid, quest.getId())){
                 list.add(quest.getId());
             }
