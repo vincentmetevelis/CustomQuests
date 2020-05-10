@@ -1,13 +1,13 @@
-package com.vincentmet.customquests.quests;
+package com.vincentmet.customquests.quests.book;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.vincentmet.customquests.lib.Ref;
+import com.vincentmet.customquests.quests.IJsonProvider;
 
-import java.util.List;
 import java.util.Map;
 
-public class QuestMenu implements IJsonProvider{
+public class QuestMenu implements IJsonProvider {
     private String title;
     private String description;
     private Map<Integer, QuestLine> questlines;

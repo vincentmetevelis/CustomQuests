@@ -1,4 +1,4 @@
-package com.vincentmet.customquests.quests;
+package com.vincentmet.customquests.quests.quest;
 
 public enum QuestRewardType {
     ITEMS,

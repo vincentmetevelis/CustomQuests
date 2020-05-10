@@ -1,9 +1,10 @@
-package com.vincentmet.customquests.quests;
+package com.vincentmet.customquests.quests.quest;
 
 import com.google.gson.JsonArray;
 import com.vincentmet.customquests.lib.Ref;
+import com.vincentmet.customquests.quests.IJsonArrayProvider;
 
-public class QuestPosition implements IJsonArrayProvider{
+public class QuestPosition implements IJsonArrayProvider {
     private int x;
     private int y;
 

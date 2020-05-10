@@ -3,7 +3,7 @@ package com.vincentmet.customquests.screens.elements.labels;
 import com.vincentmet.customquests.lib.LineColor;
 import com.vincentmet.customquests.lib.MouseDirection;
 import com.vincentmet.customquests.lib.Ref;
-import com.vincentmet.customquests.quests.QuestPosition;
+import com.vincentmet.customquests.quests.quest.QuestPosition;
 import com.vincentmet.customquests.screens.elements.IQuestingGuiElement;
 import com.vincentmet.customquests.screens.elements.buttons.ButtonQuest;
 import net.minecraft.client.gui.screen.Screen;

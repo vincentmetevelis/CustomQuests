@@ -1,9 +1,11 @@
-package com.vincentmet.customquests.quests;
+package com.vincentmet.customquests.quests.quest;
 
 import com.google.gson.JsonObject;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.vincentmet.customquests.lib.Ref;
+import com.vincentmet.customquests.quests.IJsonProvider;
+import com.vincentmet.customquests.quests.IQuestReward;
 import net.minecraft.block.Blocks;
 import net.minecraft.command.CommandSource;
 import net.minecraft.entity.EntityType;
@@ -15,7 +17,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.registries.ForgeRegistries;
 
-public class QuestReward implements IJsonProvider{
+public class QuestReward implements IJsonProvider {
     private QuestRewardType type;
     private IQuestReward reward;
 

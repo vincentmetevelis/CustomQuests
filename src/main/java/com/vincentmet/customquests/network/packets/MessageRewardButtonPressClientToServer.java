@@ -1,8 +1,9 @@
 package com.vincentmet.customquests.network.packets;
 
 import com.vincentmet.customquests.lib.Utils;
-import com.vincentmet.customquests.quests.Quest;
-import com.vincentmet.customquests.quests.QuestUserProgress;
+import com.vincentmet.customquests.quests.progress.ProgressHelper;
+import com.vincentmet.customquests.quests.quest.Quest;
+import com.vincentmet.customquests.quests.progress.QuestUserProgress;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.network.NetworkEvent;
 
@@ -25,7 +26,7 @@ public class MessageRewardButtonPressClientToServer {
 
     public static void handle(final MessageRewardButtonPressClientToServer message, Supplier<NetworkEvent.Context> ctx) {
         ctx.get().enqueueWork(() -> {
-            QuestUserProgress.getUserProgressForUuid(Utils.simplifyUUID(ctx.get().getSender().getUniqueID())).getQuestStatuses().entrySet().stream().filter(questStatus -> questStatus.getValue().getQuestId() == message.questId).forEach(questStatus -> {
+            ProgressHelper.getUserProgressForUuid(Utils.simplifyUUID(ctx.get().getSender().getUniqueID())).getQuestStatuses().entrySet().stream().filter(questStatus -> questStatus.getValue().getQuestId() == message.questId).forEach(questStatus -> {
                 if(!questStatus.getValue().isClaimed()){
                     Quest.getQuestFromId(message.questId).getRewards().forEach(reward -> reward.getReward().executeReward(ctx.get().getSender()));
                     questStatus.getValue().setClaimed(true);

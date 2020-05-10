@@ -2,7 +2,7 @@ package com.vincentmet.customquests.lib;
 
 public class IntCounter {
     private int value = 0;
-    private int incrementor = 1;
+    private int incrementer = 1;
 
     public IntCounter(){
 
@@ -12,13 +12,13 @@ public class IntCounter {
         this.value = startingValue;
     }
 
-    public IntCounter(int startingValue, int incrementor){
+    public IntCounter(int startingValue, int incrementer){
         this.value = startingValue;
-        this.incrementor = incrementor;
+        this.incrementer = incrementer;
     }
 
     public IntCounter count(){
-        this.value += this.incrementor;
+        this.value += this.incrementer;
         return this;
     }
 
@@ -29,5 +29,10 @@ public class IntCounter {
     public IntCounter add(int value){
         this.value += value;
         return this;
+    }
+
+    @Override
+    public String toString() {
+        return "" + getValue();
     }
 }

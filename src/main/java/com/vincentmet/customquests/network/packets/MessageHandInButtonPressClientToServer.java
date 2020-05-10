@@ -2,8 +2,9 @@ package com.vincentmet.customquests.network.packets;
 
 import com.vincentmet.customquests.lib.Utils;
 import com.vincentmet.customquests.quests.IQuestRequirement;
-import com.vincentmet.customquests.quests.Quest;
-import com.vincentmet.customquests.quests.QuestUserProgress;
+import com.vincentmet.customquests.quests.progress.ProgressHelper;
+import com.vincentmet.customquests.quests.quest.Quest;
+import com.vincentmet.customquests.quests.progress.QuestUserProgress;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.network.NetworkEvent;
@@ -36,13 +37,13 @@ public class MessageHandInButtonPressClientToServer {
                 int slotIndexCount = 0;
                 for(ItemStack mainInventoryStack : ctx.get().getSender().inventory.mainInventory){
                     if(mainInventoryStack.getItem() == itemStack.getItem()){
-                        int itemCountLeftToHandIn = QuestUserProgress.getItemCountLeftToHandIn(Utils.simplifyUUID(ctx.get().getSender().getUniqueID()), message.questId, message.subQuestId, countSubReq);
+                        int itemCountLeftToHandIn = ProgressHelper.getItemCountLeftToHandIn(Utils.simplifyUUID(ctx.get().getSender().getUniqueID()), message.questId, message.subQuestId, countSubReq);
                         System.out.println("Submitted item");
                         if(itemCountLeftToHandIn < mainInventoryStack.getCount()){
-                            QuestUserProgress.addPlayerProgress(Utils.simplifyUUID(ctx.get().getSender().getUniqueID()), message.questId, message.subQuestId, countSubReq, itemCountLeftToHandIn);
+                            ProgressHelper.addPlayerProgress(Utils.simplifyUUID(ctx.get().getSender().getUniqueID()), message.questId, message.subQuestId, countSubReq, itemCountLeftToHandIn);
                             ctx.get().getSender().inventory.getStackInSlot(slotIndexCount).setCount(ctx.get().getSender().inventory.getStackInSlot(slotIndexCount).getCount() - itemCountLeftToHandIn);
                         }else{
-                            QuestUserProgress.addPlayerProgress(Utils.simplifyUUID(ctx.get().getSender().getUniqueID()), message.questId, message.subQuestId, countSubReq, mainInventoryStack.getCount());
+                            ProgressHelper.addPlayerProgress(Utils.simplifyUUID(ctx.get().getSender().getUniqueID()), message.questId, message.subQuestId, countSubReq, mainInventoryStack.getCount());
                             ctx.get().getSender().inventory.removeStackFromSlot(slotIndexCount);
                         }
                     }
