@@ -11,9 +11,11 @@ public class ConfigHandler {
     public static ForgeConfigSpec COMMON_CONFIG;
 
     public static ForgeConfigSpec.BooleanValue giveDeviceOnLogin;
+    public static ForgeConfigSpec.BooleanValue giveDeviceOnFirstLogin;
 
     static{
-        giveDeviceOnLogin = COMMON_BUILDER.comment("Gives the player a Questing Device when loading into a world if the player doesn't have one yet in their inventory").define("giveDeviceOnLogin", true);
+        giveDeviceOnLogin = COMMON_BUILDER.comment("Gives the player a Questing Device when loading into a world if the player doesn't have one yet in their inventory").define("giveDeviceOnLogin", false);
+        giveDeviceOnFirstLogin = COMMON_BUILDER.comment("If the 'giveDeviceOnLogin' config setting is set to false but this one to true, you will still receive a Questing Device, but only when first loading into the server.").define("giveDeviceOnFirstLogin", true);
 
         COMMON_CONFIG = COMMON_BUILDER.build();
     }

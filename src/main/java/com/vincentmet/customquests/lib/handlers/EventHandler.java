@@ -2,34 +2,22 @@ package com.vincentmet.customquests.lib.handlers;
 
 import com.mojang.datafixers.util.Pair;
 import com.vincentmet.customquests.Objects;
-import com.vincentmet.customquests.lib.Ref;
-import com.vincentmet.customquests.lib.Triple;
-import com.vincentmet.customquests.lib.Utils;
-import com.vincentmet.customquests.network.packets.MessageUpdateQuestPartiesServerToClient;
-import com.vincentmet.customquests.network.packets.MessageUpdateQuestbookServerToClient;
-import com.vincentmet.customquests.network.packets.MessageUpdateQuestsServerToClient;
-import com.vincentmet.customquests.network.packets.PacketHelper;
-import com.vincentmet.customquests.quests.Quest;
-import com.vincentmet.customquests.quests.QuestRequirementType;
-import com.vincentmet.customquests.quests.QuestUserProgress;
+import com.vincentmet.customquests.lib.*;
+import com.vincentmet.customquests.network.packets.*;
+import com.vincentmet.customquests.quests.*;
 import com.vincentmet.customquests.screens.ScreenQuestingDevice;
-import com.vincentmet.customquests.screens.questingdeveicesubscreens.SubScreenQuestDetails;
-import com.vincentmet.customquests.screens.questingdeveicesubscreens.SubScreensQuestingDevice;
+import com.vincentmet.customquests.screens.questingdeveicesubscreens.*;
+import java.util.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityType;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
+import net.minecraft.entity.player.*;
+import net.minecraft.item.*;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.GameRules;
-import net.minecraft.world.World;
+import net.minecraft.world.*;
 import net.minecraft.world.server.ServerWorld;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.api.distmarker.*;
 import net.minecraftforge.client.event.InputEvent;
-import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.event.*;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.world.WorldEvent;
@@ -37,8 +25,6 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.loading.FMLPaths;
 import net.minecraftforge.fml.network.PacketDistributor;
-
-import java.util.*;
 
 @Mod.EventBusSubscriber(modid = Ref.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class EventHandler {
@@ -82,6 +68,12 @@ public class EventHandler {
             if(!event.getPlayer().inventory.hasItemStack(new ItemStack(Objects.Items.itemQuestingDevice))) {
                 event.getPlayer().inventory.addItemStackToInventory(new ItemStack(Objects.Items.itemQuestingDevice, 1));
             }
+        }else if(ConfigHandler.giveDeviceOnFirstLogin.get()){
+            if(QuestUserProgress.getUserProgressForUuid(Utils.simplifyUUID(event.getPlayer().getUniqueID()))==null){
+                if(!event.getPlayer().inventory.hasItemStack(new ItemStack(Objects.Items.itemQuestingDevice))){
+                    event.getPlayer().inventory.addItemStackToInventory(new ItemStack(Objects.Items.itemQuestingDevice, 1));
+                }
+            }
         }
         if(QuestUserProgress.getUserProgressForUuid(Utils.simplifyUUID(event.getPlayer().getUniqueID()))==null){
             QuestUserProgress newQup = new QuestUserProgress(Utils.simplifyUUID(event.getPlayer().getUniqueID()), Ref.ERR_MSG_INT_INVALID_JSON, new ArrayList<>(), new HashMap<>());
@@ -90,7 +82,7 @@ public class EventHandler {
         }
 
         PacketHelper.sendAllProgressUpdatePackets((ServerPlayerEntity)event.getPlayer());
-        PacketHandler.CHANNEL.send(PacketDistributor.PLAYER.with(()->(ServerPlayerEntity)event.getPlayer()), new MessageUpdateQuestsServerToClient());
+        PacketHelper.sendAllQuestUpdatePackets((ServerPlayerEntity)event.getPlayer());
         PacketHandler.CHANNEL.send(PacketDistributor.PLAYER.with(()->(ServerPlayerEntity)event.getPlayer()), new MessageUpdateQuestbookServerToClient());
         PacketHandler.CHANNEL.send(PacketDistributor.PLAYER.with(()->(ServerPlayerEntity)event.getPlayer()), new MessageUpdateQuestPartiesServerToClient());
     }
@@ -156,7 +148,7 @@ public class EventHandler {
                 }
             }
 
-            for(Quest quest : Ref.ALL_QUESTS){
+            for(Quest quest : Ref.ALL_QUESTS.values()){
                 if(QuestUserProgress.areAllRequirementsCompleted(Utils.simplifyUUID(playerEntity.getUniqueID()), quest.getId())){
                     for(Map.Entry<String, QuestUserProgress> userprogress : Ref.ALL_QUESTING_PROGRESS.entrySet()){
                         if(userprogress.getKey().equals(Utils.simplifyUUID(playerEntity.getUniqueID()))){

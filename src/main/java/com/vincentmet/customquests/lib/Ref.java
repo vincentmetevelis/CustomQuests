@@ -1,21 +1,14 @@
 package com.vincentmet.customquests.lib;
 
 import com.mojang.datafixers.util.Pair;
-import com.vincentmet.customquests.quests.Quest;
-import com.vincentmet.customquests.quests.QuestMenu;
-import com.vincentmet.customquests.quests.QuestUserProgress;
+import com.vincentmet.customquests.quests.*;
 import com.vincentmet.customquests.quests.party.Party;
+import java.nio.file.Path;
+import java.util.*;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.api.distmarker.*;
 import org.lwjgl.glfw.GLFW;
-
-import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 public class Ref {
     public static final String MODID = "customquests";
@@ -60,7 +53,7 @@ public class Ref {
     public static Path questingPartiesLocation;
     public static Path currWorldDir;
     public static QuestMenu ALL_QUESTBOOK;
-    public static List<Quest> ALL_QUESTS = new ArrayList<>();
+    public static Map<Integer, Quest> ALL_QUESTS = new HashMap<>();
     public static Map<String, QuestUserProgress> ALL_QUESTING_PROGRESS = new HashMap<>();
     public static List<Party> ALL_QUESTING_PARTIES = new ArrayList<>();
 

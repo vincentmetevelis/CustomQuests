@@ -1,20 +1,14 @@
 package com.vincentmet.customquests.lib.handlers;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
+import com.google.gson.*;
 import com.vincentmet.customquests.lib.Ref;
 import com.vincentmet.customquests.lib.converters.ConverterHelper;
 import com.vincentmet.customquests.quests.*;
-import com.vincentmet.customquests.quests.party.Party;
-import com.vincentmet.customquests.quests.party.QuestPartyProgress;
+import com.vincentmet.customquests.quests.party.*;
+import java.util.*;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.registries.ForgeRegistries;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 public class StructureHandler {
     public static void initQuestingParties(JsonObject json){
@@ -51,10 +45,10 @@ public class StructureHandler {
     }
 
     public static void initQuestbook(JsonObject json){
-        List<QuestLine> questLineList = new ArrayList<>();
+        Map<Integer, QuestLine> questLineList = new HashMap<>();
         for(JsonElement jsonQuestlineElement : ConverterHelper.QuestBook.getQuestLines(json)){
             JsonObject jsonQuestline = jsonQuestlineElement.getAsJsonObject();
-            questLineList.add(new QuestLine(
+            questLineList.put(ConverterHelper.QuestBook.Questlines.getId(jsonQuestline), new QuestLine(
                     ConverterHelper.QuestBook.Questlines.getId(jsonQuestline),
                     ConverterHelper.QuestBook.Questlines.getTitle(jsonQuestline),
                     ConverterHelper.QuestBook.Questlines.getText(jsonQuestline),
@@ -71,10 +65,11 @@ public class StructureHandler {
     }
 
     public static void initQuests(JsonObject json) {
-        List<Quest> questsList = new ArrayList<>();
+        Map<Integer, Quest> questsList = new HashMap<>();
         for (JsonElement jsonQuestElement : json.get("quests").getAsJsonArray()) {
             JsonObject jsonQuest = jsonQuestElement.getAsJsonObject();
-            questsList.add(initSingleQuest(jsonQuest));
+            Quest q = initSingleQuest(jsonQuest);
+            questsList.put(q.getId(), q);
         }
         Ref.ALL_QUESTS = questsList;
     }
@@ -218,6 +213,14 @@ public class StructureHandler {
                             new QuestReward.SpawnEntity(
                                     ConverterHelper.Quests.Rewards.SpawnEntity.getEntity(jsonQuestReward),
                                     ConverterHelper.Quests.Rewards.SpawnEntity.getAmount(jsonQuestReward)
+                            )
+                    ));
+                    break;
+                case XP:
+                    questRewardList.add(new QuestReward(
+                            QuestRewardType.XP,
+                            new QuestReward.GiveXP(
+                                    ConverterHelper.Quests.Rewards.GiveXP.getAmount(jsonQuestReward)
                             )
                     ));
                     break;

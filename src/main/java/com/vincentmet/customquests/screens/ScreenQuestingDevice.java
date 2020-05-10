@@ -18,7 +18,6 @@ import java.util.Map;
 @OnlyIn(Dist.CLIENT)
 public class ScreenQuestingDevice extends Screen {
     private PlayerEntity player = BaseClass.proxy.getClientPlayer();
-    //private ButtonHome buttonHome = new ButtonHome(this);
     private ButtonQuestlines buttonQuestlines = new ButtonQuestlines(this);
     //private ButtonParties buttonParties = new ButtonParties(this);
     //private ButtonSettings buttonSettings = new ButtonSettings(this);
@@ -29,7 +28,6 @@ public class ScreenQuestingDevice extends Screen {
     public ScreenQuestingDevice() {
         super(new TranslationTextComponent("I DONT CAREEEE"));
 
-        //screens.put(SubScreensQuestingDevice.MAIN_MENU, new SubScreenMainMenu(this));
         //screens.put(SubScreensQuestingDevice.PARTY_SCREEN, new SubScreenParties(this));
         screens.put(SubScreensQuestingDevice.QUESTLINES, new SubScreenQuestlines(this));
         //screens.put(SubScreensQuestingDevice.SETTINGS, new SubScreenSettings(this));
@@ -49,8 +47,6 @@ public class ScreenQuestingDevice extends Screen {
                         subScreensQuestingDeviceIQuestingGuiElementEntry.getValue().render(player, mouseX, mouseY);
                 })
         ;
-        //this.buttonHome.update(player, mouseX, mouseY, 0, 0);
-        //this.buttonHome.render(player, mouseX, mouseY);
         this.buttonQuestlines.update(player, mouseX, mouseY, 0, 0);
         this.buttonQuestlines.render(player, mouseX, mouseY);
         //this.buttonParties.update(player, mouseX, mouseY, 0, 0);
@@ -75,7 +71,6 @@ public class ScreenQuestingDevice extends Screen {
                 )
         ;
 
-        //this.buttonHome.onClick(player, mouseX, mouseY);
         this.buttonQuestlines.onClick(player, mouseX, mouseY);
         //this.buttonParties.onClick(player, mouseX, mouseY);
         //this.buttonSettings.onClick(player, mouseX, mouseY);

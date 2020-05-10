@@ -5,7 +5,6 @@ import com.vincentmet.customquests.lib.*;
 import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.entity.player.PlayerEntity;
 import org.lwjgl.glfw.GLFW;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;

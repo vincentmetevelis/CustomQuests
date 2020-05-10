@@ -3,7 +3,7 @@ package com.vincentmet.customquests.quests.party;
 import com.google.gson.JsonObject;
 import com.vincentmet.customquests.lib.Ref;
 import com.vincentmet.customquests.quests.IJsonProvider;
-import com.vincentmet.customquests.quests.QuestUserProgress;
+import com.vincentmet.customquests.quests.progress.QuestUserProgress;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;

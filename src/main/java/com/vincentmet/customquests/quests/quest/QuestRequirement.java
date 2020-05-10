@@ -1,8 +1,10 @@
-package com.vincentmet.customquests.quests;
+package com.vincentmet.customquests.quests.quest;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.vincentmet.customquests.lib.Ref;
+import com.vincentmet.customquests.quests.IJsonProvider;
+import com.vincentmet.customquests.quests.IQuestRequirement;
 import net.minecraft.entity.EntityType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -11,7 +13,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.List;
 
-public class QuestRequirement implements IJsonProvider{
+public class QuestRequirement implements IJsonProvider {
     private QuestRequirementType requirementType;
     private List<IQuestRequirement> subRequirements;
 

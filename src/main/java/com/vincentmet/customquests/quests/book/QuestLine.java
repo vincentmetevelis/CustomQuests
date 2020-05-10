@@ -1,11 +1,8 @@
 package com.vincentmet.customquests.quests;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
+import com.google.gson.*;
 import com.vincentmet.customquests.lib.Ref;
-
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class QuestLine implements IJsonProvider{
     private int id;
@@ -36,7 +33,7 @@ public class QuestLine implements IJsonProvider{
     public static List<Integer> getUnlockedQuestlines(String uuid){
         List<Integer> completedQuestIds = Quest.getCompletedQuests(uuid);
         List<Integer> unlockedQuestlines = new ArrayList<>();
-        for(Quest quest : Ref.ALL_QUESTS){
+        for(Quest quest : Ref.ALL_QUESTS.values()){
             if(quest.getDependencies().isEmpty()){
                 unlockedQuestlines.add(quest.getQuestline());
             }

@@ -1,18 +1,18 @@
 package com.vincentmet.customquests.screens.elements.buttons;
 
-import com.vincentmet.customquests.lib.MouseDirection;
-import com.vincentmet.customquests.lib.Ref;
-import com.vincentmet.customquests.lib.Utils;
-import com.vincentmet.customquests.quests.QuestLine;
+import com.vincentmet.customquests.lib.*;
+import com.vincentmet.customquests.quests.*;
 import com.vincentmet.customquests.screens.elements.IQuestingGuiElement;
 import com.vincentmet.customquests.screens.elements.labels.Label;
 import com.vincentmet.customquests.screens.questingdeveicesubscreens.SubScreenQuestDetails;
 import com.vincentmet.customquests.screens.questingdeveicesubscreens.questlines.QuestingWeb;
+import java.util.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.api.distmarker.*;
+import org.lwjgl.opengl.GL11;
 
 @OnlyIn(Dist.CLIENT)
 public class ButtonQuestline implements IQuestingGuiElement {
@@ -49,7 +49,20 @@ public class ButtonQuestline implements IQuestingGuiElement {
             Minecraft.getInstance().getTextureManager().bindTexture(Ref.IMAGE_BUTTON_QUESTLINE_DISABLED);
         }
         root.blit(x, y, 0, 0, WIDTH, HEIGHT);
+        reloadLabel();
         label.render(player, mouseX, mouseY);
+
+        if(!QuestLine.isQuestlineUnlocked(Utils.simplifyUUID(player.getUniqueID()), questLine.getId()) && Utils.isMouseInBounds(mouseX, mouseY, x, y, x + WIDTH, y + HEIGHT)){
+            List<Integer> missingIds = new ArrayList<>();
+            questLine.getQuests().forEach(questId->{
+                missingIds.addAll(Quest.getQuestFromId(questId).getDependencies());
+            });
+
+            GL11.glPushMatrix();
+            root.renderTooltip("Complete the quest(s): " + missingIds.toString().replace("[", "\'").replace("]", "\'") + " to unlock this questline!", (int)mouseX, (int)mouseY);
+            GL11.glPopMatrix();
+            RenderHelper.disableStandardItemLighting();
+        }
     }
 
     @Override

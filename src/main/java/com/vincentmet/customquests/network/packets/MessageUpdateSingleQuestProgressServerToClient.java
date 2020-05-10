@@ -4,8 +4,9 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.vincentmet.customquests.lib.Ref;
 import com.vincentmet.customquests.lib.handlers.StructureHandler;
-import com.vincentmet.customquests.quests.QuestStatus;
-import com.vincentmet.customquests.quests.QuestUserProgress;
+import com.vincentmet.customquests.quests.progress.ProgressHelper;
+import com.vincentmet.customquests.quests.progress.QuestStatus;
+import com.vincentmet.customquests.quests.progress.QuestUserProgress;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.network.NetworkEvent;
 
@@ -33,7 +34,7 @@ public class MessageUpdateSingleQuestProgressServerToClient {
         JsonObject json = new JsonObject();
         json.addProperty("uuid", packet.uuid);
         json.addProperty("questid", packet.questId);
-        for(Map.Entry<Integer, QuestStatus> questStatus : QuestUserProgress.getUserProgressForUuid(packet.uuid).getQuestStatuses().entrySet()){
+        for(Map.Entry<Integer, QuestStatus> questStatus : ProgressHelper.getUserProgressForUuid(packet.uuid).getQuestStatuses().entrySet()){
             if(questStatus.getValue().getQuestId() == packet.questId){
                 json.add("content", questStatus.getValue().getJson());
             }

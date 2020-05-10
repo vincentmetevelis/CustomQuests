@@ -13,7 +13,7 @@ apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 
-version = '1.14.4-1.0.6'
+version = '1.14.4-1.0.8'
 group = 'com.vincentmet.customquests'
 archivesBaseName = 'customquests'
 
@@ -51,7 +51,7 @@ minecraft {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.14.4-28.1.115'
+    minecraft 'net.minecraftforge:forge:1.14.4-28.2.11'
 	//put JEI here as soft dependency
 }
 

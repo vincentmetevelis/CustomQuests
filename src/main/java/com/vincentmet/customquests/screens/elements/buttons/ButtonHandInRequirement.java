@@ -5,9 +5,10 @@ import com.vincentmet.customquests.lib.Ref;
 import com.vincentmet.customquests.lib.Utils;
 import com.vincentmet.customquests.lib.handlers.PacketHandler;
 import com.vincentmet.customquests.network.packets.MessageHandInButtonPressClientToServer;
-import com.vincentmet.customquests.quests.QuestRequirement;
-import com.vincentmet.customquests.quests.QuestRequirementType;
-import com.vincentmet.customquests.quests.QuestUserProgress;
+import com.vincentmet.customquests.quests.progress.ProgressHelper;
+import com.vincentmet.customquests.quests.quest.QuestRequirement;
+import com.vincentmet.customquests.quests.quest.QuestRequirementType;
+import com.vincentmet.customquests.quests.progress.QuestUserProgress;
 import com.vincentmet.customquests.screens.elements.IQuestingGuiElement;
 import com.vincentmet.customquests.screens.elements.labels.Label;
 import net.minecraft.client.gui.screen.Screen;
@@ -44,8 +45,8 @@ public class ButtonHandInRequirement implements IQuestingGuiElement {
 
     @Override
     public void render(PlayerEntity player, double mouseX, double mouseY) {
-        String text = QuestUserProgress.isRequirementCompleted(Utils.simplifyUUID(player.getUniqueID()), questId, questReqId) ? textHandedIn : textNotHandedIn;
-        if(questRequirement.getType() == QuestRequirementType.ITEM_DELIVER && !QuestUserProgress.isRequirementCompleted(Utils.simplifyUUID(player.getUniqueID()), questId, questReqId)){
+        String text = ProgressHelper.isRequirementCompleted(Utils.simplifyUUID(player.getUniqueID()), questId, questReqId) ? textHandedIn : textNotHandedIn;
+        if(questRequirement.getType() == QuestRequirementType.ITEM_DELIVER && !ProgressHelper.isRequirementCompleted(Utils.simplifyUUID(player.getUniqueID()), questId, questReqId)){
             if(Utils.isMouseInBounds(mouseX, mouseY, x, y, x + WIDTH, y + HEIGHT)){
                 root.getMinecraft().getTextureManager().bindTexture(Ref.IMAGE_BUTTON_CLAIM_REWARD_PRESSED);
             }else{
@@ -70,7 +71,7 @@ public class ButtonHandInRequirement implements IQuestingGuiElement {
 
     @Override
     public void onClick(PlayerEntity player, double mouseX, double mouseY) {
-        if(questRequirement.getType() == QuestRequirementType.ITEM_DELIVER && !QuestUserProgress.isRequirementCompleted(Utils.simplifyUUID(player.getUniqueID()), questId, questReqId)){
+        if(questRequirement.getType() == QuestRequirementType.ITEM_DELIVER && !ProgressHelper.isRequirementCompleted(Utils.simplifyUUID(player.getUniqueID()), questId, questReqId)){
             if(Utils.isMouseInBounds(mouseX, mouseY, x, y, x+WIDTH, y+HEIGHT)){
                 PacketHandler.CHANNEL.sendToServer(new MessageHandInButtonPressClientToServer(questId, questReqId));
             }

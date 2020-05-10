@@ -1,29 +1,19 @@
 package com.vincentmet.customquests.lib;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
+import com.google.gson.*;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.vincentmet.customquests.screens.ScreenQuestingEditor;
+import java.io.*;
+import java.net.URL;
+import java.nio.file.*;
+import java.util.UUID;
+import javax.net.ssl.HttpsURLConnection;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.JsonToNBT;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.nbt.*;
+import net.minecraft.util.text.*;
 import net.minecraft.world.World;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-
-import javax.net.ssl.HttpsURLConnection;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.UUID;
+import net.minecraftforge.api.distmarker.*;
 
 public class Utils {
     public static String colorify(String string){
@@ -163,6 +153,11 @@ public class Utils {
 
     @OnlyIn(Dist.CLIENT)
     public static void displayEditorGui(){
+        Minecraft.getInstance().displayGuiScreen(new ScreenQuestingEditor());
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    public static void displayQuestingGui(){
         Minecraft.getInstance().displayGuiScreen(new ScreenQuestingEditor());
     }
 }

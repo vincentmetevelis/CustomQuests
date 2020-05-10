@@ -23,6 +23,7 @@ public class PacketHandler {
 
     public static void init() {
         CHANNEL.registerMessage(nextID(), MessageUpdateSingleQuestProgressServerToClient.class, MessageUpdateSingleQuestProgressServerToClient::encode, MessageUpdateSingleQuestProgressServerToClient::decode, MessageUpdateSingleQuestProgressServerToClient::handle);
+        CHANNEL.registerMessage(nextID(), MessageUpdateSingleQuestServerToClient.class, MessageUpdateSingleQuestServerToClient::encode, MessageUpdateSingleQuestServerToClient::decode, MessageUpdateSingleQuestServerToClient::handle);
         CHANNEL.registerMessage(nextID(), MessageUpdateQuestUserProgressServerToClient.class, MessageUpdateQuestUserProgressServerToClient::encode, MessageUpdateQuestUserProgressServerToClient::decode, MessageUpdateQuestUserProgressServerToClient::handle);
         CHANNEL.registerMessage(nextID(), MessageUpdateQuestbookServerToClient.class, MessageUpdateQuestbookServerToClient::encode, MessageUpdateQuestbookServerToClient::decode, MessageUpdateQuestbookServerToClient::handle);
         CHANNEL.registerMessage(nextID(), MessageUpdateQuestsServerToClient.class, MessageUpdateQuestsServerToClient::encode, MessageUpdateQuestsServerToClient::decode, MessageUpdateQuestsServerToClient::handle);

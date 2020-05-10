@@ -1,9 +1,11 @@
-package com.vincentmet.customquests.quests;
+package com.vincentmet.customquests.quests.quest;
 
 import com.google.gson.JsonObject;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.vincentmet.customquests.lib.Ref;
+import com.vincentmet.customquests.quests.IJsonProvider;
+import com.vincentmet.customquests.quests.IQuestReward;
 import net.minecraft.block.Blocks;
 import net.minecraft.command.CommandSource;
 import net.minecraft.entity.EntityType;
@@ -15,7 +17,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.registries.ForgeRegistries;
 
-public class QuestReward implements IJsonProvider{
+public class QuestReward implements IJsonProvider {
     private QuestRewardType type;
     private IQuestReward reward;
 
@@ -112,7 +114,7 @@ public class QuestReward implements IJsonProvider{
         public void executeReward(PlayerEntity player) {
             final CommandDispatcher<CommandSource> dispatcher = player.getServer().getCommandManager().getDispatcher();
             try {
-                dispatcher.execute(command, player.getServer().getCommandSource().withFeedbackDisabled());
+                dispatcher.execute("execute at " + player.getDisplayName().getString() + " run " + command, player.getServer().getCommandSource().withFeedbackDisabled());
             } catch (CommandSyntaxException e) {
                 e.printStackTrace();
             }
@@ -173,6 +175,43 @@ public class QuestReward implements IJsonProvider{
         public void setAmount(int amount) {
             this.amount = amount;
             Ref.shouldSaveNextTick = true;
+        }
+    }
+
+    public static class GiveXP implements IQuestReward{
+        private int amount;
+        public GiveXP(int amount){
+            this.amount = amount;
+        }
+
+        @Override
+        public void executeReward(PlayerEntity player) {
+            player.giveExperiencePoints(amount);
+        }
+
+        @Override
+        public ItemStack getItemStack() {
+            return new ItemStack(Items.EXPERIENCE_BOTTLE);
+        }
+
+        @Override
+        public JsonObject getJson() {
+            JsonObject json = new JsonObject();
+            json.addProperty("amount", amount);
+            return json;
+        }
+
+        @Override
+        public String toString() {
+            return "Receive " + amount + " Experience points";
+        }
+
+        public int getAmount() {
+            return amount;
+        }
+
+        public void setAmount(int amount) {
+            this.amount = amount;
         }
     }
 }

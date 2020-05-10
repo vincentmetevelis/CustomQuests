@@ -6,9 +6,10 @@ import com.google.gson.JsonObject;
 import com.mojang.datafixers.util.Pair;
 import com.vincentmet.customquests.lib.Ref;
 import com.vincentmet.customquests.lib.Utils;
-import com.vincentmet.customquests.quests.QuestPosition;
-import com.vincentmet.customquests.quests.QuestRequirementType;
-import com.vincentmet.customquests.quests.QuestRewardType;
+import com.vincentmet.customquests.quests.progress.QuestSubrequirementStatus;
+import com.vincentmet.customquests.quests.quest.QuestPosition;
+import com.vincentmet.customquests.quests.quest.QuestRequirementType;
+import com.vincentmet.customquests.quests.quest.QuestRewardType;
 import net.minecraft.entity.EntityType;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
@@ -18,7 +19,9 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ConverterHelper {
 	public static class QuestBook{
@@ -86,7 +89,6 @@ public class ConverterHelper {
 	}
 
 	public static class Quests{
-
 		public static int getId(JsonObject json){
 			if(json.has("id") && json.get("id").isJsonPrimitive()){
 				return json.get("id").getAsInt();
@@ -94,7 +96,6 @@ public class ConverterHelper {
 				return Ref.ERR_MSG_INT_INVALID_JSON;
 			}
 		}
-
 		public static Item getIcon(JsonObject json){
 			if(json.has("icon") && json.get("icon").isJsonPrimitive()){
 				return ForgeRegistries.ITEMS.getValue(new ResourceLocation(json.get("icon").getAsString()));
@@ -102,7 +103,6 @@ public class ConverterHelper {
 				return Items.AIR;
 			}
 		}
-
 		public static String getTitle(JsonObject json){
 			if(json.has("title") && json.get("title").isJsonPrimitive()){
 				return json.get("title").getAsString();
@@ -110,7 +110,6 @@ public class ConverterHelper {
 				return Ref.ERR_MSG_STR_INVALID_JSON;
 			}
 		}
-
 		public static String getText(JsonObject json){
 			if(json.has("text") && json.get("text").isJsonPrimitive()){
 				return json.get("text").getAsString();
@@ -118,7 +117,6 @@ public class ConverterHelper {
 				return Ref.ERR_MSG_STR_INVALID_JSON;
 			}
 		}
-
 		public static JsonArray getRequirements(JsonObject json){
 			if(json.has("requirements") && json.get("requirements").isJsonArray()){
 				return json.get("requirements").getAsJsonArray();
@@ -126,7 +124,6 @@ public class ConverterHelper {
 				return new JsonArray();
 			}
 		}
-
 		public static JsonArray getRewards(JsonObject json){
 			if(json.has("rewards") && json.get("rewards").isJsonArray()){
 				return json.get("rewards").getAsJsonArray();
@@ -148,7 +145,6 @@ public class ConverterHelper {
 				}
 			}
 		}
-
 		public static class Requirements{
 			public static QuestRequirementType getType(JsonObject json){
 				if(json.has("type") && json.get("type").isJsonPrimitive()){
@@ -311,7 +307,6 @@ public class ConverterHelper {
 				}
 			}
 		}
-
 		public static class Rewards{
 			public static QuestRewardType getType(JsonObject json){
 				if(json.has("type") && json.get("type").isJsonPrimitive()){
@@ -380,6 +375,16 @@ public class ConverterHelper {
 				}
 			}
 
+			public static class GiveXP{
+				public static int getAmount(JsonObject json){
+					if(json.has("content") && json.get("content").getAsJsonObject().has("amount") && json.get("content").getAsJsonObject().get("amount").isJsonPrimitive()){
+						return json.get("content").getAsJsonObject().get("amount").getAsInt();
+					}else{
+						return Ref.ERR_MSG_INT_INVALID_JSON;
+					}
+				}
+			}
+
 			public static class TeleportTo{
 				public static Pair<String, BlockPos> getLocation(JsonObject json){
 					if(json.has("content") && json.get("content").getAsJsonObject().has("entity") && json.get("content").getAsJsonObject().get("entity").isJsonPrimitive()){
@@ -390,7 +395,6 @@ public class ConverterHelper {
 				}
 			}
 		}
-
 		public static class GuiPosition{
 			public static QuestPosition getGuiPosition(JsonObject json){
 				if(json.has("position") && json.get("position").isJsonArray()){
@@ -402,7 +406,6 @@ public class ConverterHelper {
 			}
 		}
 	}
-
 	public static class QuestProgress{
 		public static JsonArray getPlayers(JsonObject json){
 			if(json.has("players") && json.get("players").isJsonArray()){
@@ -411,7 +414,6 @@ public class ConverterHelper {
 				return new JsonArray();
 			}
 		}
-
 		public static class Players{
 			public static String getUUID(JsonObject json){
 				if(json.has("uuid") && json.get("uuid").isJsonPrimitive()){
@@ -475,13 +477,29 @@ public class ConverterHelper {
 				}
 
 				public static class RequirementCompletion{
-					public static List<Integer> getSubRequirementCompletionStatusList(JsonArray json) {
-						List<Integer> subRequirementDependencyList = new ArrayList<>();
-						for (JsonElement questSubDependencyId : json.getAsJsonArray()) {
-							subRequirementDependencyList.add(questSubDependencyId.getAsInt());
-						}
-						return subRequirementDependencyList;
+					public static Map<Integer, QuestSubrequirementStatus> getSubRequirementCompletionStatusList(JsonArray json) {
+                        Map<Integer, QuestSubrequirementStatus> map = new HashMap<>();
+						for(JsonElement jsonElement : json){
+						    map.put(SubRequirementCompletion.getId(jsonElement.getAsJsonObject()), new QuestSubrequirementStatus(SubRequirementCompletion.getId(jsonElement.getAsJsonObject()), SubRequirementCompletion.getValue(jsonElement.getAsJsonObject())));
+                        }
+						return map;
 					}
+					public static class SubRequirementCompletion{
+					    public static int getId(JsonObject json){
+                            if(json.has("id") && json.get("id").isJsonPrimitive()){
+                                return json.get("id").getAsInt();
+                            }else{
+                                return Ref.ERR_MSG_INT_INVALID_JSON;
+                            }
+                        }
+					    public static int getValue(JsonObject json){
+                            if(json.has("value") && json.get("value").isJsonPrimitive()){
+                                return json.get("value").getAsInt();
+                            }else{
+                                return Ref.ERR_MSG_INT_INVALID_JSON;
+                            }
+                        }
+                    }
 				}
 			}
 		}
