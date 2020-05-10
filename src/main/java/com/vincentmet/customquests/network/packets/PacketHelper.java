@@ -3,6 +3,8 @@ package com.vincentmet.customquests.network.packets;
 import com.vincentmet.customquests.lib.Ref;
 import com.vincentmet.customquests.lib.handlers.PacketHandler;
 import com.vincentmet.customquests.quests.*;
+import com.vincentmet.customquests.quests.progress.*;
+import com.vincentmet.customquests.quests.quest.Quest;
 import java.util.Map;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraftforge.fml.network.PacketDistributor;

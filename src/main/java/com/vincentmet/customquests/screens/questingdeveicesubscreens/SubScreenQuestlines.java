@@ -1,7 +1,7 @@
 package com.vincentmet.customquests.screens.questingdeveicesubscreens;
 
 import com.vincentmet.customquests.lib.*;
-import com.vincentmet.customquests.quests.QuestLine;
+import com.vincentmet.customquests.quests.book.QuestLine;
 import com.vincentmet.customquests.screens.elements.IQuestingGuiElement;
 import com.vincentmet.customquests.screens.elements.buttons.ButtonQuestline;
 import com.vincentmet.customquests.screens.elements.labels.Label;

@@ -4,12 +4,10 @@ import com.vincentmet.customquests.lib.Utils;
 import com.vincentmet.customquests.quests.IQuestRequirement;
 import com.vincentmet.customquests.quests.progress.ProgressHelper;
 import com.vincentmet.customquests.quests.quest.Quest;
-import com.vincentmet.customquests.quests.progress.QuestUserProgress;
+import java.util.function.Supplier;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.network.NetworkEvent;
-
-import java.util.function.Supplier;
 
 public class MessageHandInButtonPressClientToServer {
     public int questId;

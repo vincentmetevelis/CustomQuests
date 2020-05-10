@@ -1,5 +1,6 @@
 package com.vincentmet.customquests.screens.elements.buttons;
 
+import com.mojang.blaze3d.platform.GlStateManager;
 import com.vincentmet.customquests.lib.MouseDirection;
 import com.vincentmet.customquests.lib.Ref;
 import com.vincentmet.customquests.lib.Utils;
@@ -16,6 +17,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import org.lwjgl.opengl.GL11;
 
 @OnlyIn(Dist.CLIENT)
 public class ButtonQuest implements IQuestingGuiElement {
@@ -56,8 +58,11 @@ public class ButtonQuest implements IQuestingGuiElement {
             }
         }
         root.blit(x, y, 0, 0, WIDTH, HEIGHT);
-        RenderHelper.enableGUIStandardItemLighting();
+        GL11.glPushMatrix();
+        RenderHelper.enableStandardItemLighting();
         root.getMinecraft().getItemRenderer().renderItemIntoGUI(new ItemStack(quest.getIcon()), x + 8, y + 7);
+        RenderHelper.disableStandardItemLighting();
+        GL11.glPopMatrix();
 
     }
 

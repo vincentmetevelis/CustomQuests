@@ -13,14 +13,14 @@ apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 
-version = '1.14.4-1.0.8'
+version = '1.15.2-1.0.1'
 group = 'com.vincentmet.customquests'
 archivesBaseName = 'customquests'
 
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8'
 
 minecraft {
-	mappings channel: 'snapshot', version: '20200119-1.14.4' //Leave it at '20200119-1.14.4' for 1.14, this is the final mapping
+    mappings channel: 'snapshot', version: '20200510-1.15.1'
     runs {
         client {
             workingDirectory project.file('run')
@@ -51,7 +51,7 @@ minecraft {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.14.4-28.2.11'
+    minecraft 'net.minecraftforge:forge:1.15.2-31.1.77'
 	//put JEI here as soft dependency
 }
 
@@ -69,15 +69,12 @@ jar {
     }
 }
 
-def reobfFile = file("$buildDir/reobfJar/output.jar")
-def reobfArtifact = artifacts.add('default', reobfFile) {
-    type 'jar'
-    builtBy 'reobfJar'
-}
+jar.finalizedBy('reobfJar') 
+
 publishing {
     publications {
         mavenJava(MavenPublication) {
-            artifact reobfArtifact
+            artifact jar
         }
     }
     repositories {

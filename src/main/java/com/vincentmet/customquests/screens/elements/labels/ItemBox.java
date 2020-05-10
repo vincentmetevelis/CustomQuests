@@ -10,6 +10,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import org.lwjgl.opengl.GL11;
 
 @OnlyIn(Dist.CLIENT)
 public class ItemBox implements IQuestingGuiElement {
@@ -36,8 +37,11 @@ public class ItemBox implements IQuestingGuiElement {
     public void render(PlayerEntity player, double mouseX, double mouseY) {
         root.getMinecraft().getTextureManager().bindTexture(Ref.IMAGE_ITEMBOX_BACKGROUND);
         root.blit(x, y, 0, 0, WIDTH, HEIGHT);
-        RenderHelper.enableGUIStandardItemLighting();
+        GL11.glPushMatrix();
+        RenderHelper.enableStandardItemLighting();
         Minecraft.getInstance().getItemRenderer().renderItemIntoGUI(itemstack, x+1, y+1);
+        RenderHelper.disableStandardItemLighting();
+        GL11.glPopMatrix();
     }
 
     @Override

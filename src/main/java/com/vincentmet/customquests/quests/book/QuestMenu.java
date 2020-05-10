@@ -3,7 +3,7 @@ package com.vincentmet.customquests.quests.book;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.vincentmet.customquests.lib.Ref;
-import com.vincentmet.customquests.quests.IJsonProvider;
+import com.vincentmet.customquests.quests.*;
 
 import java.util.Map;
 
