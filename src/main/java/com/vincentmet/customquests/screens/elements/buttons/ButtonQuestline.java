@@ -1,30 +1,18 @@
 package com.vincentmet.customquests.screens.elements.buttons;
 
-import com.mojang.blaze3d.platform.GlStateManager;
-import com.vincentmet.customquests.Objects;
-import com.vincentmet.customquests.lib.MouseDirection;
-import com.vincentmet.customquests.lib.Ref;
-import com.vincentmet.customquests.lib.Utils;
-import com.vincentmet.customquests.quests.Quest;
-import com.vincentmet.customquests.quests.QuestLine;
-import com.vincentmet.customquests.quests.QuestUserProgress;
+import com.vincentmet.customquests.lib.*;
+import com.vincentmet.customquests.quests.*;
 import com.vincentmet.customquests.screens.elements.IQuestingGuiElement;
 import com.vincentmet.customquests.screens.elements.labels.Label;
 import com.vincentmet.customquests.screens.questingdeveicesubscreens.SubScreenQuestDetails;
 import com.vincentmet.customquests.screens.questingdeveicesubscreens.questlines.QuestingWeb;
+import java.util.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.fml.client.config.GuiUtils;
-import org.apache.commons.lang3.ArrayUtils;
+import net.minecraftforge.api.distmarker.*;
 import org.lwjgl.opengl.GL11;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @OnlyIn(Dist.CLIENT)
 public class ButtonQuestline implements IQuestingGuiElement {
@@ -61,6 +49,7 @@ public class ButtonQuestline implements IQuestingGuiElement {
             Minecraft.getInstance().getTextureManager().bindTexture(Ref.IMAGE_BUTTON_QUESTLINE_DISABLED);
         }
         root.blit(x, y, 0, 0, WIDTH, HEIGHT);
+        reloadLabel();
         label.render(player, mouseX, mouseY);
 
         if(!QuestLine.isQuestlineUnlocked(Utils.simplifyUUID(player.getUniqueID()), questLine.getId()) && Utils.isMouseInBounds(mouseX, mouseY, x, y, x + WIDTH, y + HEIGHT)){
