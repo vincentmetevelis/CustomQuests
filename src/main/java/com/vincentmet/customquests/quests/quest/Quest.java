@@ -1,8 +1,12 @@
-package com.vincentmet.customquests.quests;
+package com.vincentmet.customquests.quests.quest;
 
 import com.google.gson.*;
 import com.mojang.datafixers.util.Pair;
 import com.vincentmet.customquests.lib.*;
+import com.vincentmet.customquests.quests.*;
+import com.vincentmet.customquests.quests.book.QuestLine;
+import com.vincentmet.customquests.quests.progress.QuestUserProgress;
+import com.vincentmet.customquests.quests.quest.*;
 import java.util.*;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.player.PlayerEntity;

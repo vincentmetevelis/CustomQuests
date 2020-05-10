@@ -1,8 +1,10 @@
 package com.vincentmet.customquests.lib;
 
 import com.mojang.datafixers.util.Pair;
-import com.vincentmet.customquests.quests.*;
+import com.vincentmet.customquests.quests.book.QuestMenu;
 import com.vincentmet.customquests.quests.party.Party;
+import com.vincentmet.customquests.quests.progress.QuestUserProgress;
+import com.vincentmet.customquests.quests.quest.Quest;
 import java.nio.file.Path;
 import java.util.*;
 import net.minecraft.client.gui.FontRenderer;

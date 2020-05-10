@@ -154,7 +154,7 @@ public class QuestReward implements IJsonProvider {
 
         @Override
         public void executeReward(PlayerEntity player) {
-            for(int i=0; i<amount;i++)player.getEntityWorld().getWorld().getServer().func_71218_a(player.dimension).summonEntity(entity.create(player.world, new CompoundNBT(), new TranslationTextComponent("Your Reward <3"), player, player.getPosition(), SpawnReason.COMMAND, true, false));
+            for(int i=0; i<amount;i++)player.getEntityWorld().getWorld().getServer().getWorld(player.dimension).summonEntity(entity.create(player.world, new CompoundNBT(), new TranslationTextComponent("Your Reward <3"), player, player.getPosition(), SpawnReason.COMMAND, true, false));
         }
 
         @Override

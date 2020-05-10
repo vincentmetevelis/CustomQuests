@@ -3,7 +3,7 @@ package com.vincentmet.customquests.network.packets;
 import com.google.gson.*;
 import com.vincentmet.customquests.lib.Ref;
 import com.vincentmet.customquests.lib.handlers.StructureHandler;
-import com.vincentmet.customquests.quests.Quest;
+import com.vincentmet.customquests.quests.quest.Quest;
 import java.util.function.Supplier;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.network.NetworkEvent;

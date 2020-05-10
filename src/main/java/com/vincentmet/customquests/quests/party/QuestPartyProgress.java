@@ -5,6 +5,8 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.vincentmet.customquests.lib.*;
 import com.vincentmet.customquests.quests.*;
+import com.vincentmet.customquests.quests.progress.*;
+import com.vincentmet.customquests.quests.quest.Quest;
 import java.util.*;
 import net.minecraft.command.CommandSource;
 import net.minecraft.entity.player.PlayerEntity;
@@ -64,11 +66,11 @@ public class QuestPartyProgress implements IJsonProvider{
                         for(QuestRequirementStatus reqStatus : questStatus.getQuestRequirementStatuses()){
                             if(reqStatus.getRequirementId() == reqId){
                                 int countSubReqProgress = 0;
-                                for(int subReqProgress : reqStatus.getProgress()){
+                                for(Map.Entry<Integer, QuestSubrequirementStatus> subReqProgress : reqStatus.getProgress().entrySet()){
                                     int countSubReq = 0;
                                     for(IQuestRequirement subReq : Quest.getQuestFromId(questId).getRequirements().get(reqId).getSubRequirements()){
                                         if(countSubReq == countSubReqProgress){
-                                            if(subReqProgress < subReq.getCompletionNumber()){
+                                            if(subReqProgress.getValue().getValue() < subReq.getCompletionNumber()){
                                                 isCompleted = false;
                                             }
                                         }

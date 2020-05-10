@@ -5,6 +5,8 @@ import com.vincentmet.customquests.Objects;
 import com.vincentmet.customquests.lib.*;
 import com.vincentmet.customquests.network.packets.*;
 import com.vincentmet.customquests.quests.*;
+import com.vincentmet.customquests.quests.progress.QuestUserProgress;
+import com.vincentmet.customquests.quests.quest.*;
 import com.vincentmet.customquests.screens.ScreenQuestingDevice;
 import com.vincentmet.customquests.screens.questingdeveicesubscreens.*;
 import java.util.*;
