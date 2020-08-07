@@ -1,19 +1,17 @@
 package com.vincentmet.customquests.screens;
 
-import com.vincentmet.customquests.BaseClass;
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.vincentmet.customquests.lib.MouseDirection;
 import com.vincentmet.customquests.screens.elements.IQuestingGuiElement;
-import com.vincentmet.customquests.screens.questingeditorsubscreens.SubScreenAllQuestlines;
-import com.vincentmet.customquests.screens.questingeditorsubscreens.SubScreensQuestingEditor;
+import com.vincentmet.customquests.screens.questingeditorsubscreens.*;
+import java.util.*;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.text.TranslationTextComponent;
 
-import java.util.EnumMap;
-import java.util.Map;
-
 public class ScreenQuestingEditor extends Screen {
-    private static PlayerEntity player = BaseClass.proxy.getClientPlayer();
+    private static PlayerEntity player = Minecraft.getInstance().player;
     private static Map<SubScreensQuestingEditor, IQuestingGuiElement> screens = new EnumMap<>(SubScreensQuestingEditor.class);
     private static SubScreensQuestingEditor activeScreen = SubScreensQuestingEditor.ALL_QUESTLINES;
 
@@ -24,8 +22,8 @@ public class ScreenQuestingEditor extends Screen {
     }
 
     @Override
-    public void render(int mouseX, int mouseY, float partialTicks) {
-        this.renderBackground();
+    public void render(MatrixStack stack, int mouseX, int mouseY, float partialTicks) {
+        this.renderBackground(stack);
         screens.entrySet()
                 .stream()
                 .filter(subScreensQuestingDeviceIQuestingGuiElementEntry ->
@@ -33,10 +31,10 @@ public class ScreenQuestingEditor extends Screen {
                 )
                 .forEach(subScreensQuestingDeviceIQuestingGuiElementEntry -> {
                     subScreensQuestingDeviceIQuestingGuiElementEntry.getValue().update(player, mouseX, mouseY, this.width, this.height);
-                    subScreensQuestingDeviceIQuestingGuiElementEntry.getValue().render(player, mouseX, mouseY);
+                    subScreensQuestingDeviceIQuestingGuiElementEntry.getValue().render(stack, player, mouseX, mouseY);
                 })
         ;
-        super.render(mouseX, mouseY, partialTicks);
+        super.render(stack, mouseX, mouseY, partialTicks);
     }
 
     @Override

@@ -1,26 +1,15 @@
 package com.vincentmet.customquests.screens.questingdeveicesubscreens;
 
-import com.vincentmet.customquests.lib.LineColor;
-import com.vincentmet.customquests.lib.MouseDirection;
-import com.vincentmet.customquests.lib.Ref;
-import com.vincentmet.customquests.lib.Utils;
+import com.mojang.blaze3d.matrix.MatrixStack;
+import com.vincentmet.customquests.lib.*;
 import com.vincentmet.customquests.quests.*;
-import com.vincentmet.customquests.quests.quest.Quest;
-import com.vincentmet.customquests.quests.quest.QuestRequirement;
-import com.vincentmet.customquests.quests.quest.QuestRequirementType;
-import com.vincentmet.customquests.quests.quest.QuestReward;
+import com.vincentmet.customquests.quests.quest.*;
 import com.vincentmet.customquests.screens.elements.IQuestingGuiElement;
-import com.vincentmet.customquests.screens.elements.buttons.ButtonClaimReward;
-import com.vincentmet.customquests.screens.elements.buttons.ButtonHandInRequirement;
-import com.vincentmet.customquests.screens.elements.labels.ItemBoxAndText;
-import com.vincentmet.customquests.screens.elements.labels.Label;
-import com.vincentmet.customquests.screens.elements.labels.Line;
-import com.vincentmet.customquests.screens.elements.labels.MultilineLabel;
+import com.vincentmet.customquests.screens.elements.buttons.*;
+import com.vincentmet.customquests.screens.elements.labels.*;
+import java.util.*;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.entity.player.PlayerEntity;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class SubScreenQuestDetails implements IQuestingGuiElement {
     private Screen root;
@@ -53,7 +42,7 @@ public class SubScreenQuestDetails implements IQuestingGuiElement {
     }
 
     @Override
-    public void render(PlayerEntity player, double mouseX, double mouseY) {
+    public void render(MatrixStack stack, PlayerEntity player, double mouseX, double mouseY) {
         if (activeQuest >= 0) {//todo add everything the vars instead of creating new ones
             int spacingIdRequirements = 0;
             int spacingIdRewards = 0;
@@ -65,7 +54,7 @@ public class SubScreenQuestDetails implements IQuestingGuiElement {
                     0xFFFFFF,
                     true,
                     true
-            ).render(player, mouseX, mouseY);
+            ).render(stack, player, mouseX, mouseY);
             //left side of the line
             new MultilineLabel(
                     root,
@@ -74,7 +63,7 @@ public class SubScreenQuestDetails implements IQuestingGuiElement {
                     Quest.getQuestFromId(activeQuest).getDescription(),
                     0xFFFFFF,
                     (width>>1) - 2*MARGIN_CLAIM_BUTTON_LEFT
-            ).render(player, mouseX, mouseY);
+            ).render(stack, player, mouseX, mouseY);
             //right side of the line
             new Label(
                     root,
@@ -84,7 +73,7 @@ public class SubScreenQuestDetails implements IQuestingGuiElement {
                     0xFFFFFF,
                     false,
                     false
-            ).render(player, mouseX, mouseY);
+            ).render(stack, player, mouseX, mouseY);
             spacingIdRequirements++;
             int countReq = 0;
             for (QuestRequirement requirement : Quest.getQuestFromId(activeQuest).getRequirements()) {
@@ -97,7 +86,7 @@ public class SubScreenQuestDetails implements IQuestingGuiElement {
                         0xFFFFFF,
                         false,
                         false
-                ).render(player, mouseX, mouseY);
+                ).render(stack, player, mouseX, mouseY);
                 spacingIdRequirements++;
                 for (IQuestRequirement subRequirement : requirement.getSubRequirements()) {
                     new ItemBoxAndText(
@@ -108,7 +97,7 @@ public class SubScreenQuestDetails implements IQuestingGuiElement {
                             subRequirement.getLabelText(),
                             0xFFFFFF,
                             false
-                    ).render(player, mouseX, mouseY);
+                    ).render(stack, player, mouseX, mouseY);
                     spacingIdRequirements++;
                 }
                 if (requirement.getType() == QuestRequirementType.ITEM_DELIVER) {
@@ -119,7 +108,7 @@ public class SubScreenQuestDetails implements IQuestingGuiElement {
                             activeQuest,
                             countReq,
                             requirement
-                    ).render(player, mouseX, mouseY);
+                    ).render(stack, player, mouseX, mouseY);
                 }
                 countReq++;
             }
@@ -132,7 +121,7 @@ public class SubScreenQuestDetails implements IQuestingGuiElement {
                     0xFFFFFF,
                     false,
                     false
-            ).render(player, mouseX, mouseY);
+            ).render(stack, player, mouseX, mouseY);
             for (QuestReward reward : Quest.getQuestFromId(activeQuest).getRewards()) {
                 new ItemBoxAndText(
                         root,
@@ -142,7 +131,7 @@ public class SubScreenQuestDetails implements IQuestingGuiElement {
                         reward.getReward().toString(),
                         0xFFFFFF,
                         false
-                ).render(player, mouseX, mouseY);
+                ).render(stack, player, mouseX, mouseY);
                 spacingIdRewards++;
             }
             List<IQuestReward> rewards = new ArrayList<>();
@@ -154,7 +143,7 @@ public class SubScreenQuestDetails implements IQuestingGuiElement {
                     rewardButtonX = (width>>1) + MARGIN_CLAIM_BUTTON_LEFT,
                     rewardButtonY = ((this.height-MARGIN_CONTENT_TOP)>>1) + nonTextHeight + nonTextHeight * spacingIdRewards,
                     activeQuest
-            ).render(player, mouseX, mouseY);
+            ).render(stack, player, mouseX, mouseY);
 
             new Line(
                     root,
@@ -164,7 +153,7 @@ public class SubScreenQuestDetails implements IQuestingGuiElement {
                     (this.height - MARGIN_CONTENT_TOP)>>1,
                     LineColor.WHITE,
                     Ref.GUI_QUESTING_LINE_THICKNESS
-            ).render(player, mouseX, mouseY);
+            ).render(stack, player, mouseX, mouseY);
             new Line(
                     root,
                     width>>1,
@@ -173,7 +162,7 @@ public class SubScreenQuestDetails implements IQuestingGuiElement {
                     this.height - MARGIN_CONTENT_BOTTOM,
                     LineColor.WHITE,
                     Ref.GUI_QUESTING_LINE_THICKNESS
-            ).render(player, mouseX, mouseY);
+            ).render(stack, player, mouseX, mouseY);
         }
     }
 

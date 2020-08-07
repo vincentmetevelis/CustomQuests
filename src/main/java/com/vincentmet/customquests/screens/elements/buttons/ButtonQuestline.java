@@ -1,5 +1,6 @@
 package com.vincentmet.customquests.screens.elements.buttons;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.vincentmet.customquests.lib.*;
 import com.vincentmet.customquests.quests.book.QuestLine;
 import com.vincentmet.customquests.quests.quest.Quest;
@@ -12,6 +13,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.text.ITextProperties;
 import net.minecraftforge.api.distmarker.*;
 import org.lwjgl.opengl.GL11;
 
@@ -39,7 +41,7 @@ public class ButtonQuestline implements IQuestingGuiElement {
     }
 
     @Override
-    public void render(PlayerEntity player, double mouseX, double mouseY) {
+    public void render(MatrixStack stack, PlayerEntity player, double mouseX, double mouseY) {
         if(QuestLine.isQuestlineUnlocked(Utils.simplifyUUID(player.getUniqueID()), questLine.getId())){
             if(Utils.isMouseInBounds(mouseX, mouseY, x, y, x + WIDTH, y + HEIGHT)){
                 Minecraft.getInstance().getTextureManager().bindTexture(Ref.IMAGE_BUTTON_QUESTLINE_PRESSED);
@@ -49,9 +51,9 @@ public class ButtonQuestline implements IQuestingGuiElement {
         }else{
             Minecraft.getInstance().getTextureManager().bindTexture(Ref.IMAGE_BUTTON_QUESTLINE_DISABLED);
         }
-        root.blit(x, y, 0, 0, WIDTH, HEIGHT);
+        root.blit(stack, x, y, 0, 0, WIDTH, HEIGHT);
         reloadLabel();
-        label.render(player, mouseX, mouseY);
+        label.render(stack, player, mouseX, mouseY);
 
         if(!QuestLine.isQuestlineUnlocked(Utils.simplifyUUID(player.getUniqueID()), questLine.getId()) && Utils.isMouseInBounds(mouseX, mouseY, x, y, x + WIDTH, y + HEIGHT)){
             List<Integer> missingIds = new ArrayList<>();
@@ -60,7 +62,7 @@ public class ButtonQuestline implements IQuestingGuiElement {
             });
 
             GL11.glPushMatrix();
-            root.renderTooltip("Complete the quest(s): " + missingIds.toString().replace("[", "\'").replace("]", "\'") + " to unlock this questline!", (int)mouseX, (int)mouseY);
+            root.renderTooltip(stack, ITextProperties.func_240652_a_("Complete the quest(s): " + missingIds.toString().replace("[", "\'").replace("]", "\'") + " to unlock this questline!"), (int)mouseX, (int)mouseY);
             GL11.glPopMatrix();
             RenderHelper.disableStandardItemLighting();
         }

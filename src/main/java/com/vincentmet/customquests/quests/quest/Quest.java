@@ -6,7 +6,6 @@ import com.vincentmet.customquests.lib.*;
 import com.vincentmet.customquests.quests.*;
 import com.vincentmet.customquests.quests.book.QuestLine;
 import com.vincentmet.customquests.quests.progress.QuestUserProgress;
-import com.vincentmet.customquests.quests.quest.*;
 import java.util.*;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.player.PlayerEntity;
@@ -180,7 +179,7 @@ public class Quest implements IJsonProvider{
         BlockPos qp = dimPosRadius.getMiddle();
         BlockPos pp = player.getPosition();
         int r = dimPosRadius.getRight();
-        return player.world.getDimension().getType().toString().substring(14, player.world.getDimension().getType().toString().length()-1).equals(dimPosRadius.getLeft()) && qp.getX() <= pp.getX()+r && qp.getX() >= pp.getX()-r && qp.getY() <= pp.getY()+r && qp.getY() >= pp.getY()-r && qp.getZ() <= pp.getZ()+r && qp.getZ() >= pp.getZ()-r;
+        return /*player.world.getProviderName().getType().toString().substring(14, player.world.getDimension().getType().toString().length()-1).equals(dimPosRadius.getLeft()) && */qp.getX() <= pp.getX()+r && qp.getX() >= pp.getX()-r && qp.getY() <= pp.getY()+r && qp.getY() >= pp.getY()-r && qp.getZ() <= pp.getZ()+r && qp.getZ() >= pp.getZ()-r;
     }
 
     public static Triple<String, BlockPos, Integer> getDimPosRadius(int questId, int reqId, int subReqId){

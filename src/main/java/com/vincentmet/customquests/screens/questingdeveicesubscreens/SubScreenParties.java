@@ -1,11 +1,9 @@
 package com.vincentmet.customquests.screens.questingdeveicesubscreens;
 
-import com.vincentmet.customquests.lib.MouseDirection;
-import com.vincentmet.customquests.lib.Ref;
+import com.mojang.blaze3d.matrix.MatrixStack;
+import com.vincentmet.customquests.lib.*;
 import com.vincentmet.customquests.quests.party.Party;
-import com.vincentmet.customquests.screens.elements.ButtonParty;
-import com.vincentmet.customquests.screens.elements.ButtonPartySetting;
-import com.vincentmet.customquests.screens.elements.IQuestingGuiElement;
+import com.vincentmet.customquests.screens.elements.*;
 import com.vincentmet.customquests.screens.elements.labels.Label;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.entity.player.PlayerEntity;
@@ -33,17 +31,17 @@ public class SubScreenParties implements IQuestingGuiElement {//todo
     }
 
     @Override
-    public void render(PlayerEntity player, double mouseX, double mouseY) {
-        this.title.render(player, mouseX, mouseY);
+    public void render(MatrixStack stack, PlayerEntity player, double mouseX, double mouseY) {
+        this.title.render(stack, player, mouseX, mouseY);
 
         int currentPartyGuiHeight = 0;
         for(Party party : Ref.ALL_QUESTING_PARTIES){
-            new ButtonParty(root, Ref.GUI_QUESTLINES_MARGIN_LEFT, Ref.GUI_QUESTLINES_MARGIN_TOP + currentPartyGuiHeight, party).render(player, mouseX, mouseY);
+            new ButtonParty(root, Ref.GUI_QUESTLINES_MARGIN_LEFT, Ref.GUI_QUESTLINES_MARGIN_TOP + currentPartyGuiHeight, party).render(stack, player, mouseX, mouseY);
             currentPartyGuiHeight += 25;
         }
         if(activeParty>=0){
             int currentPartySettingsGuiHeight = 0;
-            new ButtonPartySetting(root, Ref.GUI_QUESTING_MARGIN_LEFT, Ref.GUI_QUESTLINES_MARGIN_TOP + currentPartySettingsGuiHeight, "Join").render(player, mouseX, mouseY);
+            new ButtonPartySetting(root, Ref.GUI_QUESTING_MARGIN_LEFT, Ref.GUI_QUESTLINES_MARGIN_TOP + currentPartySettingsGuiHeight, "Join").render(stack, player, mouseX, mouseY);
             currentPartySettingsGuiHeight += 25;
         }
     }

@@ -1,13 +1,13 @@
 package com.vincentmet.customquests.screens.elements.labels;
 
-import com.vincentmet.customquests.lib.MouseDirection;
-import com.vincentmet.customquests.lib.Ref;
-import com.vincentmet.customquests.lib.Utils;
+import com.mojang.blaze3d.matrix.MatrixStack;
+import com.vincentmet.customquests.lib.*;
 import com.vincentmet.customquests.screens.elements.IQuestingGuiElement;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraft.util.text.ITextProperties;
+import net.minecraftforge.api.distmarker.*;
 
 @OnlyIn(Dist.CLIENT)
 public class MultilineLabel implements IQuestingGuiElement {
@@ -33,11 +33,11 @@ public class MultilineLabel implements IQuestingGuiElement {
     }
 
     @Override
-    public void render(PlayerEntity player, double mouseX, double mouseY) {
+    public void render(MatrixStack stack, PlayerEntity player, double mouseX, double mouseY) {
         int currentHeight = y;
-        for(String line : Ref.FONT_RENDERER.listFormattedStringToWidth(text, maxWidth)){
-            root.drawString(Ref.FONT_RENDERER, line, x, currentHeight, color);
-            currentHeight += Ref.FONT_RENDERER.FONT_HEIGHT;
+        for(ITextProperties line : Minecraft.getInstance().fontRenderer.func_238425_b_(ITextProperties.func_240652_a_(text), maxWidth)){
+            root.drawString(stack, Minecraft.getInstance().fontRenderer, line, x, currentHeight, color);
+            currentHeight += Minecraft.getInstance().fontRenderer.FONT_HEIGHT;
         }
     }
 

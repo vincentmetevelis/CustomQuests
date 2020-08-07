@@ -1,13 +1,13 @@
 package com.vincentmet.customquests.screens.elements.labels;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.vincentmet.customquests.lib.MouseDirection;
-import com.vincentmet.customquests.lib.Ref;
 import com.vincentmet.customquests.screens.elements.IQuestingGuiElement;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.api.distmarker.*;
 
 @OnlyIn(Dist.CLIENT)
 public class ItemBoxAndText implements IQuestingGuiElement {
@@ -35,17 +35,17 @@ public class ItemBoxAndText implements IQuestingGuiElement {
     }
 
     @Override
-    public void render(PlayerEntity player, double mouseX, double mouseY) {
+    public void render(MatrixStack stack, PlayerEntity player, double mouseX, double mouseY) {
         if(centered){
             int itembox_width = 18;
             int margin = 2;
-            int text_width = Ref.FONT_RENDERER.getStringWidth(text);
+            int text_width = Minecraft.getInstance().fontRenderer.getStringWidth(text);
             int half_total_width = (itembox_width + margin + text_width) / 2;
-            new ItemBox(root, x - half_total_width, y, itemstack).render(player, mouseX, mouseY);
-            new Label(root, text, x - half_total_width + itembox_width + margin, y + (18/2 - 8/2), color, false, false).render(player, mouseX, mouseY);
+            new ItemBox(root, x - half_total_width, y, itemstack).render(stack, player, mouseX, mouseY);
+            new Label(root, text, x - half_total_width + itembox_width + margin, y + (18/2 - 8/2), color, false, false).render(stack, player, mouseX, mouseY);
         }else{
-            new ItemBox(root, x, y, itemstack).render(player, mouseX, mouseY);
-            new Label(root, text, x + 20, y + (18/2 - 8/2), color, false, false).render(player, mouseX, mouseY);
+            new ItemBox(root, x, y, itemstack).render(stack, player, mouseX, mouseY);
+            new Label(root, text, x + 20, y + (18/2 - 8/2), color, false, false).render(stack, player, mouseX, mouseY);
         }
     }
 

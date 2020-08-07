@@ -1,21 +1,20 @@
 package com.vincentmet.customquests.screens.elements.labels;
 
-import com.vincentmet.customquests.lib.MouseDirection;
-import com.vincentmet.customquests.lib.Ref;
-import com.vincentmet.customquests.lib.Utils;
+import com.mojang.blaze3d.matrix.MatrixStack;
+import com.vincentmet.customquests.lib.*;
 import com.vincentmet.customquests.screens.elements.IQuestingGuiElement;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.api.distmarker.*;
 
 @OnlyIn(Dist.CLIENT)
 public class Label implements IQuestingGuiElement {
     private Screen root;
-    private int x;
-    private int y;
-    private String text;
-    private int color;
+    private int x = 0;
+    private int y = 0;
+    private String text = "";
+    private int color = 0xFFFFFF;
 
     public Label(Screen root, String text, int x, int y, int color, boolean xCentered, boolean yCentered){
         this.root = root;
@@ -24,10 +23,10 @@ public class Label implements IQuestingGuiElement {
         this.y = y;
         this.color = color;
         if(xCentered){
-            this.x -= (Ref.FONT_RENDERER.getStringWidth(this.text)>>1);
+            this.x -= (Minecraft.getInstance().fontRenderer.getStringWidth(this.text)>>1);
         }
         if(yCentered){
-            this.y -= (Ref.FONT_RENDERER.FONT_HEIGHT>>1);
+            this.y -= (Minecraft.getInstance().fontRenderer.FONT_HEIGHT>>1);
         }
     }
 
@@ -37,8 +36,8 @@ public class Label implements IQuestingGuiElement {
     }
 
     @Override
-    public void render(PlayerEntity player, double mouseX, double mouseY) {
-        Ref.FONT_RENDERER.drawStringWithShadow(this.text, this.x, this.y, this.color);
+    public void render(MatrixStack stack, PlayerEntity player, double mouseX, double mouseY) {
+        Minecraft.getInstance().fontRenderer.drawStringWithShadow(stack, this.text, this.x, this.y, this.color);
     }
 
     @Override
@@ -58,12 +57,12 @@ public class Label implements IQuestingGuiElement {
 
     @Override
     public int getWidth() {
-        return Ref.FONT_RENDERER.getStringWidth(text);
+        return Minecraft.getInstance().fontRenderer.getStringWidth(text);
     }
 
     @Override
     public int getHeight() {
-        return Ref.FONT_RENDERER.FONT_HEIGHT;
+        return Minecraft.getInstance().fontRenderer.FONT_HEIGHT;
     }
 
     @Override

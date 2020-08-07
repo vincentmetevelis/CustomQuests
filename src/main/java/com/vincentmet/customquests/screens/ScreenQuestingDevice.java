@@ -1,23 +1,19 @@
 package com.vincentmet.customquests.screens;
 
-import com.vincentmet.customquests.BaseClass;
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.vincentmet.customquests.screens.elements.IQuestingGuiElement;
 import com.vincentmet.customquests.screens.elements.buttons.ButtonQuestlines;
-import com.vincentmet.customquests.screens.questingdeveicesubscreens.SubScreenQuestDetails;
-import com.vincentmet.customquests.screens.questingdeveicesubscreens.SubScreenQuestlines;
-import com.vincentmet.customquests.screens.questingdeveicesubscreens.SubScreensQuestingDevice;
+import com.vincentmet.customquests.screens.questingdeveicesubscreens.*;
+import java.util.*;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-
-import java.util.EnumMap;
-import java.util.Map;
+import net.minecraftforge.api.distmarker.*;
 
 @OnlyIn(Dist.CLIENT)
 public class ScreenQuestingDevice extends Screen {
-    private PlayerEntity player = BaseClass.proxy.getClientPlayer();
+    private PlayerEntity player = Minecraft.getInstance().player;
     private ButtonQuestlines buttonQuestlines = new ButtonQuestlines(this);
     //private ButtonParties buttonParties = new ButtonParties(this);
     //private ButtonSettings buttonSettings = new ButtonSettings(this);
@@ -35,8 +31,8 @@ public class ScreenQuestingDevice extends Screen {
     }
 
     @Override
-    public void render(int mouseX, int mouseY, float partialTicks) {
-        this.renderBackground();
+    public void render(MatrixStack stack, int mouseX, int mouseY, float partialTicks) {
+        this.renderBackground(stack);
         screens.entrySet()
                 .stream()
                 .filter(subScreensQuestingDeviceIQuestingGuiElementEntry ->
@@ -44,11 +40,11 @@ public class ScreenQuestingDevice extends Screen {
                 )
                 .forEach(subScreensQuestingDeviceIQuestingGuiElementEntry -> {
                         subScreensQuestingDeviceIQuestingGuiElementEntry.getValue().update(player, mouseX, mouseY, this.width, this.height);
-                        subScreensQuestingDeviceIQuestingGuiElementEntry.getValue().render(player, mouseX, mouseY);
+                        subScreensQuestingDeviceIQuestingGuiElementEntry.getValue().render(stack, player, mouseX, mouseY);
                 })
         ;
         this.buttonQuestlines.update(player, mouseX, mouseY, 0, 0);
-        this.buttonQuestlines.render(player, mouseX, mouseY);
+        this.buttonQuestlines.render(stack, player, mouseX, mouseY);
         //this.buttonParties.update(player, mouseX, mouseY, 0, 0);
         //this.buttonParties.render(player, mouseX, mouseY);
         //this.buttonSettings.update(player, mouseX, mouseY, 0, 0);
@@ -56,7 +52,7 @@ public class ScreenQuestingDevice extends Screen {
 
         //ButtonDrawer.draw(200, 200, 50, 50, ButtonDrawer.ButtonTexture.DEFAULT);
 
-        super.render(mouseX, mouseY, partialTicks);
+        super.render(stack, mouseX, mouseY, partialTicks);
     }
 
     @Override

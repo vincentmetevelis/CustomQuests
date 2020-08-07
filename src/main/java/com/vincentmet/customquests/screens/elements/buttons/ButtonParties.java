@@ -1,16 +1,14 @@
 package com.vincentmet.customquests.screens.elements.buttons;
 
-import com.vincentmet.customquests.lib.MouseDirection;
-import com.vincentmet.customquests.lib.Ref;
-import com.vincentmet.customquests.lib.Utils;
+import com.mojang.blaze3d.matrix.MatrixStack;
+import com.vincentmet.customquests.lib.*;
 import com.vincentmet.customquests.screens.ScreenQuestingDevice;
 import com.vincentmet.customquests.screens.elements.IQuestingGuiElement;
 import com.vincentmet.customquests.screens.elements.labels.Label;
 import com.vincentmet.customquests.screens.questingdeveicesubscreens.SubScreensQuestingDevice;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.api.distmarker.*;
 
 @OnlyIn(Dist.CLIENT)
 public class ButtonParties implements IQuestingGuiElement {
@@ -32,14 +30,14 @@ public class ButtonParties implements IQuestingGuiElement {
     }
 
     @Override
-    public void render(PlayerEntity player, double mouseX, double mouseY) {
+    public void render(MatrixStack stack, PlayerEntity player, double mouseX, double mouseY) {
         if(Utils.isMouseInBounds(mouseX, mouseY, x, y, x + WIDTH, y + HEIGHT)){
             root.getMinecraft().getTextureManager().bindTexture(Ref.IMAGE_BUTTON_SQUARE_PRESSED);
         }else{
             root.getMinecraft().getTextureManager().bindTexture(Ref.IMAGE_BUTTON_SQUARE_UNPRESSED);
         }
-        root.blit(x, y, 0, 0, WIDTH, HEIGHT);
-        this.label.render(player, mouseX, mouseY);
+        root.blit(stack, x, y, 0, 0, WIDTH, HEIGHT);
+        this.label.render(stack, player, mouseX, mouseY);
     }
 
     @Override

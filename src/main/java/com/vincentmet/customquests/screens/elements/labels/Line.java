@@ -1,15 +1,13 @@
 package com.vincentmet.customquests.screens.elements.labels;
 
-import com.vincentmet.customquests.lib.LineColor;
-import com.vincentmet.customquests.lib.MouseDirection;
-import com.vincentmet.customquests.lib.Ref;
+import com.mojang.blaze3d.matrix.MatrixStack;
+import com.vincentmet.customquests.lib.*;
 import com.vincentmet.customquests.quests.quest.QuestPosition;
 import com.vincentmet.customquests.screens.elements.IQuestingGuiElement;
 import com.vincentmet.customquests.screens.elements.buttons.ButtonQuest;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.api.distmarker.*;
 import org.lwjgl.opengl.GL11;
 
 @OnlyIn(Dist.CLIENT)
@@ -66,13 +64,13 @@ public class Line implements IQuestingGuiElement {
     }
 
     @Override
-    public void render(PlayerEntity player, double mouseX, double mouseY) {
+    public void render(MatrixStack stack, PlayerEntity player, double mouseX, double mouseY) {
         GL11.glPushMatrix();
         GL11.glTranslatef(this.x, this.y, 0);
         GL11.glRotated(this.angle, 0, 0, 1);
         GL11.glTranslatef(-this.x, -this.y, 0);
         root.getMinecraft().getTextureManager().bindTexture(this.color.getResourceLocation());
-        root.blit(this.x, this.y, 0, 0, this.length, this.thickness);
+        root.blit(stack, this.x, this.y, 0, 0, this.length, this.thickness);
         GL11.glPopMatrix();
     }
 

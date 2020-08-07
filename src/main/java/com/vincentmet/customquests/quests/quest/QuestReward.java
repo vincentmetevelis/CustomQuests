@@ -4,17 +4,15 @@ import com.google.gson.JsonObject;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.vincentmet.customquests.lib.Ref;
-import com.vincentmet.customquests.quests.IJsonProvider;
-import com.vincentmet.customquests.quests.IQuestReward;
+import com.vincentmet.customquests.quests.*;
 import net.minecraft.block.Blocks;
 import net.minecraft.command.CommandSource;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.SpawnReason;
+import net.minecraft.entity.*;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
+import net.minecraft.item.*;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.World;
 import net.minecraftforge.registries.ForgeRegistries;
 
 public class QuestReward implements IJsonProvider {
@@ -154,7 +152,7 @@ public class QuestReward implements IJsonProvider {
 
         @Override
         public void executeReward(PlayerEntity player) {
-            for(int i=0; i<amount;i++)player.getEntityWorld().getWorld().getServer().getWorld(player.dimension).summonEntity(entity.create(player.world, new CompoundNBT(), new TranslationTextComponent("Your Reward <3"), player, player.getPosition(), SpawnReason.COMMAND, true, false));
+            for(int i=0; i<amount;i++)player.getEntityWorld().getWorld().getServer().getWorld(World.field_234918_g_).summonEntity(entity.create(player.world, new CompoundNBT(), new TranslationTextComponent("Your Reward <3"), player, player.getPosition(), SpawnReason.COMMAND, true, false));
         }
 
         @Override

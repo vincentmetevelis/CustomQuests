@@ -4,7 +4,6 @@ import com.mojang.datafixers.util.Pair;
 import com.vincentmet.customquests.Objects;
 import com.vincentmet.customquests.lib.*;
 import com.vincentmet.customquests.network.packets.*;
-import com.vincentmet.customquests.quests.*;
 import com.vincentmet.customquests.quests.progress.QuestUserProgress;
 import com.vincentmet.customquests.quests.quest.*;
 import com.vincentmet.customquests.screens.ScreenQuestingDevice;
@@ -17,6 +16,7 @@ import net.minecraft.item.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.*;
 import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.storage.FolderName;
 import net.minecraftforge.api.distmarker.*;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.event.*;
@@ -40,7 +40,7 @@ public class EventHandler {
     }
 
     @SubscribeEvent
-    public static void onItemCraft(PlayerEvent.ItemCraftedEvent event){
+    public void onItemCraft(PlayerEvent.ItemCraftedEvent event){
         List<Triple<Integer, Integer, Integer>> activeItemCraftQuestIds = Quest.getActiveQuestsWithType(Utils.simplifyUUID(event.getPlayer().getUniqueID()), QuestRequirementType.CRAFTING_DETECT);
         for(Triple<Integer, Integer, Integer> questAndReqAndSubReqId : activeItemCraftQuestIds){
             ItemStack itemStack = Quest.getItemstackForCraftingDetect(questAndReqAndSubReqId.getLeft(), questAndReqAndSubReqId.getMiddle(), questAndReqAndSubReqId.getRight());
@@ -51,7 +51,7 @@ public class EventHandler {
     }
 
     @SubscribeEvent
-    public static void onEntityKill(LivingDeathEvent event){
+    public void onEntityKill(LivingDeathEvent event){
         if(event.getSource().getTrueSource() instanceof PlayerEntity) {
             List<Triple<Integer, Integer, Integer>> activeEntityKillQuestIds = Quest.getActiveQuestsWithType(Utils.simplifyUUID(event.getSource().getTrueSource().getUniqueID()), QuestRequirementType.KILL_MOB);
             for (Triple<Integer, Integer, Integer> questAndReqAndSubReqId : activeEntityKillQuestIds) {
@@ -65,7 +65,7 @@ public class EventHandler {
     }
 
     @SubscribeEvent
-    public static void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event){
+    public void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event){
         if(ConfigHandler.giveDeviceOnLogin.get()){
             if(!event.getPlayer().inventory.hasItemStack(new ItemStack(Objects.Items.itemQuestingDevice))) {
                 event.getPlayer().inventory.addItemStackToInventory(new ItemStack(Objects.Items.itemQuestingDevice, 1));
@@ -90,7 +90,7 @@ public class EventHandler {
     }
 
     @SubscribeEvent
-    public static void onPlayerLoggingOff(PlayerEvent.PlayerLoggedOutEvent event){
+    public void onPlayerLoggedOut(PlayerEvent.PlayerLoggedOutEvent event){
         if(event.getPlayer().world.isRemote){
             Ref.ALL_QUESTING_PROGRESS = new HashMap<>();
             Ref.ALL_QUESTING_PARTIES = new ArrayList<>();
@@ -100,7 +100,7 @@ public class EventHandler {
     }
 
     @SubscribeEvent
-    public static void onWorldTick(TickEvent.WorldTickEvent event){
+    public void onWorldTick(TickEvent.WorldTickEvent event){
         if(!event.world.isRemote) {
             if(Ref.shouldSaveNextTick){
                 JsonHandler.writeAll(Ref.questsLocation, Ref.questBookLocation, Ref.questingProgressLocation, Ref.questingPartiesLocation);
@@ -124,7 +124,7 @@ public class EventHandler {
         }
     }
 
-    private static void executeWorldTickLogic(World world){ //Separate method to avoid code duplication
+    private void executeWorldTickLogic(World world){ //Separate method to avoid code duplication
         for(PlayerEntity playerEntity : world.getPlayers()){
             List<Triple<Integer, Integer, Integer>> activeLocationTrackingQuestIds = Quest.getActiveQuestsWithType(Utils.simplifyUUID(playerEntity.getUniqueID()), QuestRequirementType.TRAVEL_TO);
             for(Triple<Integer, Integer, Integer> questAndReqAndSubReqId : activeLocationTrackingQuestIds){
@@ -144,7 +144,7 @@ public class EventHandler {
                         correctItemInInvCount += mainInventoryStack.getCount();
                     }
                 }
-                if(itemStack.getCount() <= correctItemInInvCount){
+            if(itemStack.getCount() <= correctItemInInvCount){
                     QuestUserProgress.setPlayerProgressToCompleted(Utils.simplifyUUID(playerEntity.getUniqueID()), questAndReqAndSubReqId.getLeft(), questAndReqAndSubReqId.getMiddle(), questAndReqAndSubReqId.getRight());
                     Ref.shouldSaveNextTick = true;
                 }
@@ -163,9 +163,9 @@ public class EventHandler {
     }
 
     @SubscribeEvent
-    public static void onWorldStart(WorldEvent.Load event){
+    public void onWorldStart(WorldEvent.Load event){
         if(event.getWorld() instanceof ServerWorld){
-            Ref.currWorldDir = ((ServerWorld)event.getWorld()).getSaveHandler().getWorldDirectory().toPath();
+            Ref.currWorldDir = ((ServerWorld)event.getWorld()).getServer().func_240776_a_(new FolderName("."));
             if(!event.getWorld().isRemote()){
                 JsonHandler.loadJson(
                         Ref.questsLocation = FMLPaths.CONFIGDIR.get().resolve("Quests.json"),
@@ -183,14 +183,14 @@ public class EventHandler {
 
     @OnlyIn(Dist.CLIENT)
     @SubscribeEvent
-    public static void onKeyPress(InputEvent.KeyInputEvent event){
+    public void onKeyPress(InputEvent.KeyInputEvent event){
         if(Objects.KeyBindings.OPEN_QUESTINGDEVICE.isPressed()){
             Minecraft.getInstance().displayGuiScreen(new ScreenQuestingDevice());
         }
     }
 
     @SubscribeEvent
-    public static void onKeyHold(InputEvent.KeyInputEvent event){
+    public void onKeyHold(InputEvent.KeyInputEvent event){
         if(lastKey == null){
             lastKey = new Pair<>(event.getKey(), new Date().getTime());
         }

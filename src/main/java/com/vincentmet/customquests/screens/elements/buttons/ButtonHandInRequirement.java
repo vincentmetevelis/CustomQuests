@@ -1,20 +1,17 @@
 package com.vincentmet.customquests.screens.elements.buttons;
 
-import com.vincentmet.customquests.lib.MouseDirection;
-import com.vincentmet.customquests.lib.Ref;
-import com.vincentmet.customquests.lib.Utils;
+import com.mojang.blaze3d.matrix.MatrixStack;
+import com.vincentmet.customquests.lib.*;
 import com.vincentmet.customquests.lib.handlers.PacketHandler;
 import com.vincentmet.customquests.network.packets.MessageHandInButtonPressClientToServer;
 import com.vincentmet.customquests.quests.progress.ProgressHelper;
-import com.vincentmet.customquests.quests.quest.QuestRequirement;
-import com.vincentmet.customquests.quests.quest.QuestRequirementType;
-import com.vincentmet.customquests.quests.progress.QuestUserProgress;
+import com.vincentmet.customquests.quests.quest.*;
 import com.vincentmet.customquests.screens.elements.IQuestingGuiElement;
 import com.vincentmet.customquests.screens.elements.labels.Label;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.api.distmarker.*;
 
 @OnlyIn(Dist.CLIENT)
 public class ButtonHandInRequirement implements IQuestingGuiElement {
@@ -44,7 +41,7 @@ public class ButtonHandInRequirement implements IQuestingGuiElement {
     }
 
     @Override
-    public void render(PlayerEntity player, double mouseX, double mouseY) {
+    public void render(MatrixStack stack, PlayerEntity player, double mouseX, double mouseY) {
         String text = ProgressHelper.isRequirementCompleted(Utils.simplifyUUID(player.getUniqueID()), questId, questReqId) ? textHandedIn : textNotHandedIn;
         if(questRequirement.getType() == QuestRequirementType.ITEM_DELIVER && !ProgressHelper.isRequirementCompleted(Utils.simplifyUUID(player.getUniqueID()), questId, questReqId)){
             if(Utils.isMouseInBounds(mouseX, mouseY, x, y, x + WIDTH, y + HEIGHT)){
@@ -55,18 +52,18 @@ public class ButtonHandInRequirement implements IQuestingGuiElement {
         }else{
             root.getMinecraft().getTextureManager().bindTexture(Ref.IMAGE_BUTTON_CLAIM_REWARD_DISABLED);
         }
-        root.blit(x, y, 0, 0, WIDTH, HEIGHT);
+        root.blit(stack, x, y, 0, 0, WIDTH, HEIGHT);
 
 
         new Label(
                 root,
                 text,
-                x+(WIDTH/2)-Ref.FONT_RENDERER.getStringWidth(text)/2,
-                y+(HEIGHT/2)-Ref.FONT_RENDERER.FONT_HEIGHT/2,
+                x+(WIDTH/2) - Minecraft.getInstance().fontRenderer.getStringWidth(text) / 2,
+                y+(HEIGHT/2)-Minecraft.getInstance().fontRenderer.FONT_HEIGHT/2,
                 0xFFFFFF,
                 false,
                 false
-        ).render(player, mouseX, mouseY);
+        ).render(stack, player, mouseX, mouseY);
     }
 
     @Override

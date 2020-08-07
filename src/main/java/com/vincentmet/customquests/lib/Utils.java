@@ -25,7 +25,7 @@ public class Utils {
 
     public static String getFormattedText(String text) {
         TranslationTextComponent textComponent = createTextComponent(text);
-        return textComponent.getFormattedText();
+        return textComponent.getString();
     }
 
     public static TranslationTextComponent createTextComponent(String text) {

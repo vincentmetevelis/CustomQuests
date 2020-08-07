@@ -1,13 +1,14 @@
 package com.vincentmet.customquests.screens.elements;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.datafixers.util.Pair;
 import com.vincentmet.customquests.lib.*;
+import java.util.*;
+import java.util.function.Supplier;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.entity.player.PlayerEntity;
 import org.lwjgl.glfw.GLFW;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.function.Supplier;
 
 public class TextField implements IQuestingGuiElement{
     private static final int BORDER = 1;
@@ -31,7 +32,7 @@ public class TextField implements IQuestingGuiElement{
         this.y = y;
         this.width = width;
         this.heightInLines = heightInLines;
-        this.height = heightInLines * Ref.FONT_RENDERER.FONT_HEIGHT + 5;
+        this.height = heightInLines * Minecraft.getInstance().fontRenderer.FONT_HEIGHT + 5;
         this.colorInside = colorInside;
         this.colorBorder = colorBorder;
         if(initialText.isEmpty()){
@@ -47,7 +48,7 @@ public class TextField implements IQuestingGuiElement{
         this.y = y;
         this.width = width;
         this.heightInLines = heightInLines;
-        this.height = heightInLines * Ref.FONT_RENDERER.FONT_HEIGHT + 5;
+        this.height = heightInLines * Minecraft.getInstance().fontRenderer.FONT_HEIGHT + 5;
         if(initialText.isEmpty()){
             initialText.add(new ArrayList<>());
         }else{
@@ -61,9 +62,9 @@ public class TextField implements IQuestingGuiElement{
         this.y = y;
     }
 
-    public void render(PlayerEntity player, double mouseX, double mouseY){
-        AbstractGui.fill(x, y, x+width + BORDER, y+height + BORDER, colorBorder);
-        AbstractGui.fill(x + BORDER, y + BORDER, x+width, y+height, colorInside);
+    public void render(MatrixStack stack, PlayerEntity player, double mouseX, double mouseY){
+        AbstractGui.fill(stack, x, y, x+width + BORDER, y+height + BORDER, colorBorder);
+        AbstractGui.fill(stack, x + BORDER, y + BORDER, x+width, y+height, colorInside);
 
         for(int i=0;i<text.size();i++){
             char lastC = '\u0000';//NULL
@@ -72,7 +73,7 @@ public class TextField implements IQuestingGuiElement{
                 char character = pair.getFirst();
                 int charLength = pair.getSecond();
                 if(character != '\u00a7' && lastC != '\u00a7'){//§
-                    Ref.FONT_RENDERER.drawString(String.copyValueOf(new char[]{character}), xPosInPx, y+MARGIN_CURSOR_TOP+2 + Ref.FONT_RENDERER.FONT_HEIGHT*i, 0xFFFFFF);
+                    Minecraft.getInstance().fontRenderer.drawString(stack, String.copyValueOf(new char[]{character}), xPosInPx, y+MARGIN_CURSOR_TOP+2 + Minecraft.getInstance().fontRenderer.FONT_HEIGHT*i, 0xFFFFFF);
                     xPosInPx+=charLength;
                 }
                 lastC = character;
@@ -97,7 +98,7 @@ public class TextField implements IQuestingGuiElement{
                 });
                 int xPosInPx = x + MARGIN_CURSOR_LEFT + accumulatedOffsetCounter.getValue();
                 if(System.currentTimeMillis()%1000>=500){
-                    AbstractGui.fill(xPosInPx, y + MARGIN_CURSOR_TOP + cursorPos.getY()*Ref.FONT_RENDERER.FONT_HEIGHT, xPosInPx + 1, y + 2*MARGIN_CURSOR_TOP + cursorPos.getY()*Ref.FONT_RENDERER.FONT_HEIGHT + Ref.FONT_RENDERER.FONT_HEIGHT, 0xFFAAAAAA);
+                    AbstractGui.fill(stack, xPosInPx, y + MARGIN_CURSOR_TOP + cursorPos.getY()*Minecraft.getInstance().fontRenderer.FONT_HEIGHT, xPosInPx + 1, y + 2*MARGIN_CURSOR_TOP + cursorPos.getY()*Minecraft.getInstance().fontRenderer.FONT_HEIGHT + Minecraft.getInstance().fontRenderer.FONT_HEIGHT, 0xFFAAAAAA);
                 }
             }
         }
@@ -108,7 +109,7 @@ public class TextField implements IQuestingGuiElement{
             Ref.currentFocussedTextfield = this.focusId;
             double localMouseX = mouseX - x;
             double localMouseY = mouseY - y;
-            int whichLine = (int)Math.floor((localMouseY - MARGIN_CURSOR_TOP) / Ref.FONT_RENDERER.FONT_HEIGHT);
+            int whichLine = (int)Math.floor((localMouseY - MARGIN_CURSOR_TOP) / Minecraft.getInstance().fontRenderer.FONT_HEIGHT);
             if(whichLine>=this.heightInLines){
                 whichLine = heightInLines-1;
             }
@@ -231,7 +232,7 @@ public class TextField implements IQuestingGuiElement{
 
     private void insertCharAtPos(char c){
         Vec2i cursorPos = this.cursorPos;
-        this.text.get(cursorPos.getY()).add(cursorPos.getX(), new Pair<>(c, Ref.FONT_RENDERER.getStringWidth(String.copyValueOf(new char[]{c}))));
+        this.text.get(cursorPos.getY()).add(cursorPos.getX(), new Pair<>(c, Minecraft.getInstance().fontRenderer.getStringWidth(String.copyValueOf(new char[]{c}))));
         this.cursorPos.add(1, 0);
     }
 
@@ -242,7 +243,7 @@ public class TextField implements IQuestingGuiElement{
     public static List<Pair<Character, Integer>> stringToCharIntList(String line){
         List<Pair<Character, Integer>> result = new ArrayList<>();
         for(char c : line.toCharArray()){
-            result.add(new Pair<>(c, Ref.FONT_RENDERER.getStringWidth(String.copyValueOf(new char[]{c}))));
+            result.add(new Pair<>(c, Minecraft.getInstance().fontRenderer.getStringWidth(String.copyValueOf(new char[]{c}))));
         }
         return result;
     }

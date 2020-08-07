@@ -1,5 +1,6 @@
 package com.vincentmet.customquests.screens.questingdeveicesubscreens;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.vincentmet.customquests.lib.MouseDirection;
 import com.vincentmet.customquests.screens.elements.IQuestingGuiElement;
 import net.minecraft.client.gui.screen.Screen;
@@ -37,7 +38,7 @@ public class SubScreenSettings implements IQuestingGuiElement {
     }
 
     @Override
-    public void render(PlayerEntity player, double mouseX, double mouseY) {
+    public void render(MatrixStack stack, PlayerEntity player, double mouseX, double mouseY) {
 
     }
 

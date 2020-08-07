@@ -1,22 +1,17 @@
 package com.vincentmet.customquests.screens.elements.buttons;
 
-import com.mojang.blaze3d.platform.GlStateManager;
-import com.vincentmet.customquests.lib.MouseDirection;
-import com.vincentmet.customquests.lib.Ref;
-import com.vincentmet.customquests.lib.Utils;
+import com.mojang.blaze3d.matrix.MatrixStack;
+import com.vincentmet.customquests.lib.*;
 import com.vincentmet.customquests.quests.progress.ProgressHelper;
 import com.vincentmet.customquests.quests.quest.Quest;
-import com.vincentmet.customquests.quests.progress.QuestUserProgress;
 import com.vincentmet.customquests.screens.ScreenQuestingDevice;
 import com.vincentmet.customquests.screens.elements.IQuestingGuiElement;
-import com.vincentmet.customquests.screens.questingdeveicesubscreens.SubScreenQuestDetails;
-import com.vincentmet.customquests.screens.questingdeveicesubscreens.SubScreensQuestingDevice;
+import com.vincentmet.customquests.screens.questingdeveicesubscreens.*;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.api.distmarker.*;
 import org.lwjgl.opengl.GL11;
 
 @OnlyIn(Dist.CLIENT)
@@ -43,7 +38,7 @@ public class ButtonQuest implements IQuestingGuiElement {
     }
 
     @Override
-    public void render(PlayerEntity player, double mouseX, double mouseY) {
+    public void render(MatrixStack stack, PlayerEntity player, double mouseX, double mouseY) {
         if(Quest.isQuestCompletedForPlayer(uuid, quest.getId()) && !ProgressHelper.isRewardClaimed(uuid, quest.getId())){
             root.getMinecraft().getTextureManager().bindTexture(Ref.IMAGE_BUTTON_HEXAGON_UNCLAIMED);
         }else if(Quest.isQuestCompletedForPlayer(uuid, quest.getId())){
@@ -57,7 +52,7 @@ public class ButtonQuest implements IQuestingGuiElement {
                 root.getMinecraft().getTextureManager().bindTexture(Ref.IMAGE_BUTTON_HEXAGON_UNPRESSED);
             }
         }
-        root.blit(x, y, 0, 0, WIDTH, HEIGHT);
+        root.blit(stack, x, y, 0, 0, WIDTH, HEIGHT);
         GL11.glPushMatrix();
         RenderHelper.enableStandardItemLighting();
         root.getMinecraft().getItemRenderer().renderItemIntoGUI(new ItemStack(quest.getIcon()), x + 8, y + 7);

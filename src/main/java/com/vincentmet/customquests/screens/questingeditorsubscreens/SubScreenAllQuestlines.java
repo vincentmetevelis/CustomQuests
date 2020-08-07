@@ -1,18 +1,12 @@
 package com.vincentmet.customquests.screens.questingeditorsubscreens;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.datafixers.util.Pair;
-import com.vincentmet.customquests.lib.MouseDirection;
-import com.vincentmet.customquests.lib.Ref;
-import com.vincentmet.customquests.lib.Utils;
-import com.vincentmet.customquests.screens.elements.IQuestingGuiElement;
-import com.vincentmet.customquests.screens.elements.ScrollableList;
-import com.vincentmet.customquests.screens.elements.TextField;
+import com.vincentmet.customquests.lib.*;
+import com.vincentmet.customquests.screens.elements.*;
+import java.util.*;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.text.TranslationTextComponent;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class SubScreenAllQuestlines implements IQuestingGuiElement {
     private Screen root;
@@ -44,9 +38,9 @@ public class SubScreenAllQuestlines implements IQuestingGuiElement {
     }
 
     @Override
-    public void render(PlayerEntity player, double mouseX, double mouseY) {
-        this.txt.render(player, mouseX, mouseY);
-        this.scrollableList.render(player, mouseX, mouseY);
+    public void render(MatrixStack stack, PlayerEntity player, double mouseX, double mouseY) {
+        this.txt.render(stack, player, mouseX, mouseY);
+        this.scrollableList.render(stack, player, mouseX, mouseY);
     }
 
     @Override

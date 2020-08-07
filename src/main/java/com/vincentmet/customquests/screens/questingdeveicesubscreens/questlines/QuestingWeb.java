@@ -1,18 +1,14 @@
 package com.vincentmet.customquests.screens.questingdeveicesubscreens.questlines;
 
-import com.vincentmet.customquests.lib.LineColor;
-import com.vincentmet.customquests.lib.MouseDirection;
-import com.vincentmet.customquests.lib.Ref;
-import com.vincentmet.customquests.lib.Utils;
+import com.mojang.blaze3d.matrix.MatrixStack;
+import com.vincentmet.customquests.lib.*;
 import com.vincentmet.customquests.quests.quest.Quest;
 import com.vincentmet.customquests.screens.elements.IQuestingGuiElement;
 import com.vincentmet.customquests.screens.elements.buttons.ButtonQuest;
 import com.vincentmet.customquests.screens.elements.labels.Line;
+import java.util.*;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.entity.player.PlayerEntity;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class QuestingWeb implements IQuestingGuiElement {
     private Screen root;
@@ -35,9 +31,9 @@ public class QuestingWeb implements IQuestingGuiElement {
     }
 
     @Override
-    public void render(PlayerEntity player, double mouseX, double mouseY) {
-        lines.forEach(line -> line.render(player, mouseX, mouseY));
-        questButtonList.forEach(buttonQuest -> buttonQuest.render(player, mouseX, mouseY));
+    public void render(MatrixStack stack, PlayerEntity player, double mouseX, double mouseY) {
+        lines.forEach(line -> line.render(stack, player, mouseX, mouseY));
+        questButtonList.forEach(buttonQuest -> buttonQuest.render(stack, player, mouseX, mouseY));
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.vincentmet.customquests.screens.questingdeveicesubscreens;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.vincentmet.customquests.lib.*;
 import com.vincentmet.customquests.quests.book.QuestLine;
 import com.vincentmet.customquests.screens.elements.IQuestingGuiElement;
@@ -48,16 +49,16 @@ public class SubScreenQuestlines implements IQuestingGuiElement {
         this.height = height;
         this.questlineButtons.forEach(buttonQuestline -> buttonQuestline.update(player, mouseX, mouseY, MARGIN_QUESTLINE_BUTTONS_LEFT + ButtonQuestline.WIDTH + MARGIN_QUESTLINE_BUTTONS_RIGHT, this.height));
         reloadTitle();
-        this.title.update(player, mouseX, mouseY, 0, 0);
+        this.title.update(player, mouseX, mouseY, width, height);
         this.questingWeb.update(player, mouseX, mouseY, this.width - (MARGIN_QUESTLINE_BUTTONS_LEFT + ButtonQuestline.WIDTH + MARGIN_QUESTLINE_BUTTONS_RIGHT), this.height - MARGIN_QUESTLINE_BUTTONS_TOP);
     }
 
     @Override
-    public void render(PlayerEntity player, double mouseX, double mouseY) {
+    public void render(MatrixStack stack, PlayerEntity player, double mouseX, double mouseY) {
         reloadTitle();
-        this.title.render(player, mouseX, mouseY);
-        this.questingWeb.render(player, mouseX, mouseY);
-        this.questlineButtons.forEach(buttonQuestline -> buttonQuestline.render(player, mouseX, mouseY));
+        this.title.render(stack, player, mouseX, mouseY);
+        this.questingWeb.render(stack, player, mouseX, mouseY);
+        this.questlineButtons.forEach(buttonQuestline -> buttonQuestline.render(stack, player, mouseX, mouseY));
     }
 
     @Override

@@ -7,9 +7,7 @@ import com.vincentmet.customquests.quests.progress.QuestUserProgress;
 import com.vincentmet.customquests.quests.quest.Quest;
 import java.nio.file.Path;
 import java.util.*;
-import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.api.distmarker.*;
 import org.lwjgl.glfw.GLFW;
 
 public class Ref {
@@ -58,9 +56,6 @@ public class Ref {
     public static Map<Integer, Quest> ALL_QUESTS = new HashMap<>();
     public static Map<String, QuestUserProgress> ALL_QUESTING_PROGRESS = new HashMap<>();
     public static List<Party> ALL_QUESTING_PARTIES = new ArrayList<>();
-
-    @OnlyIn(Dist.CLIENT)
-    public static FontRenderer FONT_RENDERER;
 
     public static final Map<Integer, Pair<Character, Character>> KEY_MAPPINGS = new HashMap<>();
     static {

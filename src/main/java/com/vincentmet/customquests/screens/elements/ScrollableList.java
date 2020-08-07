@@ -1,10 +1,9 @@
 package com.vincentmet.customquests.screens.elements;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.vincentmet.customquests.lib.MouseDirection;
+import java.util.*;
 import net.minecraft.entity.player.PlayerEntity;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class ScrollableList implements IQuestingGuiElement{
     private int offset = 0;
@@ -27,7 +26,7 @@ public class ScrollableList implements IQuestingGuiElement{
     }
 
     @Override
-    public void render(PlayerEntity player, double mouseX, double mouseY) {
+    public void render(MatrixStack stack, PlayerEntity player, double mouseX, double mouseY) {
 
     }
 
