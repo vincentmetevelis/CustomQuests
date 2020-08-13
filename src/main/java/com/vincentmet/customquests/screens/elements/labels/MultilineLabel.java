@@ -6,6 +6,7 @@ import com.vincentmet.customquests.screens.elements.IQuestingGuiElement;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.IReorderingProcessor;
 import net.minecraft.util.text.ITextProperties;
 import net.minecraftforge.api.distmarker.*;
 
@@ -35,8 +36,8 @@ public class MultilineLabel implements IQuestingGuiElement {
     @Override
     public void render(MatrixStack stack, PlayerEntity player, double mouseX, double mouseY) {
         int currentHeight = y;
-        for(ITextProperties line : Minecraft.getInstance().fontRenderer.func_238425_b_(ITextProperties.func_240652_a_(text), maxWidth)){
-            root.drawString(stack, Minecraft.getInstance().fontRenderer, line, x, currentHeight, color);
+        for(IReorderingProcessor line : Minecraft.getInstance().fontRenderer.func_238425_b_(ITextProperties.func_240652_a_(text), maxWidth)){
+            Minecraft.getInstance().fontRenderer.func_238407_a_(stack, line, x, currentHeight, color);
             currentHeight += Minecraft.getInstance().fontRenderer.FONT_HEIGHT;
         }
     }

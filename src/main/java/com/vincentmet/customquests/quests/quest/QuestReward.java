@@ -13,6 +13,7 @@ import net.minecraft.item.*;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.registries.ForgeRegistries;
 
 public class QuestReward implements IJsonProvider {
@@ -152,7 +153,9 @@ public class QuestReward implements IJsonProvider {
 
         @Override
         public void executeReward(PlayerEntity player) {
-            for(int i=0; i<amount;i++)player.getEntityWorld().getWorld().getServer().getWorld(World.field_234918_g_).summonEntity(entity.create(player.world, new CompoundNBT(), new TranslationTextComponent("Your Reward <3"), player, player.getPosition(), SpawnReason.COMMAND, true, false));
+            if(player.world instanceof ServerWorld){
+                for(int i=0; i<amount;i++)player.getEntityWorld().getServer().getWorld(World.field_234918_g_).summonEntity(entity.create((ServerWorld)player.world, new CompoundNBT(), new TranslationTextComponent("Your Reward <3"), player, player.getPosition(), SpawnReason.COMMAND, true, false));
+            }
         }
 
         @Override

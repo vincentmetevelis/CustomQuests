@@ -13,7 +13,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.text.ITextProperties;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.api.distmarker.*;
 import org.lwjgl.opengl.GL11;
 
@@ -62,7 +62,7 @@ public class ButtonQuestline implements IQuestingGuiElement {
             });
 
             GL11.glPushMatrix();
-            root.renderTooltip(stack, ITextProperties.func_240652_a_("Complete the quest(s): " + missingIds.toString().replace("[", "\'").replace("]", "\'") + " to unlock this questline!"), (int)mouseX, (int)mouseY);
+            root.renderTooltip(stack, new StringTextComponent("Complete the quest(s): " + missingIds.toString().replace("[", "\'").replace("]", "\'") + " to unlock this questline!"), (int)mouseX, (int)mouseY);
             GL11.glPopMatrix();
             RenderHelper.disableStandardItemLighting();
         }
