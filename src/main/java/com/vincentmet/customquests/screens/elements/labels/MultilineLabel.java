@@ -36,7 +36,7 @@ public class MultilineLabel implements IQuestingGuiElement {
     @Override
     public void render(MatrixStack stack, PlayerEntity player, double mouseX, double mouseY) {
         int currentHeight = y;
-        for(IReorderingProcessor line : Minecraft.getInstance().fontRenderer.func_238425_b_(ITextProperties.func_240652_a_(text), maxWidth)){
+        for(IReorderingProcessor line : Minecraft.getInstance().fontRenderer.trimStringToWidth(ITextProperties.func_240652_a_(text), maxWidth)){
             Minecraft.getInstance().fontRenderer.func_238407_a_(stack, line, x, currentHeight, color);
             currentHeight += Minecraft.getInstance().fontRenderer.FONT_HEIGHT;
         }

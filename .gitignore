@@ -4,3 +4,4 @@ out/
 build/
 run/
 *.iml
+logs/
