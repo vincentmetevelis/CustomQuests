@@ -27,7 +27,7 @@ public class Objects {
     public static class KeyBindings{
         public static final KeyBinding OPEN_QUESTINGDEVICE = new KeyBinding(
                 Utils.getFormattedText(".open_device_key"),
-                KeyConflictContext.GUI,
+                KeyConflictContext.IN_GAME,
                 InputMappings.Type.KEYSYM,
                 GLFW.GLFW_KEY_GRAVE_ACCENT,
                 "CustomQuests"
